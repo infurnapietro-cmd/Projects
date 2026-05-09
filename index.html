@@ -637,9 +637,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--fon
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
-// ══════════════════════════════════════════════
-// FIREBASE CONFIG — sostituisci con il tuo!
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// FIREBASE CONFIG \u2014 sostituisci con il tuo!
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 var FB_CONFIG = {
   apiKey: "AIzaSyDHsdknopzoGspMs0oGJlGJLEWg_-nfuaQ",
   authDomain: "infurna-family.firebaseapp.com",
@@ -650,9 +650,9 @@ var FB_CONFIG = {
   measurementId: "G-BSYFEZXPH3
 };
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // STATE
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 var ST = {
   screen: null, prevScreen: null,
   fb: null, auth: null, db: null, fbOk: false,
@@ -668,11 +668,11 @@ var ST = {
   authMode: 'login'
 };
 
-var EMOJIS = ['👶','🐣','🌟'];
+var EMOJIS = ['\u1F476','\u1F423','\u1F31F'];
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // LOCAL STORAGE HELPERS
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function lsGet(k) {
   try { return JSON.parse(localStorage.getItem('ifam_' + k)); } catch(e) { return null; }
 }
@@ -683,9 +683,9 @@ function lsDel(k) {
   try { localStorage.removeItem('ifam_' + k); } catch(e) {}
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // INIT
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function init() {
   setLdrTxt('Connessione Firebase...');
   try {
@@ -778,9 +778,9 @@ function initApp() {
   syncSleepUI();
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // FIRESTORE SUBSCRIPTIONS
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function subscribeEvents() {
   if (!ST.db || !ST.profile || !ST.profile.familyCode) return;
   var fc = ST.profile.familyCode;
@@ -825,9 +825,9 @@ function setSync(ok) {
   if (dot) dot.style.background = ok ? 'var(--green)' : 'var(--red)';
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // AUTH
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function toggleAuthMode() {
   ST.authMode = ST.authMode === 'login' ? 'register' : 'login';
   document.getElementById('login-txt').textContent = ST.authMode === 'login' ? 'Accedi' : 'Registrati';
@@ -896,13 +896,13 @@ function doLogout() {
   lsDel('user');
   ST.user = null; ST.profile = null; ST.children = []; ST.events = [];
   showScreen('sc-auth');
-  toast('👋', 'Uscito', 'A presto!');
+  toast('\u1F44B', 'Uscito', 'A presto!');
 }
 window.doLogout = doLogout;
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // ONBOARDING / SETUP
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function startSetup() {
   lsSet('seen_onboard', true);
   showScreen('sc-setup');
@@ -915,8 +915,8 @@ function saveSetup() {
   var c2 = document.getElementById('setup-c2').value.trim();
   var c3 = document.getElementById('setup-c3').value.trim();
   var fc = document.getElementById('setup-fcode').value.trim().toLowerCase().replace(/\s+/g, '');
-  if (!myname) { toast('⚠️', 'Inserisci il tuo nome', ''); return; }
-  if (!c1) { toast('⚠️', 'Inserisci almeno un bambino', ''); return; }
+  if (!myname) { toast('\u26A0\uFE0F', 'Inserisci il tuo nome', ''); return; }
+  if (!c1) { toast('\u26A0\uFE0F', 'Inserisci almeno un bambino', ''); return; }
   if (!fc) fc = 'famiglia-' + Math.random().toString(36).slice(2, 8);
   var children = [c1, c2, c3].filter(function(n) { return n.length > 0; }).slice(0, 3).map(function(n, i) {
     return { name: n, emoji: EMOJIS[i] };
@@ -933,14 +933,14 @@ function saveSetup() {
       medicines: []
     }).catch(function() {});
   }
-  toast('✅', 'Profilo salvato!', 'Benvenuto in Infurna\'s Family');
+  toast('\u2705', 'Profilo salvato!', 'Benvenuto in Infurna\'s Family');
   initApp();
 }
 window.saveSetup = saveSetup;
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // SETTINGS
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function saveChildrenSettings() {
   var c1 = document.getElementById('set-c1').value.trim();
   var c2 = document.getElementById('set-c2').value.trim();
@@ -972,14 +972,14 @@ function editMyName() {
   if (ST.db && ST.user) {
     ST.db.collection('users').doc(ST.user.uid).update({ name: name }).catch(function() {});
   }
-  toast('✅', 'Nome aggiornato', '');
+  toast('\u2705', 'Nome aggiornato', '');
 }
 window.editMyName = editMyName;
 
 function copyFcode() {
   var fc = (ST.profile && ST.profile.familyCode) ? ST.profile.familyCode : '';
   if (navigator.clipboard) navigator.clipboard.writeText(fc).catch(function() {});
-  toast('📋', 'Codice copiato!', fc);
+  toast('\u1F4CB', 'Codice copiato!', fc);
 }
 window.copyFcode = copyFcode;
 
@@ -987,9 +987,9 @@ function loadSettingsUI() {
   var el1 = document.getElementById('set-myname-disp');
   var el2 = document.getElementById('set-email-disp');
   var el3 = document.getElementById('set-fcode-disp');
-  if (el1) el1.textContent = ST.profile ? ST.profile.name : '—';
-  if (el2) el2.textContent = ST.user ? (ST.user.email || '—') : '—';
-  if (el3) el3.textContent = ST.profile ? ST.profile.familyCode : '—';
+  if (el1) el1.textContent = ST.profile ? ST.profile.name : '\u2014';
+  if (el2) el2.textContent = ST.user ? (ST.user.email || '\u2014') : '\u2014';
+  if (el3) el3.textContent = ST.profile ? ST.profile.familyCode : '\u2014';
   var ch = ST.children;
   var sc1 = document.getElementById('set-c1');
   var sc2 = document.getElementById('set-c2');
@@ -998,12 +998,12 @@ function loadSettingsUI() {
   if (sc2) sc2.value = ch[1] ? ch[1].name : '';
   if (sc3) sc3.value = ch[2] ? ch[2].name : '';
   var fcode = document.getElementById('cg-fcode');
-  if (fcode) fcode.textContent = ST.profile ? ST.profile.familyCode : '—';
+  if (fcode) fcode.textContent = ST.profile ? ST.profile.familyCode : '\u2014';
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // CHILD SELECTORS
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderChildSels() {
   ['home-child-sel', 'handoff-child-sel'].forEach(function(id) {
     var el = document.getElementById(id);
@@ -1048,9 +1048,9 @@ function updateChildLabels() {
 function childName() { return ST.children[ST.activeChild] ? ST.children[ST.activeChild].name : 'Bambino'; }
 function childIdx() { return ST.activeChild; }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // EVENT LOGGING
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function logEvent(type, data, cb) {
   var ev = Object.assign({
     type: type,
@@ -1074,9 +1074,9 @@ function logEvent(type, data, cb) {
   }
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // HOME
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function updateHome() {
   var ci = childIdx();
   var evts = ST.events.filter(function(e) { return e.childIndex === ci || e.childName === childName(); });
@@ -1096,17 +1096,17 @@ function updateHome() {
   grid.innerHTML =
     '<div class="card ' + feedClass + '" onclick="showScreen(\'sc-feeding\')" style="cursor:pointer">' +
       '<div class="card-lbl">Ultima poppata</div>' +
-      '<div class="card-val">' + (lastFeed ? timeAgo(lastFeed.ts) : '—') + '</div>' +
-      '<div class="card-sub">' + (lastFeed ? fmtFeedType(lastFeed.feedType) + ' · ' + (lastFeed.ml || '?') + 'ml' : 'Nessuna') + '</div>' +
+      '<div class="card-val">' + (lastFeed ? timeAgo(lastFeed.ts) : '\u2014') + '</div>' +
+      '<div class="card-sub">' + (lastFeed ? fmtFeedType(lastFeed.feedType) + ' \u00B7 ' + (lastFeed.ml || '?') + 'ml' : 'Nessuna') + '</div>' +
     '</div>' +
     '<div class="card" onclick="showScreen(\'sc-diaper\')" style="cursor:pointer">' +
       '<div class="card-lbl">Ultimo pannolino</div>' +
-      '<div class="card-val">' + (lastDiaper ? timeAgo(lastDiaper.ts) : '—') + '</div>' +
+      '<div class="card-val">' + (lastDiaper ? timeAgo(lastDiaper.ts) : '\u2014') + '</div>' +
       '<div class="card-sub">' + (lastDiaper ? fmtDiaperType(lastDiaper.diaperType) : 'Nessuno') + '</div>' +
     '</div>' +
     '<div class="card ' + (sleeping ? 'card-green' : '') + '" onclick="showScreen(\'sc-sleep\')" style="cursor:pointer">' +
       '<div class="card-lbl">Sonno</div>' +
-      '<div class="card-val" style="color:' + (sleeping ? 'var(--green)' : 'var(--t1)') + '">' + (sleeping ? 'Dorme 🌙' : 'Sveglio') + '</div>' +
+      '<div class="card-val" style="color:' + (sleeping ? 'var(--green)' : 'var(--t1)') + '">' + (sleeping ? 'Dorme \u1F319' : 'Sveglio') + '</div>' +
       '<div class="card-sub">' + (sleeping ? 'da ' + timeAgo(ST.sleepActive.startTime) : (lastSleepEnd ? 'Ultima: ' + timeAgo(lastSleepEnd.ts) : 'Nessuna')) + '</div>' +
     '</div>' +
     '<div class="card" onclick="showScreen(\'sc-medicine\')" style="cursor:pointer">' +
@@ -1119,7 +1119,7 @@ function updateHome() {
   if (!homeEvts) return;
   var recent = evts.slice(0, 8);
   if (!recent.length) {
-    homeEvts.innerHTML = '<div class="empty"><div class="empty-icon">📋</div>Nessun evento ancora</div>';
+    homeEvts.innerHTML = '<div class="empty"><div class="empty-icon">\u1F4CB</div>Nessun evento ancora</div>';
     return;
   }
   homeEvts.innerHTML = recent.map(function(e) {
@@ -1137,9 +1137,9 @@ function updateHome() {
   if (hdr && ST.profile) hdr.textContent = 'Ciao, ' + ST.profile.name;
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // FEEDING
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function chQty(delta) {
   ST.feedQty = Math.max(10, Math.min(500, ST.feedQty + delta));
   document.getElementById('qty-val').textContent = ST.feedQty;
@@ -1157,10 +1157,10 @@ function toggleFeedTimer() {
   if (ST.feedRunning) {
     clearInterval(ST.feedInterval);
     ST.feedRunning = false;
-    if (btn) btn.textContent = '▶ Riprendi';
+    if (btn) btn.textContent = '\u25B6 Riprendi';
   } else {
     ST.feedRunning = true;
-    if (btn) btn.textContent = '⏸ Pausa';
+    if (btn) btn.textContent = '\u23F8 Pausa';
     ST.feedInterval = setInterval(function() {
       ST.feedSec++;
       var el = document.getElementById('feed-timer');
@@ -1177,7 +1177,7 @@ function resetFeedTimer() {
   var el = document.getElementById('feed-timer');
   if (el) el.textContent = '00:00';
   var btn = document.getElementById('feed-timer-btn');
-  if (btn) btn.textContent = '▶ Avvia';
+  if (btn) btn.textContent = '\u25B6 Avvia';
 }
 window.resetFeedTimer = resetFeedTimer;
 
@@ -1190,7 +1190,7 @@ function logFeeding() {
   ST.feedSec = 0;
   logEvent('feeding', { feedType: feedType, ml: ST.feedQty, durationSec: dur }, function() {
     resetFeedTimer();
-    toast('🍼', 'Poppata registrata!', ST.feedQty + 'ml · ' + childName());
+    toast('\u1F37C', 'Poppata registrata!', ST.feedQty + 'ml \u00B7 ' + childName());
     showScreen('sc-home');
   });
 }
@@ -1202,9 +1202,9 @@ function selPill(groupId, btn) {
 }
 window.selPill = selPill;
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // DIAPER
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function selDiaper(type) {
   ST.diaper = type;
   ['pee', 'poop', 'both'].forEach(function(t) {
@@ -1221,7 +1221,7 @@ function selDiaper(type) {
 window.selDiaper = selDiaper;
 
 function logDiaper() {
-  if (!ST.diaper) { toast('⚠️', 'Seleziona tipo pannolino', ''); return; }
+  if (!ST.diaper) { toast('\u26A0\uFE0F', 'Seleziona tipo pannolino', ''); return; }
   var dtype = ST.diaper;
   ST.diaper = null;
   ['pee', 'poop', 'both'].forEach(function(t) {
@@ -1229,7 +1229,7 @@ function logDiaper() {
     if (el) { el.style.background = ''; el.style.border = '.5px solid var(--border)'; }
   });
   logEvent('diaper', { diaperType: dtype }, function() {
-    toast('🧷', 'Pannolino registrato!', fmtDiaperType(dtype) + ' · ' + childName());
+    toast('\u1F9F7', 'Pannolino registrato!', fmtDiaperType(dtype) + ' \u00B7 ' + childName());
     updateDiaperCounts();
     showScreen('sc-home');
   });
@@ -1255,9 +1255,9 @@ function updateDiaperCounts() {
   if (elT) elT.textContent = evts.length;
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // SLEEP
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function startSleep() {
   var now = Date.now();
   ST.sleepActive = { startTime: now, childIndex: childIdx(), childName: childName() };
@@ -1265,7 +1265,7 @@ function startSleep() {
   logEvent('sleep_start', { startTime: now }, function() {});
   syncSleepUI();
   updateHome();
-  toast('🌙', 'Nanna iniziata!', childName());
+  toast('\u1F319', 'Nanna iniziata!', childName());
 }
 window.startSleep = startSleep;
 
@@ -1280,7 +1280,7 @@ function endSleep() {
     syncSleepUI();
     updateSleepTotal();
     updateHome();
-    toast('☀️', 'Nanna terminata!', 'Durata: ' + fmtDur(dur));
+    toast('\u2600\uFE0F', 'Nanna terminata!', 'Durata: ' + fmtDur(dur));
   });
 }
 window.endSleep = endSleep;
@@ -1329,24 +1329,24 @@ function updateSleepTotal() {
   }
   var listEl = document.getElementById('sleep-sessions-list');
   if (!listEl) return;
-  if (!evts.length) { listEl.innerHTML = '<div class="empty"><div class="empty-icon">😴</div>Nessuna sessione oggi</div>'; return; }
+  if (!evts.length) { listEl.innerHTML = '<div class="empty"><div class="empty-icon">\u1F634</div>Nessuna sessione oggi</div>'; return; }
   listEl.innerHTML = evts.map(function(e) {
     return '<div class="card" style="margin-bottom:8px;display:flex;align-items:center;gap:10px">' +
-      '<div style="font-size:20px">🌙</div>' +
+      '<div style="font-size:20px">\u1F319</div>' +
       '<div style="flex:1"><div style="font-size:13px;font-weight:500">' + fmtDur(e.durationSec || 0) + '</div>' +
-      '<div style="font-size:11px;color:var(--t3)">' + fmtTime(e.startTime || e.ts) + ' → ' + fmtTime(e.ts) + '</div></div>' +
+      '<div style="font-size:11px;color:var(--t3)">' + fmtTime(e.startTime || e.ts) + ' \u2192 ' + fmtTime(e.ts) + '</div></div>' +
       '<span style="font-size:11px;color:var(--t3)">' + (e.caregiver || '') + '</span>' +
     '</div>';
   }).join('');
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // MEDICINE
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function addMedicine() {
   var name = document.getElementById('med-name-inp').value.trim();
   var dose = document.getElementById('med-dose-inp').value.trim();
-  if (!name) { toast('⚠️', 'Inserisci il nome del farmaco', ''); return; }
+  if (!name) { toast('\u26A0\uFE0F', 'Inserisci il nome del farmaco', ''); return; }
   var med = { id: Date.now().toString(), name: name, dose: dose, childIndex: childIdx() };
   ST.medicines.push(med);
   lsSet('medicines', ST.medicines);
@@ -1356,7 +1356,7 @@ function addMedicine() {
   document.getElementById('med-name-inp').value = '';
   document.getElementById('med-dose-inp').value = '';
   refreshMedList();
-  toast('💊', 'Farmaco aggiunto', '');
+  toast('\u1F48A', 'Farmaco aggiunto', '');
 }
 window.addMedicine = addMedicine;
 
@@ -1376,12 +1376,12 @@ function giveMedicine(medId) {
     }
   }
   if (alreadyGiven) {
-    toast('⚠️', 'Gia somministrato!', med.name + ' dato alle ' + fmtTime(alreadyGiven.ts));
+    toast('\u26A0\uFE0F', 'Gia somministrato!', med.name + ' dato alle ' + fmtTime(alreadyGiven.ts));
     return;
   }
   logEvent('medicine', { medId: medId, medName: med.name, dose: med.dose }, function() {
     refreshMedList();
-    toast('💊', 'Medicina registrata!', med.name + ' · ' + childName());
+    toast('\u1F48A', 'Medicina registrata!', med.name + ' \u00B7 ' + childName());
   });
 }
 window.giveMedicine = giveMedicine;
@@ -1402,7 +1402,7 @@ function refreshMedList() {
   var ci = childIdx();
   var meds = ST.medicines.filter(function(m) { return m.childIndex === undefined || m.childIndex === ci; });
   var today = new Date(); today.setHours(0,0,0,0);
-  if (!meds.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">💊</div>Nessun farmaco. Aggiungine uno sotto.</div>'; return; }
+  if (!meds.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">\u1F48A</div>Nessun farmaco. Aggiungine uno sotto.</div>'; return; }
   el.innerHTML = meds.map(function(m) {
     var given = null;
     for (var i = 0; i < ST.events.length; i++) {
@@ -1412,24 +1412,24 @@ function refreshMedList() {
       }
     }
     return '<div class="med-item">' +
-      '<div style="font-size:20px">💊</div>' +
+      '<div style="font-size:20px">\u1F48A</div>' +
       '<div class="med-info">' +
         '<div class="med-name">' + m.name + '</div>' +
         '<div class="med-dose">' + (m.dose || '') + '</div>' +
         (given ? '<div class="med-ok">Dato alle ' + fmtTime(given.ts) + ' da ' + (given.caregiver || '') + '</div>' : '') +
       '</div>' +
       (given
-        ? '<div style="font-size:18px;color:var(--green)">✓</div>'
+        ? '<div style="font-size:18px;color:var(--green)">\u2713</div>'
         : '<button class="med-act" onclick="giveMedicine(\'' + m.id + '\')">Dai</button>'
       ) +
-      '<button onclick="deleteMedicine(\'' + m.id + '\')" style="background:none;border:none;cursor:pointer;color:var(--t3);font-size:16px;padding:4px 0 4px 4px">🗑</button>' +
+      '<button onclick="deleteMedicine(\'' + m.id + '\')" style="background:none;border:none;cursor:pointer;color:var(--t3);font-size:16px;padding:4px 0 4px 4px">\u1F5D1</button>' +
     '</div>';
   }).join('');
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // VOICE / NOTE
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function toggleVoice() {
   var mic = document.getElementById('voice-mic');
   var status = document.getElementById('voice-status');
@@ -1437,7 +1437,7 @@ function toggleVoice() {
   if (!ST.voiceRunning) {
     ST.voiceRunning = true;
     if (mic) mic.classList.add('rec');
-    if (status) status.textContent = '● Registrazione in corso...';
+    if (status) status.textContent = '\u25CF Registrazione in corso...';
     ST.voiceInterval = setInterval(function() {
       ST.voiceSec++;
       var m = Math.floor(ST.voiceSec / 60), s = ST.voiceSec % 60;
@@ -1453,7 +1453,7 @@ function toggleVoice() {
     if (status) status.textContent = 'Nota vocale salvata';
     logEvent('note', { noteType: 'audio', text: '[Nota audio: ' + fmtSec(dur) + ']', durationSec: dur }, function() {
       updateNotesList();
-      toast('🎙️', 'Nota vocale salvata!', childName() + ' · ' + fmtSec(dur));
+      toast('\u1F399\uFE0F', 'Nota vocale salvata!', childName() + ' \u00B7 ' + fmtSec(dur));
     });
   }
 }
@@ -1461,11 +1461,11 @@ window.toggleVoice = toggleVoice;
 
 function saveTextNote() {
   var text = document.getElementById('note-text').value.trim();
-  if (!text) { toast('⚠️', 'Scrivi prima la nota', ''); return; }
+  if (!text) { toast('\u26A0\uFE0F', 'Scrivi prima la nota', ''); return; }
   logEvent('note', { noteType: 'text', text: text }, function() {
     document.getElementById('note-text').value = '';
     updateNotesList();
-    toast('📝', 'Nota salvata!', childName());
+    toast('\u1F4DD', 'Nota salvata!', childName());
   });
 }
 window.saveTextNote = saveTextNote;
@@ -1477,11 +1477,11 @@ function updateNotesList() {
   var notes = ST.events.filter(function(e) {
     return e.type === 'note' && (e.childIndex === ci || e.childName === childName());
   }).slice(0, 6);
-  if (!notes.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📝</div>Nessuna nota</div>'; return; }
+  if (!notes.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">\u1F4DD</div>Nessuna nota</div>'; return; }
   el.innerHTML = notes.map(function(n) {
     return '<div class="card" style="margin-bottom:8px">' +
       '<div style="display:flex;justify-content:space-between;margin-bottom:6px">' +
-        '<span class="tag ' + (n.noteType === 'audio' ? 'tag-amber' : 'tag-green') + '">' + (n.noteType === 'audio' ? '🎙️ Audio' : '📝 Testo') + '</span>' +
+        '<span class="tag ' + (n.noteType === 'audio' ? 'tag-amber' : 'tag-green') + '">' + (n.noteType === 'audio' ? '\u1F399\uFE0F Audio' : '\u1F4DD Testo') + '</span>' +
         '<span style="font-size:11px;color:var(--t3)">' + fmtTime(n.ts) + '</span>' +
       '</div>' +
       '<div class="note-box" style="margin-bottom:0">' + (n.text || '') + '</div>' +
@@ -1490,9 +1490,9 @@ function updateNotesList() {
   }).join('');
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // HANDOFF
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function updateHandoff() {
   var ci = childIdx();
   var evts = ST.events.filter(function(e) { return e.childIndex === ci || e.childName === childName(); });
@@ -1514,29 +1514,29 @@ function updateHandoff() {
   var timeEl = document.getElementById('ho-time');
   var rowsEl = document.getElementById('ho-rows');
   if (titleEl) titleEl.textContent = 'Riepilogo: ' + chn;
-  if (timeEl) timeEl.textContent = fmtDateTime(Date.now()) + ' · ' + (ST.profile ? ST.profile.name : '');
+  if (timeEl) timeEl.textContent = fmtDateTime(Date.now()) + ' \u00B7 ' + (ST.profile ? ST.profile.name : '');
   if (!rowsEl) return;
   var html =
     '<div class="ho-row">' +
-      '<div class="hicon">🍼</div>' +
+      '<div class="hicon">\u1F37C</div>' +
       '<div class="htxt"><div class="hkey">Ultima poppata</div>' +
-      '<div class="hval">' + (lastFeed ? timeAgo(lastFeed.ts) + ' fa · ' + (lastFeed.ml || '?') + 'ml ' + fmtFeedType(lastFeed.feedType) : 'Nessuna') + '</div></div>' +
+      '<div class="hval">' + (lastFeed ? timeAgo(lastFeed.ts) + ' fa \u00B7 ' + (lastFeed.ml || '?') + 'ml ' + fmtFeedType(lastFeed.feedType) : 'Nessuna') + '</div></div>' +
       '<span class="badge ' + feedBadge + '">' + feedBadgeTxt + '</span>' +
     '</div>' +
     '<div class="ho-row">' +
-      '<div class="hicon">🧷</div>' +
+      '<div class="hicon">\u1F9F7</div>' +
       '<div class="htxt"><div class="hkey">Ultimo pannolino</div>' +
-      '<div class="hval">' + (lastDiaper ? timeAgo(lastDiaper.ts) + ' fa · ' + fmtDiaperType(lastDiaper.diaperType) : 'Nessuno') + '</div></div>' +
+      '<div class="hval">' + (lastDiaper ? timeAgo(lastDiaper.ts) + ' fa \u00B7 ' + fmtDiaperType(lastDiaper.diaperType) : 'Nessuno') + '</div></div>' +
       '<span class="badge b-ok">OK</span>' +
     '</div>' +
     '<div class="ho-row">' +
-      '<div class="hicon">🌙</div>' +
+      '<div class="hicon">\u1F319</div>' +
       '<div class="htxt"><div class="hkey">Sonno</div>' +
       '<div class="hval">' + (sleeping ? 'Dorme da ' + timeAgo(ST.sleepActive.startTime) : (lastSleepEnd ? 'Ultima: ' + timeAgo(lastSleepEnd.ts) + ' fa' : 'Nessuna sessione')) + '</div></div>' +
       '<span class="badge ' + (sleeping ? 'b-ok' : 'b-warn') + '">' + (sleeping ? 'Dorme' : 'Sveglio') + '</span>' +
     '</div>' +
     '<div class="ho-row">' +
-      '<div class="hicon">💊</div>' +
+      '<div class="hicon">\u1F48A</div>' +
       '<div class="htxt"><div class="hkey">Medicine oggi</div>' +
       '<div class="hval">' + (medsToday.length ? medsToday.map(function(m) { return m.medName; }).join(', ') : 'Nessuna') + '</div></div>' +
       '<span class="badge b-ok">OK</span>' +
@@ -1545,7 +1545,7 @@ function updateHandoff() {
     var noteText = (notes[0].text || '').slice(0, 60);
     if ((notes[0].text || '').length > 60) noteText += '...';
     html += '<div class="ho-row">' +
-      '<div class="hicon">📝</div>' +
+      '<div class="hicon">\u1F4DD</div>' +
       '<div class="htxt"><div class="hkey">Ultima nota</div>' +
       '<div class="hval" style="font-style:italic">' + noteText + '</div></div>' +
     '</div>';
@@ -1558,22 +1558,22 @@ function sendHandoff() {
   if (note) {
     logEvent('note', { noteType: 'handoff', text: 'Passaggio turno: ' + note }, function() {});
   }
-  toast('📤', 'Riepilogo inviato!', 'Tutta la famiglia e aggiornata');
+  toast('\u1F4E4', 'Riepilogo inviato!', 'Tutta la famiglia e aggiornata');
   var el = document.getElementById('handoff-note');
   if (el) el.value = '';
 }
 window.sendHandoff = sendHandoff;
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // CAREGIVERS
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderCaregivers(list) {
   var el = document.getElementById('cg-list');
   if (!el) return;
   var colors = ['rgba(245,158,11,.12)', 'rgba(59,130,246,.12)', 'rgba(16,185,129,.12)', 'rgba(139,90,43,.1)'];
   var textc = ['var(--amber)', 'var(--blue)', 'var(--green)', '#8B5A2B'];
   var syncLbl = document.getElementById('cg-sync-lbl');
-  if (syncLbl) syncLbl.textContent = list.length + ' caregiver · ' + (ST.profile ? ST.profile.familyCode : '');
+  if (syncLbl) syncLbl.textContent = list.length + ' caregiver \u00B7 ' + (ST.profile ? ST.profile.familyCode : '');
   if (!list.length) { el.innerHTML = '<div class="empty">Nessun altro caregiver</div>'; return; }
   el.innerHTML = list.map(function(cg, i) {
     var initials = ((cg.name || '?').slice(0, 2)).toUpperCase();
@@ -1586,7 +1586,7 @@ function renderCaregivers(list) {
         '<div class="cg-name">' + (cg.name || 'Utente') + (isMe ? ' (tu)' : '') + '</div>' +
         '<div class="cg-role">' + (cg.email || '') + '</div>' +
       '</div>' +
-      '<span class="badge ' + (online ? 'b-ok' : '') + '" style="' + (!online ? 'background:var(--s3);color:var(--t3)' : '') + '">' + (online ? '● Attivo' : 'Offline') + '</span>' +
+      '<span class="badge ' + (online ? 'b-ok' : '') + '" style="' + (!online ? 'background:var(--s3);color:var(--t3)' : '') + '">' + (online ? '\u25CF Attivo' : 'Offline') + '</span>' +
     '</div>';
   }).join('');
   // Heartbeat
@@ -1595,9 +1595,9 @@ function renderCaregivers(list) {
   }
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // NAVIGATION
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function showScreen(id) {
   var prev = document.querySelector('.screen.active');
   if (prev) {
@@ -1618,7 +1618,7 @@ function showScreen(id) {
   if (id === 'sc-settings') loadSettingsUI();
   if (id === 'sc-caregivers') {
     var fcode = document.getElementById('cg-fcode');
-    if (fcode) fcode.textContent = ST.profile ? ST.profile.familyCode : '—';
+    if (fcode) fcode.textContent = ST.profile ? ST.profile.familyCode : '\u2014';
     if (ST.db && ST.user && ST.user.uid) {
       ST.db.collection('users').doc(ST.user.uid).update({ lastSeen: firebase.firestore.FieldValue.serverTimestamp() }).catch(function() {});
     }
@@ -1634,9 +1634,9 @@ function navTo(scId, bnId) {
 }
 window.navTo = navTo;
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // CLOCK
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function startClock() {
   var ids = ['t-setup','t-home','t-feeding','t-diaper','t-sleep','t-medicine','t-handoff','t-voice','t-cg','t-settings'];
   setInterval(function() {
@@ -1645,9 +1645,9 @@ function startClock() {
   }, 1000);
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // TOAST
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 var toastT;
 function toast(icon, title, sub) {
   var el = document.getElementById('toast');
@@ -1663,9 +1663,9 @@ function toast(icon, title, sub) {
 }
 window.toast = toast;
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // HELPERS
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function fmtSec(s) {
   var m = Math.floor(s / 60), sec = s % 60;
   return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
@@ -1675,7 +1675,7 @@ function fmtHMS(s) {
   return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
 }
 function fmtTime(ts) {
-  if (!ts) return '—';
+  if (!ts) return '\u2014';
   var t = typeof ts === 'object' && ts.toMillis ? ts.toMillis() : ts;
   return new Date(t).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
 }
@@ -1701,23 +1701,23 @@ function timeAgo(ts) {
 }
 function fmtFeedType(t) {
   var map = { bottle: 'Biberon', breast_l: 'Seno Sin.', breast_r: 'Seno Dx.' };
-  return map[t] || t || '—';
+  return map[t] || t || '\u2014';
 }
 function fmtDiaperType(t) {
   var map = { pee: 'Piu', poop: 'Popo', both: 'Piu + Popo' };
-  return map[t] || t || '—';
+  return map[t] || t || '\u2014';
 }
 function evtColor(type) {
   var map = { feeding: 'var(--amber)', diaper: 'var(--t3)', sleep_start: 'var(--green)', sleep_end: 'var(--green)', medicine: 'var(--red)', note: 'var(--blue)' };
   return map[type] || 'var(--t3)';
 }
 function evtLabel(e) {
-  if (e.type === 'feeding') return '🍼 Poppata: ' + (e.ml || '?') + 'ml · ' + fmtFeedType(e.feedType);
-  if (e.type === 'diaper') return '🧷 Pannolino: ' + fmtDiaperType(e.diaperType);
-  if (e.type === 'sleep_start') return '🌙 Inizio nanna';
-  if (e.type === 'sleep_end') return '☀️ Fine nanna: ' + fmtDur(e.durationSec || 0);
-  if (e.type === 'medicine') return '💊 ' + (e.medName || 'Medicina');
-  if (e.type === 'note') return '📝 Nota: ' + (e.text || '').slice(0, 30);
+  if (e.type === 'feeding') return '\u1F37C Poppata: ' + (e.ml || '?') + 'ml \u00B7 ' + fmtFeedType(e.feedType);
+  if (e.type === 'diaper') return '\u1F9F7 Pannolino: ' + fmtDiaperType(e.diaperType);
+  if (e.type === 'sleep_start') return '\u1F319 Inizio nanna';
+  if (e.type === 'sleep_end') return '\u2600\uFE0F Fine nanna: ' + fmtDur(e.durationSec || 0);
+  if (e.type === 'medicine') return '\u1F48A ' + (e.medName || 'Medicina');
+  if (e.type === 'note') return '\u1F4DD Nota: ' + (e.text || '').slice(0, 30);
   return e.type;
 }
 function setLdrTxt(t) { var el = document.getElementById('loader-txt'); if (el) el.textContent = t; }
@@ -1726,9 +1726,9 @@ function hideLdr() {
   if (l) { l.style.opacity = '0'; setTimeout(function() { l.style.display = 'none'; }, 400); }
 }
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // OFFLINE EVENTS
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 window.addEventListener('offline', function() { setSync(false); });
 window.addEventListener('online', function() {
   if (ST.fbOk && ST.profile && ST.profile.familyCode) {
@@ -1737,9 +1737,9 @@ window.addEventListener('online', function() {
   }
 });
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // iOS INSTALL BANNER (no apostrophes in strings)
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 window.addEventListener('load', function() {
   var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
@@ -1748,7 +1748,7 @@ window.addEventListener('load', function() {
       var d = document.createElement('div');
       d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;border-top:0.5px solid rgba(245,158,11,0.3);padding:16px 18px 30px;z-index:9999;font-family:DM Sans,sans-serif;display:flex;gap:12px;align-items:flex-start';
       var inner = document.createElement('div');
-      inner.innerHTML = '<span style="font-size:28px">📱</span>';
+      inner.innerHTML = '<span style="font-size:28px">\u1F4F1</span>';
       var txt = document.createElement('div');
       txt.style.flex = '1';
       var h = document.createElement('div');
@@ -1768,9 +1768,9 @@ window.addEventListener('load', function() {
   }
 });
 
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // START
-// ══════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 init();
 </script>
 </body>
