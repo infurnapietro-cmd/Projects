@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="Infurna's Family"/>
+<meta name="theme-color" content="#000000"/>
+<title>Infurna's Family</title>
+<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Infurna's%20Family%22%2C%22short_name%22%3A%22InFam%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23000000%22%2C%22theme_color%22%3A%22%23000000%22%7D"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#000;--s1:#0d0d0d;--s2:#161616;--s3:#202020;--s4:#2a2a2a;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --amber:#f59e0b;--amber-dim:#d97706;--amber-glow:rgba(245,158,11,0.12);
+  --red:#e74c3c;--red-glow:rgba(231,76,60,0.12);
+  --green:#10b981;--green-glow:rgba(16,185,129,0.1);
+  --blue:#3b82f6;
+  --t1:#ede9e0;--t2:#8a8680;--t3:#4a4845;
+  --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --r:14px;--rsm:8px;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--font);color:var(--t1);-webkit-font-smoothing:antialiased}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── SCREENS ── */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease;transform:translateX(30px);overflow:hidden}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.screen.prev{transform:translateX(-30px)}
+
+/* ── SCROLLABLE BODY ── */
+.screen-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 14px;display:flex;flex-direction:column;gap:10px;padding-bottom:calc(84px + var(--safe-bottom));scrollbar-width:none}
+.screen-body::-webkit-scrollbar{display:none}
+
+/* ── STATUS BAR ── */
+.sbar{padding:calc(6px + var(--safe-top)) 18px 4px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:var(--bg)}
+.sbar-time{font-size:12px;color:var(--t3);font-family:var(--mono)}
+.sbar-right{display:flex;gap:5px;align-items:center}
+.sbar-dot{width:5px;height:5px;border-radius:50%;background:var(--amber)}
+.sync-live{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* ── HEADER ── */
+.hdr{padding:6px 16px 12px;border-bottom:.5px solid var(--border);flex-shrink:0;display:flex;justify-content:space-between;align-items:flex-end}
+.hdr-logo{font-size:19px;font-weight:600;letter-spacing:-.4px}
+.hdr-logo em{font-style:normal;color:var(--amber)}
+.hdr-sub{font-size:10px;color:var(--t3);margin-top:2px}
+.sub-hdr{padding:10px 16px 12px;border-bottom:.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;gap:10px}
+.sub-hdr-title{font-size:17px;font-weight:600;flex:1}
+
+/* ── CARDS ── */
+.card{background:var(--s1);border:.5px solid var(--border);border-radius:var(--r);padding:13px}
+.card-amber{border-color:rgba(245,158,11,.22);background:var(--amber-glow)}
+.card-red{border-color:rgba(231,76,60,.22);background:var(--red-glow)}
+.card-green{border-color:rgba(16,185,129,.18);background:var(--green-glow)}
+.card-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.9px;font-weight:500;margin-bottom:7px}
+.card-val{font-size:21px;font-weight:600}
+.card-sub{font-size:12px;color:var(--t2);margin-top:3px}
+
+/* ── GRID ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+/* ── ACTION BUTTONS ── */
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.action-btn{background:var(--s2);border:.5px solid var(--border);border-radius:var(--r);padding:18px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;transition:transform .1s,background .15s;font-family:var(--font);-webkit-appearance:none}
+.action-btn:active{transform:scale(.95);background:var(--s3)}
+.action-btn .aicon{font-size:28px}
+.action-btn .albl{font-size:12px;color:var(--t2);font-weight:500}
+.action-btn.a-amber{border-color:rgba(245,158,11,.28)}
+.action-btn.a-amber .aicon{color:var(--amber)}
+.action-btn.a-red{border-color:rgba(231,76,60,.28)}
+.action-btn.a-red .aicon{color:var(--red)}
+.action-btn.a-green{border-color:rgba(16,185,129,.2)}
+.action-btn.a-green .aicon{color:var(--green)}
+.action-btn.a-blue{border-color:rgba(59,130,246,.2)}
+.action-btn.a-blue .aicon{color:var(--blue)}
+
+/* ── BUTTONS ── */
+.btn{border:none;border-radius:var(--r);cursor:pointer;font-family:var(--font);font-weight:500;font-size:15px;transition:transform .1s,opacity .1s;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-appearance:none;width:100%}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--amber);color:#000;padding:16px}
+.btn-secondary{background:var(--s2);color:var(--t1);border:.5px solid var(--border2);padding:14px}
+.btn-danger{background:var(--red);color:var(--t1);padding:14px}
+.btn-ghost{background:transparent;color:var(--t2);border:.5px solid var(--border);font-size:13px;padding:9px 14px;width:auto}
+.btn-sm{padding:9px 14px;font-size:13px;border-radius:var(--rsm)}
+
+/* ── INPUTS ── */
+.inp{background:var(--s2);border:.5px solid var(--border2);border-radius:var(--rsm);padding:13px 14px;font-size:15px;color:var(--t1);font-family:var(--font);width:100%;outline:none;-webkit-appearance:none}
+.inp:focus{border-color:rgba(245,158,11,.5)}
+.inp::placeholder{color:var(--t3)}
+.inp-lbl{font-size:11px;color:var(--t3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px}
+
+/* ── SECTION TITLE ── */
+.sec{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.9px;font-weight:500;margin:4px 0 8px}
+
+/* ── PILLS ── */
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{padding:9px 14px;background:var(--s2);border:.5px solid var(--border);border-radius:20px;font-size:13px;color:var(--t2);cursor:pointer;font-family:var(--font);font-weight:500;transition:all .15s;-webkit-appearance:none;border:none}
+.pill.sel{background:var(--amber-glow);border:.5px solid rgba(245,158,11,.45);color:var(--amber)}
+.pill:active{transform:scale(.95)}
+
+/* ── QTY ROW ── */
+.qty-row{display:flex;align-items:center;gap:12px;background:var(--s2);border:.5px solid var(--border);border-radius:var(--rsm);padding:10px 14px}
+.qty-btn{width:42px;height:42px;background:var(--s3);border:none;border-radius:10px;color:var(--t1);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font);-webkit-appearance:none;transition:background .1s}
+.qty-btn:active{background:var(--s4)}
+.qty-val{flex:1;text-align:center;font-size:30px;font-weight:600;font-family:var(--mono);color:var(--t1)}
+.qty-unit{font-size:12px;color:var(--t3)}
+
+/* ── TIMER ── */
+.timer-big{font-size:52px;font-weight:300;font-family:var(--mono);color:var(--t1);letter-spacing:-1px;text-align:center}
+.timer-lbl{font-size:11px;color:var(--t3);text-align:center;margin-top:4px}
+
+/* ── DIVIDER ── */
+.div{height:.5px;background:var(--border);margin:8px 0}
+
+/* ── BOTTOM NAV ── */
+.bnav{position:absolute;bottom:0;left:0;right:0;background:var(--s1);border-top:.5px solid var(--border);display:flex;padding:9px 0 calc(9px + var(--safe-bottom));flex-shrink:0;z-index:50}
+.bnav-btn{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--font);-webkit-appearance:none;padding:3px 0}
+.bnav-btn .ni{font-size:20px;color:var(--t3)}
+.bnav-btn .nl{font-size:10px;color:var(--t3)}
+.bnav-btn.active .ni{color:var(--amber)}
+.bnav-btn.active .nl{color:var(--amber)}
+
+/* ── EVENTS ── */
+.evt-list{display:flex;flex-direction:column}
+.evt{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--border)}
+.evt:last-child{border-bottom:none}
+.evt-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.evt-txt{flex:1;font-size:13px;color:var(--t1)}
+.evt-who{font-size:10px;color:var(--t3)}
+.evt-time{font-size:11px;color:var(--t3);font-family:var(--mono)}
+
+/* ── HANDOFF ── */
+.handoff-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border)}
+.handoff-row:last-child{border-bottom:none}
+.hicon{font-size:16px;width:22px;flex-shrink:0;margin-top:1px}
+.htxt{flex:1}
+.hkey{font-size:11px;color:var(--t3)}
+.hval{font-size:14px;color:var(--t1);font-weight:500}
+.badge{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:500;white-space:nowrap}
+.b-ok{background:rgba(16,185,129,.15);color:var(--green)}
+.b-warn{background:rgba(245,158,11,.15);color:var(--amber)}
+.b-alert{background:rgba(231,76,60,.15);color:var(--red)}
+
+/* ── MEDICINE ── */
+.med-item{display:flex;align-items:center;gap:12px;padding:12px 13px;background:var(--s2);border:.5px solid var(--border);border-radius:var(--rsm);margin-bottom:8px}
+.med-info{flex:1}
+.med-name{font-size:14px;color:var(--t1);font-weight:500}
+.med-dose{font-size:11px;color:var(--t3);margin-top:2px}
+.med-ok{font-size:11px;color:var(--green);margin-top:2px}
+.med-act{background:var(--s3);border:none;border-radius:var(--rsm);padding:8px 12px;color:var(--amber);font-size:12px;cursor:pointer;font-family:var(--font);font-weight:500;-webkit-appearance:none;white-space:nowrap}
+
+/* ── CHILD SELECTOR ── */
+.child-sel{display:flex;gap:6px;padding:10px 16px;background:var(--bg);border-bottom:.5px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.child-sel::-webkit-scrollbar{display:none}
+.child-chip{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--s2);border:.5px solid var(--border);border-radius:20px;cursor:pointer;font-family:var(--font);font-size:13px;color:var(--t2);font-weight:500;white-space:nowrap;flex-shrink:0;-webkit-appearance:none;border:none}
+.child-chip.active{background:var(--amber-glow);border:.5px solid rgba(245,158,11,.4);color:var(--amber)}
+.child-emoji{font-size:16px}
+
+/* ── SLEEP RING ── */
+.sleep-wrap{display:flex;flex-direction:column;align-items:center;padding:10px 0}
+.sleep-ring{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:10px}
+.sleep-inner{width:86px;height:86px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sleep-pct{font-size:20px;font-weight:600;font-family:var(--mono)}
+.sleep-pct-lbl{font-size:9px;color:var(--t3)}
+
+/* ── VOICE ── */
+.voice-mic{width:76px;height:76px;border-radius:50%;background:var(--s2);border:.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;margin:0 auto 12px;transition:all .2s}
+.voice-mic.rec{background:var(--red-glow);border-color:rgba(231,76,60,.5);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(231,76,60,.3)}50%{transform:scale(1.04);box-shadow:0 0 0 12px rgba(231,76,60,0)}}
+
+/* ── SETTINGS ── */
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:.5px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-lbl{font-size:14px;color:var(--t1)}
+.setting-sub{font-size:11px;color:var(--t3);margin-top:2px}
+.toggle{width:44px;height:26px;border-radius:13px;background:var(--s3);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none;-webkit-appearance:none}
+.toggle.on{background:var(--amber)}
+.toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s}
+.toggle.on::after{transform:translateX(18px)}
+
+/* ── AUTH SCREEN ── */
+.auth-screen{padding:30px 20px;display:flex;flex-direction:column;justify-content:center;min-height:100%;gap:14px}
+.auth-logo{font-size:28px;font-weight:600;letter-spacing:-.5px;margin-bottom:6px}
+.auth-logo em{font-style:normal;color:var(--amber)}
+.auth-sub{font-size:13px;color:var(--t3);margin-bottom:20px;line-height:1.5}
+
+/* ── CAREGIVER ── */
+.cg-row{display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--s2);border:.5px solid var(--border);border-radius:var(--rsm);margin-bottom:8px}
+.cg-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.cg-info{flex:1}
+.cg-name{font-size:14px;color:var(--t1);font-weight:500}
+.cg-role{font-size:11px;color:var(--t3)}
+.onl-badge{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:500}
+
+/* ── WARNING ── */
+.warn-box{background:rgba(231,76,60,.08);border:.5px solid rgba(231,76,60,.28);border-radius:var(--rsm);padding:11px 13px;display:flex;gap:9px;align-items:flex-start}
+.warn-txt{font-size:12px;color:var(--red);line-height:1.5}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:90px;left:14px;right:14px;background:var(--s2);border:.5px solid rgba(245,158,11,.38);border-radius:var(--r);padding:13px 16px;z-index:1000;display:flex;gap:10px;align-items:center;font-family:var(--font);transition:opacity .3s,transform .3s;transform:translateY(8px);opacity:0;pointer-events:none}
+#toast.show{opacity:1;transform:translateY(0)}
+.toast-title{font-size:14px;font-weight:500;color:var(--t1)}
+.toast-sub{font-size:11px;color:var(--t3)}
+
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2000;transition:opacity .4s}
+.loader-logo{font-size:26px;font-weight:600;color:var(--t1);letter-spacing:-.4px;margin-bottom:24px}
+.loader-logo em{font-style:normal;color:var(--amber)}
+.loader-spin{width:32px;height:32px;border:2px solid var(--s3);border-top-color:var(--amber);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-txt{font-size:12px;color:var(--t3);margin-top:14px}
+
+/* ── ONBOARDING ── */
+.onb-wrap{padding:30px 20px;display:flex;flex-direction:column;min-height:100%;justify-content:space-between}
+.onb-hero{font-size:30px;font-weight:300;color:var(--t1);line-height:1.3;margin:28px 0 20px}
+.onb-hero strong{font-weight:600;color:var(--amber)}
+.onb-steps{display:flex;flex-direction:column;gap:14px;margin-bottom:30px}
+.onb-step{display:flex;align-items:flex-start;gap:13px}
+.onb-num{width:28px;height:28px;border-radius:50%;background:var(--s2);border:.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--amber);flex-shrink:0;margin-top:1px}
+.onb-txt{font-size:13px;color:var(--t2);line-height:1.5}
+
+/* ── NOTE ── */
+.note-box{background:var(--s2);border:.5px solid var(--border);border-radius:var(--rsm);padding:12px 14px;font-size:13px;color:var(--t2);line-height:1.6;font-style:italic}
+
+/* ── CHILDREN SETTINGS ── */
+.child-setting{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.child-color-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:30px 20px;color:var(--t3);font-size:14px}
+.empty-icon{font-size:36px;margin-bottom:10px}
+
+/* ── EVENT TAG ── */
+.tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500;margin-right:4px}
+.tag-amber{background:var(--amber-glow);color:var(--amber)}
+.tag-green{background:var(--green-glow);color:var(--green)}
+.tag-red{background:var(--red-glow);color:var(--red)}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">Infurna's <em>Family</em></div>
+  <div class="loader-spin"></div>
+  <div class="loader-txt" id="loader-txt">Avvio in corso...</div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+<!-- ═══════════════════════════ AUTH ═══════════════════════ -->
+<div class="screen" id="sc-auth">
+  <div style="flex:1;overflow-y:auto;padding-bottom:30px;">
+  <div class="auth-screen">
+    <div>
+      <div class="auth-logo">Infurna's <em>Family</em></div>
+      <div class="auth-sub">Traccia, sincronizza e condividi la cura del tuo bambino con tutta la famiglia. Gratuito.</div>
+    </div>
+    <div id="auth-form-login" style="display:flex;flex-direction:column;gap:10px;">
+      <div>
+        <div class="inp-lbl">Email</div>
+        <input class="inp" id="auth-email" type="email" placeholder="tuaemail@example.com" autocomplete="email"/>
+      </div>
+      <div>
+        <div class="inp-lbl">Password</div>
+        <input class="inp" id="auth-pass" type="password" placeholder="Almeno 6 caratteri" autocomplete="current-password"/>
+      </div>
+      <button class="btn btn-primary" id="btn-login" onclick="doLogin()" style="margin-top:4px">
+        <span id="login-txt">Accedi</span>
+      </button>
+      <button class="btn btn-ghost" onclick="toggleAuthMode()" style="margin:0 auto">
+        Non hai un account? <span style="color:var(--amber)" id="auth-switch-lbl">Registrati</span>
+      </button>
+      <div id="auth-err" style="font-size:12px;color:var(--red);text-align:center;display:none"></div>
+    </div>
+    <div style="margin-top:20px;text-align:center;font-size:11px;color:var(--t3);">
+      I dati vengono sincronizzati con Firebase.<br/>Gratuito · Privato · Offline-ready
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ ONBOARDING ═══════════════════════ -->
+<div class="screen" id="sc-onboard">
+  <div style="flex:1;overflow-y:auto">
+  <div class="onb-wrap">
+    <div>
+      <div class="auth-logo">Infurna's <em>Family</em></div>
+      <div class="onb-hero">Più veloce<br>di un messaggio<br><strong>WhatsApp.</strong></div>
+      <div class="onb-steps">
+        <div class="onb-step"><div class="onb-num">1</div><div class="onb-txt">Registra poppate, pannolini, sonno e medicine in 1–2 tap</div></div>
+        <div class="onb-step"><div class="onb-num">2</div><div class="onb-txt">Sincronizzazione istantanea tra tutti i dispositivi della famiglia</div></div>
+        <div class="onb-step"><div class="onb-num">3</div><div class="onb-txt">Passaggio turno automatico: tutto il necessario in 5 secondi</div></div>
+        <div class="onb-step"><div class="onb-num">4</div><div class="onb-txt">Fino a 3 bambini, ciascuno con il proprio storico indipendente</div></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <button class="btn btn-primary" onclick="startSetup()">Configura il mio profilo →</button>
+      <button class="btn btn-secondary" onclick="showScreen('sc-auth')">Ho già un account</button>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ SETUP ═══════════════════════ -->
+<div class="screen" id="sc-setup">
+  <div class="sbar"><span class="sbar-time" id="time-setup"></span></div>
+  <div class="sub-hdr"><span class="sub-hdr-title">Configurazione iniziale</span></div>
+  <div class="screen-body">
+    <p class="sec">Il tuo nome</p>
+    <input class="inp" id="setup-myname" type="text" placeholder="es. Mamma / Papà / Nonna"/>
+    <div class="div"></div>
+    <p class="sec">Bambino 1</p>
+    <input class="inp" id="setup-c1" type="text" placeholder="Nome del bambino (es. Edoardo)"/>
+    <p class="sec" style="margin-top:8px">Bambino 2 (opzionale)</p>
+    <input class="inp" id="setup-c2" type="text" placeholder="Nome del secondo bambino"/>
+    <p class="sec" style="margin-top:8px">Bambino 3 (opzionale)</p>
+    <input class="inp" id="setup-c3" type="text" placeholder="Nome del terzo bambino"/>
+    <div class="div"></div>
+    <p class="sec">Codice famiglia</p>
+    <p style="font-size:12px;color:var(--t3);margin-bottom:8px;line-height:1.5">Condividi questo codice con il tuo partner per sincronizzare i dati. Oppure inserisci il codice del partner se vuoi unirti alla sua famiglia.</p>
+    <input class="inp" id="setup-fcode" type="text" placeholder="es. infurna2024 (crea o unisciti)"/>
+    <p style="font-size:11px;color:var(--t3);margin-top:4px">💡 Usate lo stesso codice su entrambi i dispositivi per sincronizzarvi</p>
+    <div style="height:10px"></div>
+    <button class="btn btn-primary" onclick="saveSetup()">Salva e inizia →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ HOME ═══════════════════════ -->
+<div class="screen" id="sc-home">
+  <div class="sbar">
+    <span class="sbar-time" id="time-home"></span>
+    <div class="sbar-right">
+      <div class="sync-live" id="sync-dot" title="Sync"></div>
+      <div class="sbar-dot"></div>
+    </div>
+  </div>
+  <div class="hdr">
+    <div>
+      <div class="hdr-logo">Infurna's <em>Family</em></div>
+      <div class="hdr-sub" id="hdr-caregiver">—</div>
+    </div>
+    <button onclick="showScreen('sc-settings')" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--t3)">⚙️</button>
+  </div>
+  <div class="child-sel" id="home-child-sel"></div>
+  <div class="screen-body" id="home-body">
+    <div id="home-status-grid" class="grid2"></div>
+    <p class="sec" style="margin-top:4px">Azioni rapide</p>
+    <div class="action-grid">
+      <button class="action-btn a-amber" onclick="showScreen('sc-feeding')"><div class="aicon">🍼</div><div class="albl">Poppata</div></button>
+      <button class="action-btn" onclick="showScreen('sc-diaper')"><div class="aicon">🧷</div><div class="albl">Pannolino</div></button>
+      <button class="action-btn a-green" onclick="showScreen('sc-sleep')"><div class="aicon">🌙</div><div class="albl">Sonno</div></button>
+      <button class="action-btn a-red" onclick="showScreen('sc-medicine')"><div class="aicon">💊</div><div class="albl">Medicina</div></button>
+      <button class="action-btn a-blue" onclick="showScreen('sc-voice')"><div class="aicon">🎙️</div><div class="albl">Nota</div></button>
+      <button class="action-btn a-amber" onclick="showScreen('sc-handoff')"><div class="aicon">🤝</div><div class="albl" style="color:var(--amber)">Passa Turno</div></button>
+    </div>
+    <p class="sec" style="margin-top:4px">Ultimi eventi</p>
+    <div class="card"><div class="evt-list" id="home-events"><div class="empty"><div class="empty-icon">📋</div>Nessun evento ancora</div></div></div>
+  </div>
+  <div class="bnav">
+    <button class="bnav-btn active" id="bn-home" onclick="navTo('sc-home','bn-home')"><span class="ni">🏠</span><span class="nl">Casa</span></button>
+    <button class="bnav-btn" id="bn-handoff" onclick="navTo('sc-handoff','bn-handoff')"><span class="ni">🤝</span><span class="nl">Turno</span></button>
+    <button class="bnav-btn" id="bn-cg" onclick="navTo('sc-caregivers','bn-cg')"><span class="ni">👨‍👩‍👦</span><span class="nl">Famiglia</span></button>
+    <button class="bnav-btn" id="bn-set" onclick="navTo('sc-settings','bn-set')"><span class="ni">⚙️</span><span class="nl">Impostazioni</span></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ FEEDING ═══════════════════════ -->
+<div class="screen" id="sc-feeding">
+  <div class="sbar"><span class="sbar-time" id="time-feeding"></span></div>
+  <div class="sub-hdr">
+    <button class="btn-ghost" onclick="goBack('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">←</button>
+    <span class="sub-hdr-title">🍼 Poppata</span>
+    <span id="feed-child-lbl" style="font-size:12px;color:var(--amber)"></span>
+  </div>
+  <div class="screen-body">
+    <p class="sec">Tipo</p>
+    <div class="pills" id="feed-type-pills">
+      <button class="pill sel" data-val="bottle" onclick="selPill('feed-type-pills',this)">🍼 Biberon</button>
+      <button class="pill" data-val="breast_l" onclick="selPill('feed-type-pills',this)">🤱 Seno Sin.</button>
+      <button class="pill" data-val="breast_r" onclick="selPill('feed-type-pills',this)">🤱 Seno Dx.</button>
+    </div>
+    <p class="sec" style="margin-top:8px">Quantità (ml)</p>
+    <div class="qty-row">
+      <button class="qty-btn" onclick="chQty(-10)">−</button>
+      <div class="qty-val" id="qty-val">80</div>
+      <div class="qty-unit">ml</div>
+      <button class="qty-btn" onclick="chQty(10)">+</button>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn-ghost" onclick="setQty(60)" style="border-radius:20px;font-size:12px;padding:7px 12px">60</button>
+      <button class="btn-ghost" onclick="setQty(80)" style="border-radius:20px;font-size:12px;padding:7px 12px;background:var(--amber-glow);border-color:rgba(245,158,11,.4);color:var(--amber)">80 ✓</button>
+      <button class="btn-ghost" onclick="setQty(100)" style="border-radius:20px;font-size:12px;padding:7px 12px">100</button>
+      <button class="btn-ghost" onclick="setQty(120)" style="border-radius:20px;font-size:12px;padding:7px 12px">120</button>
+      <button class="btn-ghost" onclick="setQty(150)" style="border-radius:20px;font-size:12px;padding:7px 12px">150</button>
+    </div>
+    <div class="div" style="margin:14px 0"></div>
+    <p class="sec">Timer poppata</p>
+    <div class="timer-big" id="feed-timer">00:00</div>
+    <div class="timer-lbl">Tocca per avviare</div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="pill" id="feed-timer-btn" onclick="toggleFeedTimer()" style="flex:1;justify-content:center">▶ Avvia</button>
+      <button class="pill" onclick="resetFeedTimer()">⟳ Reset</button>
+    </div>
+    <div style="height:10px"></div>
+    <button class="btn btn-primary" onclick="logFeeding()" id="btn-log-feed">✓ Registra poppata</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ DIAPER ═══════════════════════ -->
+<div class="screen" id="sc-diaper">
+  <div class="sbar"><span class="sbar-time" id="time-diaper"></span></div>
+  <div class="sub-hdr">
+    <button class="btn-ghost" onclick="goBack('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">←</button>
+    <span class="sub-hdr-title">🧷 Pannolino</span>
+    <span id="diaper-child-lbl" style="font-size:12px;color:var(--amber)"></span>
+  </div>
+  <div class="screen-body">
+    <p class="sec">Tipo</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
+      <button class="action-btn" id="dp-pee" onclick="selDiaper('pee')" style="padding:20px 8px">
+        <div class="aicon">💧</div><div class="albl">Solo pipì</div>
+      </button>
+      <button class="action-btn" id="dp-poop" onclick="selDiaper('poop')" style="padding:20px 8px">
+        <div class="aicon">💩</div><div class="albl">Solo popò</div>
+      </button>
+      <button class="action-btn" id="dp-both" onclick="selDiaper('both')" style="padding:20px 8px">
+        <div class="aicon">🧷</div><div class="albl">Entrambi</div>
+      </button>
+    </div>
+    <div class="div" style="margin:14px 0"></div>
+    <div class="card" id="diaper-today-card">
+      <div class="card-lbl">Oggi</div>
+      <div style="display:flex;gap:16px;margin-top:8px" id="diaper-counts">
+        <div><div style="font-size:22px;font-weight:600" id="dc-pee">0</div><div style="font-size:11px;color:var(--t3)">pipì</div></div>
+        <div><div style="font-size:22px;font-weight:600" id="dc-poop">0</div><div style="font-size:11px;color:var(--t3)">popò</div></div>
+        <div><div style="font-size:22px;font-weight:600;color:var(--amber)" id="dc-tot">0</div><div style="font-size:11px;color:var(--t3)">totale</div></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="logDiaper()" style="margin-top:4px">✓ Registra pannolino</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ SLEEP ═══════════════════════ -->
+<div class="screen" id="sc-sleep">
+  <div class="sbar"><span class="sbar-time" id="time-sleep"></span></div>
+  <div class="sub-hdr">
+    <button class="btn-ghost" onclick="goBack('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">←</button>
+    <span class="sub-hdr-title">🌙 Sonno</span>
+    <span id="sleep-child-lbl" style="font-size:12px;color:var(--amber)"></span>
+  </div>
+  <div class="screen-body">
+    <div class="sleep-wrap">
+      <div class="sleep-ring" id="sleep-ring-el">
+        <div class="sleep-inner">
+          <div class="sleep-pct" id="sleep-pct-val" style="color:var(--green)">0%</div>
+          <div class="sleep-pct-lbl">del giorno</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--t3)">Sonno totale oggi</div>
+      <div style="font-size:28px;font-weight:600;color:var(--green);font-family:var(--mono)" id="sleep-total">0h 00m</div>
+    </div>
+    <div class="card card-green" id="sleep-active-card" style="display:none">
+      <div class="card-lbl">In corso</div>
+      <div class="timer-big" id="sleep-timer" style="font-size:38px;color:var(--green)">00:00:00</div>
+      <div class="card-sub" id="sleep-start-lbl">Inizio: —</div>
+    </div>
+    <div id="sleep-start-wrap">
+      <button class="btn btn-secondary" onclick="startSleep()">🌙 Inizia nanna</button>
+    </div>
+    <div id="sleep-end-wrap" style="display:none">
+      <button class="btn btn-danger" onclick="endSleep()">⏹ Sveglio — fine nanna</button>
+    </div>
+    <div class="div" style="margin:10px 0"></div>
+    <p class="sec">Sessioni di oggi</p>
+    <div id="sleep-sessions-list"><div class="empty"><div class="empty-icon">😴</div>Nessuna sessione oggi</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ MEDICINE ═══════════════════════ -->
+<div class="screen" id="sc-medicine">
+  <div class="sbar"><span class="sbar-time" id="time-medicine"></span></div>
+  <div class="sub-hdr">
+    <button class="btn-ghost" onclick="goBack('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">←</button>
+    <span class="sub-hdr-title">💊 Medicine</span>
+    <span id="medicine-child-lbl" style="font-size:12px;color:var(--amber)"></span>
+  </div>
+  <div class="screen-body">
+    <div class="warn-box" style="margin-bottom:4px">
+      <span style="font-size:16px">⚠️</span>
+      <div class="warn-txt">Prevenzione doppia somministrazione attiva. Ogni registrazione è sincronizzata in tempo reale con tutti i caregiver.</div>
+    </div>
+    <p class="sec" style="margin-top:4px">Farmaci configurati</p>
+    <div id="med-list"></div>
+    <div class="div" style="margin:10px 0"></div>
+    <p class="sec">Aggiungi farmaco</p>
+    <input class="inp" id="med-name-inp" type="text" placeholder="Nome farmaco (es. Tachipirina 125mg)" style="margin-bottom:8px"/>
+    <input class="inp" id="med-dose-inp" type="text" placeholder="Dose (es. 0.5ml, 3 gocce)" style="margin-bottom:8px"/>
+    <button class="btn btn-secondary btn-sm" onclick="addMedicine()" style="width:auto">+ Aggiungi</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ HANDOFF ═══════════════════════ -->
+<div class="screen" id="sc-handoff">
+  <div class="sbar"><span class="sbar-time" id="time-handoff"></span></div>
+  <div class="sub-hdr">
+    <button class="btn-ghost" onclick="goBack('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">←</button>
+    <span class="sub-hdr-title">🤝 Passa il Turno</span>
+  </div>
+  <div class="child-sel" id="handoff-child-sel"></div>
+  <div class="screen-body">
+    <p style="font-size:13px;color:var(--t2);margin-bottom:10px;line-height:1.5">Riepilogo automatico aggiornato in tempo reale. Il prossimo caregiver capirà tutto in 5 secondi.</p>
+    <div class="card card-amber" id="handoff-summary">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="font-size:24px">🌙</div>
+        <div>
+          <div style="font-size:14px;font-weight:600" id="ho-title">Riepilogo turno</div>
+          <div style="font-size:11px;color:var(--t3)" id="ho-time">—</div>
+        </div>
+      </div>
+      <div id="ho-rows"></div>
+    </div>
+    <p class="sec" style="margin-top:6px">Nota per il prossimo</p>
+    <textarea class="inp" id="handoff-note" rows="3" placeholder="Qualcosa di importante da sapere..." style="resize:none;line-height:1.5"></textarea>
+    <button class="btn btn-primary" onclick="sendHandoff()" style="margin-top:4px">📤 Invia riepilogo alla famiglia</button>
+    <div class="bnav">
+      <button class="bnav-btn" id="bn-home2" onclick="navTo('sc-home','bn-home')"><span class="ni">🏠</span><span class="nl">Casa</span></button>
+      <button class="bnav-btn active" id="bn-handoff2"><span class="ni">🤝</span><span class="nl">Turno</span></button>
+      <button class="bnav-btn" id="bn-cg2" onclick="navTo('sc-caregivers','bn-cg')"><span class="ni">👨‍👩‍👦</span><span class="nl">Famiglia</span></button>
+      <button class="bnav-btn" id="bn-set2" onclick="navTo('sc-settings','bn-set')"><span class="ni">⚙️</span><span class="nl">Impostazioni</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ VOICE ═══════════════════════ -->
+<div class="screen" id="sc-voice">
+  <div class="sbar"><span class="sbar-time" id="time-voice"></span></div>
+  <div class="sub-hdr">
+    <button class="btn-ghost" onclick="goBack('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">←</button>
+    <span class="sub-hdr-title">🎙️ Nota</span>
+    <span id="voice-child-lbl" style="font-size:12px;color:var(--amber)"></span>
+  </div>
+  <div class="screen-body">
+    <div class="card" style="text-align:center;padding:24px">
+      <div class="voice-mic" id="voice-mic" onclick="toggleVoice()">🎙️</div>
+      <div style="font-size:13px;color:var(--t2)" id="voice-status">Tocca per registrare</div>
+      <div style="font-size:26px;font-weight:600;font-family:var(--mono);margin-top:10px;color:var(--t1)" id="voice-time">0:00</div>
+    </div>
+    <p class="sec" style="margin-top:6px">Oppure scrivi una nota</p>
+    <textarea class="inp" id="note-text" rows="4" placeholder="Scrivi qui la tua nota..." style="resize:none;line-height:1.5;margin-bottom:8px"></textarea>
+    <button class="btn btn-secondary" onclick="saveTextNote()">💾 Salva nota testo</button>
+    <div class="div" style="margin:10px 0"></div>
+    <p class="sec">Note recenti</p>
+    <div id="notes-list"><div class="empty"><div class="empty-icon">📝</div>Nessuna nota</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ CAREGIVERS ═══════════════════════ -->
+<div class="screen" id="sc-caregivers">
+  <div class="sbar"><span class="sbar-time" id="time-cg"></span></div>
+  <div class="sub-hdr">
+    <button class="btn-ghost" onclick="goBack('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">←</button>
+    <span class="sub-hdr-title">👨‍👩‍👦 Famiglia</span>
+  </div>
+  <div class="screen-body">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <div class="sync-live"></div>
+      <span style="font-size:12px;color:var(--t3)" id="cg-sync-lbl">Firestore sync attivo</span>
+    </div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-lbl">Codice famiglia</div>
+      <div style="font-size:20px;font-weight:600;font-family:var(--mono);color:var(--amber);margin-top:4px" id="cg-fcode">—</div>
+      <div style="font-size:11px;color:var(--t3);margin-top:4px">Condividi questo codice con il partner per sincronizzarsi</div>
+    </div>
+    <p class="sec">Caregiver connessi</p>
+    <div id="cg-list"></div>
+    <div class="bnav">
+      <button class="bnav-btn" onclick="navTo('sc-home','bn-home')"><span class="ni">🏠</span><span class="nl">Casa</span></button>
+      <button class="bnav-btn" onclick="navTo('sc-handoff','bn-handoff')"><span class="ni">🤝</span><span class="nl">Turno</span></button>
+      <button class="bnav-btn active"><span class="ni">👨‍👩‍👦</span><span class="nl">Famiglia</span></button>
+      <button class="bnav-btn" onclick="navTo('sc-settings','bn-set')"><span class="ni">⚙️</span><span class="nl">Impostazioni</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ SETTINGS ═══════════════════════ -->
+<div class="screen" id="sc-settings">
+  <div class="sbar"><span class="sbar-time" id="time-settings"></span></div>
+  <div class="sub-hdr">
+    <button class="btn-ghost" onclick="goBack('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">←</button>
+    <span class="sub-hdr-title">⚙️ Impostazioni</span>
+  </div>
+  <div class="screen-body">
+    <div class="card" style="margin-bottom:4px">
+      <div class="card-lbl">Il mio profilo</div>
+      <div class="div"></div>
+      <div class="setting-row" style="padding:10px 0 4px">
+        <div><div class="setting-lbl">Nome</div><div class="setting-sub" id="set-myname-disp">—</div></div>
+        <button class="btn-ghost btn-sm" onclick="editMyName()">Modifica</button>
+      </div>
+      <div class="setting-row" style="padding:4px 0 10px">
+        <div><div class="setting-lbl">Email</div><div class="setting-sub" id="set-email-disp">—</div></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:4px">
+      <div class="card-lbl">Bambini (max 3)</div>
+      <div class="div"></div>
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px;padding:10px 0">
+        <div style="width:100%">
+          <div class="inp-lbl">Bambino 1</div>
+          <input class="inp" id="set-c1" type="text" placeholder="Nome" oninput="saveChildrenSettings()"/>
+        </div>
+      </div>
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px;padding:10px 0">
+        <div style="width:100%">
+          <div class="inp-lbl">Bambino 2 (opzionale)</div>
+          <input class="inp" id="set-c2" type="text" placeholder="Nome" oninput="saveChildrenSettings()"/>
+        </div>
+      </div>
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px;padding:10px 0">
+        <div style="width:100%">
+          <div class="inp-lbl">Bambino 3 (opzionale)</div>
+          <input class="inp" id="set-c3" type="text" placeholder="Nome" oninput="saveChildrenSettings()"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:4px">
+      <div class="card-lbl">Famiglia</div>
+      <div class="div"></div>
+      <div class="setting-row">
+        <div><div class="setting-lbl">Codice famiglia</div><div class="setting-sub" id="set-fcode-disp">—</div></div>
+        <button class="btn-ghost btn-sm" onclick="copyFcode()">Copia</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:4px">
+      <div class="card-lbl">Preferenze</div>
+      <div class="div"></div>
+      <div class="setting-row">
+        <div><div class="setting-lbl">Notifiche push</div><div class="setting-sub">Avvisi in tempo reale</div></div>
+        <button class="toggle on" id="tog-notif" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-lbl">Avviso poppata</div><div class="setting-sub">Dopo 3 ore dall'ultima</div></div>
+        <button class="toggle on" id="tog-feed-alert" onclick="this.classList.toggle('on')"></button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:4px">
+      <div class="card-lbl">Account</div>
+      <div class="div"></div>
+      <div class="setting-row">
+        <div><div class="setting-lbl">Versione app</div></div>
+        <div style="font-size:12px;color:var(--t3);font-family:var(--mono)">1.0.0</div>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-lbl">Storage</div><div class="setting-sub">Firebase Firestore — gratuito</div></div>
+        <span class="badge b-ok">Free</span>
+      </div>
+    </div>
+    <button class="btn btn-danger" onclick="doLogout()" style="margin-top:8px">Esci dall'account</button>
+    <div style="height:10px"></div>
+    <div class="bnav">
+      <button class="bnav-btn" onclick="navTo('sc-home','bn-home')"><span class="ni">🏠</span><span class="nl">Casa</span></button>
+      <button class="bnav-btn" onclick="navTo('sc-handoff','bn-handoff')"><span class="ni">🤝</span><span class="nl">Turno</span></button>
+      <button class="bnav-btn" onclick="navTo('sc-caregivers','bn-cg')"><span class="ni">👨‍👩‍👦</span><span class="nl">Famiglia</span></button>
+      <button class="bnav-btn active"><span class="ni">⚙️</span><span class="nl">Impostazioni</span></button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<div id="toast">
+  <div style="font-size:20px" id="toast-icon">✓</div>
+  <div><div class="toast-title" id="toast-title">OK</div><div class="toast-sub" id="toast-sub"></div></div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, updateDoc, deleteDoc, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+// ══════════════════════════════════════════════════════════
+// FIREBASE CONFIG
+// ══════════════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyDemo_InfurnaFamily_Key_Replace_This",
+  authDomain: "infurnas-family.firebaseapp.com",
+  projectId: "infurnas-family",
+  storageBucket: "infurnas-family.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef"
+};
+
+// ══════════════════════════════════════════════════════════
+// LOCAL-FIRST STORAGE (works without Firebase too)
+// ══════════════════════════════════════════════════════════
+const LS = {
+  get: k => { try { return JSON.parse(localStorage.getItem('infam_'+k)); } catch(e){return null;} },
+  set: (k,v) => { try { localStorage.setItem('infam_'+k, JSON.stringify(v)); } catch(e){} },
+  del: k => localStorage.removeItem('infam_'+k)
+};
+
+// ══════════════════════════════════════════════════════════
+// APP STATE
+// ══════════════════════════════════════════════════════════
+let app_state = {
+  currentScreen: null,
+  prevScreen: null,
+  auth: null,
+  db: null,
+  firebaseOk: false,
+  user: null,
+  profile: null,      // { name, familyCode }
+  children: [],       // [{name, emoji}]
+  activeChild: 0,     // index
+  events: [],         // local cache
+  medicines: [],
+  sleepActive: null,  // {startTime}
+  unsubscribers: [],
+  feedQty: 80,
+  feedTimerSec: 0,
+  feedTimerRunning: false,
+  feedTimerInterval: null,
+  sleepTimerInterval: null,
+  voiceRunning: false,
+  voiceInterval: null,
+  voiceSec: 0,
+  selectedDiaper: null,
+  authMode: 'login',
+};
+
+const CHILD_EMOJIS = ['👶','🐣','🌟'];
+const CHILD_COLORS = ['var(--amber)','var(--green)','var(--blue)'];
+
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+async function init() {
+  setLoaderTxt('Connessione a Firebase...');
+  try {
+    const fbApp = initializeApp(firebaseConfig);
+    app_state.auth = getAuth(fbApp);
+    app_state.db = getFirestore(fbApp);
+    app_state.firebaseOk = true;
+    setLoaderTxt('Controllo sessione...');
+  } catch(e) {
+    setLoaderTxt('Modalità offline');
+    app_state.firebaseOk = false;
+  }
+
+  startClock();
+  loadLocalState();
+
+  if (app_state.firebaseOk) {
+    onAuthStateChanged(app_state.auth, async (user) => {
+      if (user) {
+        app_state.user = user;
+        await loadUserProfile(user.uid);
+        hidLoader();
+        if (!app_state.profile || !app_state.children.length) {
+          showScreen('sc-onboard');
+        } else {
+          initApp();
+        }
+      } else {
+        hidLoader();
+        const localUser = LS.get('user');
+        if (localUser && app_state.profile) {
+          initApp();
+        } else {
+          showScreen(LS.get('seen_onboard') ? 'sc-auth' : 'sc-onboard');
+        }
+      }
+    });
+  } else {
+    await delay(600);
+    hidLoader();
+    const localUser = LS.get('user');
+    if (localUser && app_state.profile) {
+      app_state.user = localUser;
+      initApp();
+    } else {
+      showScreen('sc-auth');
+    }
+  }
+}
+
+function loadLocalState() {
+  app_state.profile = LS.get('profile');
+  app_state.children = LS.get('children') || [];
+  app_state.events = LS.get('events') || [];
+  app_state.medicines = LS.get('medicines') || [];
+  app_state.sleepActive = LS.get('sleepActive');
+  app_state.activeChild = LS.get('activeChild') || 0;
+  if (app_state.activeChild >= app_state.children.length) app_state.activeChild = 0;
+}
+
+async function loadUserProfile(uid) {
+  if (!app_state.db) return;
+  try {
+    const snap = await getDoc(doc(app_state.db, 'users', uid));
+    if (snap.exists()) {
+      const d = snap.data();
+      app_state.profile = { name: d.name, familyCode: d.familyCode };
+      app_state.children = d.children || [];
+      app_state.medicines = d.medicines || [];
+      LS.set('profile', app_state.profile);
+      LS.set('children', app_state.children);
+      LS.set('medicines', app_state.medicines);
+    }
+  } catch(e) { console.warn('Profile load failed, using local cache'); }
+}
+
+function initApp() {
+  renderChildSelectors();
+  subscribeToEvents();
+  subscribeToCaregivers();
+  showScreen('sc-home');
+  updateHomeStatus();
+  startSleepClockIfActive();
+}
+
+// ══════════════════════════════════════════════════════════
+// FIRESTORE REALTIME SUBSCRIPTIONS
+// ══════════════════════════════════════════════════════════
+function subscribeToEvents() {
+  if (!app_state.db || !app_state.profile?.familyCode) return;
+  const fc = app_state.profile.familyCode;
+  const q = query(
+    collection(app_state.db, 'events'),
+    where('familyCode', '==', fc),
+    orderBy('timestamp', 'desc')
+  );
+  const unsub = onSnapshot(q, snap => {
+    app_state.events = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    LS.set('events', app_state.events.slice(0,200));
+    updateHomeStatus();
+    updateDiaperCounts();
+    updateSleepTotal();
+    updateHandoffSummary();
+    updateNotesList();
+    document.getElementById('sync-dot').style.background = 'var(--green)';
+  }, err => {
+    document.getElementById('sync-dot').style.background = 'var(--red)';
+  });
+  app_state.unsubscribers.push(unsub);
+}
+
+function subscribeToCaregivers() {
+  if (!app_state.db || !app_state.profile?.familyCode) return;
+  const fc = app_state.profile.familyCode;
+  const q = query(collection(app_state.db, 'users'), where('familyCode', '==', fc));
+  const unsub = onSnapshot(q, snap => {
+    const list = snap.docs.map(d => d.data());
+    renderCaregivers(list);
+  });
+  app_state.unsubscribers.push(unsub);
+}
+
+// ══════════════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════════════
+window.toggleAuthMode = () => {
+  app_state.authMode = app_state.authMode === 'login' ? 'register' : 'login';
+  document.getElementById('btn-login').querySelector('#login-txt').textContent =
+    app_state.authMode === 'login' ? 'Accedi' : 'Registrati';
+  document.getElementById('auth-switch-lbl').textContent =
+    app_state.authMode === 'login' ? 'Registrati' : 'Hai già un account? Accedi';
+  document.getElementById('auth-err').style.display = 'none';
+};
+
+window.doLogin = async () => {
+  const email = document.getElementById('auth-email').value.trim();
+  const pass = document.getElementById('auth-pass').value;
+  const errEl = document.getElementById('auth-err');
+  errEl.style.display = 'none';
+  if (!email || !pass) { errEl.textContent = 'Inserisci email e password'; errEl.style.display = 'block'; return; }
+  document.getElementById('login-txt').textContent = '...';
+  try {
+    if (app_state.firebaseOk) {
+      let cred;
+      if (app_state.authMode === 'register') {
+        cred = await createUserWithEmailAndPassword(app_state.auth, email, pass);
+      } else {
+        cred = await signInWithEmailAndPassword(app_state.auth, email, pass);
+      }
+      app_state.user = cred.user;
+      LS.set('user', {uid: cred.user.uid, email: cred.user.email});
+    } else {
+      app_state.user = {uid: 'local_'+email, email};
+      LS.set('user', app_state.user);
+    }
+    await loadUserProfile(app_state.user?.uid);
+    if (!app_state.profile || !app_state.children.length) {
+      showScreen('sc-onboard');
+    } else {
+      initApp();
+    }
+  } catch(e) {
+    const msgs = {
+      'auth/user-not-found': 'Account non trovato. Registrati prima.',
+      'auth/wrong-password': 'Password errata.',
+      'auth/email-already-in-use': 'Email già registrata.',
+      'auth/invalid-email': 'Email non valida.',
+      'auth/weak-password': 'Password troppo corta (min 6 caratteri).',
+      'auth/network-request-failed': 'Nessuna connessione. Funziona anche offline.'
+    };
+    errEl.textContent = msgs[e.code] || ('Errore: ' + e.message);
+    errEl.style.display = 'block';
+    document.getElementById('login-txt').textContent = app_state.authMode === 'login' ? 'Accedi' : 'Registrati';
+    // Offline fallback
+    if (e.code === 'auth/network-request-failed') {
+      app_state.user = {uid: 'local_'+email, email};
+      LS.set('user', app_state.user);
+      app_state.firebaseOk = false;
+      if (app_state.profile) initApp();
+      else showScreen('sc-onboard');
+    }
+  }
+};
+
+window.doLogout = async () => {
+  app_state.unsubscribers.forEach(u => u());
+  if (app_state.firebaseOk && app_state.auth?.currentUser) {
+    await signOut(app_state.auth).catch(()=>{});
+  }
+  LS.del('user');
+  app_state.user = null;
+  app_state.profile = null;
+  app_state.children = [];
+  app_state.events = [];
+  showScreen('sc-auth');
+  toast('👋', 'Uscito', 'A presto!');
+};
+
+// ══════════════════════════════════════════════════════════
+// ONBOARDING → SETUP
+// ══════════════════════════════════════════════════════════
+window.startSetup = () => {
+  LS.set('seen_onboard', true);
+  showScreen('sc-setup');
+};
+
+window.saveSetup = async () => {
+  const myname = document.getElementById('setup-myname').value.trim();
+  const c1 = document.getElementById('setup-c1').value.trim();
+  const c2 = document.getElementById('setup-c2').value.trim();
+  const c3 = document.getElementById('setup-c3').value.trim();
+  const fc = document.getElementById('setup-fcode').value.trim().toLowerCase().replace(/\s/g,'') || 'famiglia-' + Math.random().toString(36).slice(2,8);
+  if (!myname) { toast('⚠️','Inserisci il tuo nome','Campo obbligatorio'); return; }
+  if (!c1) { toast('⚠️','Inserisci almeno un bambino','Campo obbligatorio'); return; }
+  const children = [c1, c2, c3].filter(Boolean).slice(0,3).map((n,i) => ({name:n, emoji:CHILD_EMOJIS[i]}));
+  app_state.profile = {name: myname, familyCode: fc};
+  app_state.children = children;
+  LS.set('profile', app_state.profile);
+  LS.set('children', children);
+  if (app_state.db && app_state.user) {
+    await setDoc(doc(app_state.db, 'users', app_state.user.uid), {
+      name: myname, familyCode: fc, children,
+      email: app_state.user.email || '',
+      lastSeen: serverTimestamp(),
+      medicines: []
+    }).catch(()=>{});
+  }
+  toast('✅', 'Profilo salvato!', 'Benvenuto in Infurna\'s Family');
+  initApp();
+};
+
+// ══════════════════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════════════════
+window.saveChildrenSettings = async () => {
+  const c1 = document.getElementById('set-c1').value.trim();
+  const c2 = document.getElementById('set-c2').value.trim();
+  const c3 = document.getElementById('set-c3').value.trim();
+  const children = [c1,c2,c3].filter(Boolean).slice(0,3).map((n,i)=>({name:n,emoji:CHILD_EMOJIS[i]}));
+  if (!children.length) return;
+  app_state.children = children;
+  if (app_state.activeChild >= children.length) app_state.activeChild = 0;
+  LS.set('children', children);
+  LS.set('activeChild', app_state.activeChild);
+  if (app_state.db && app_state.user) {
+    updateDoc(doc(app_state.db,'users',app_state.user.uid),{children}).catch(()=>{});
+  }
+  renderChildSelectors();
+  updateChildLabels();
+};
+
+window.editMyName = () => {
+  const name = prompt('Il tuo nome:', app_state.profile?.name || '');
+  if (!name) return;
+  app_state.profile.name = name;
+  LS.set('profile', app_state.profile);
+  document.getElementById('set-myname-disp').textContent = name;
+  document.getElementById('hdr-caregiver').textContent = 'Ciao, ' + name;
+  if (app_state.db && app_state.user) {
+    updateDoc(doc(app_state.db,'users',app_state.user.uid),{name}).catch(()=>{});
+  }
+  toast('✅','Nome aggiornato','');
+};
+
+window.copyFcode = () => {
+  const fc = app_state.profile?.familyCode || '';
+  if (navigator.clipboard) navigator.clipboard.writeText(fc).catch(()=>{});
+  toast('📋','Codice copiato!', fc);
+};
+
+function loadSettingsScreen() {
+  document.getElementById('set-myname-disp').textContent = app_state.profile?.name || '—';
+  document.getElementById('set-email-disp').textContent = app_state.user?.email || '—';
+  document.getElementById('set-fcode-disp').textContent = app_state.profile?.familyCode || '—';
+  const ch = app_state.children;
+  document.getElementById('set-c1').value = ch[0]?.name || '';
+  document.getElementById('set-c2').value = ch[1]?.name || '';
+  document.getElementById('set-c3').value = ch[2]?.name || '';
+  document.getElementById('cg-fcode').textContent = app_state.profile?.familyCode || '—';
+}
+
+// ══════════════════════════════════════════════════════════
+// CHILD SELECTORS
+// ══════════════════════════════════════════════════════════
+function renderChildSelectors() {
+  const ids = ['home-child-sel','handoff-child-sel'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = '';
+    app_state.children.forEach((c, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'child-chip' + (i === app_state.activeChild ? ' active' : '');
+      btn.innerHTML = `<span class="child-emoji">${c.emoji}</span>${c.name}`;
+      btn.onclick = () => selectChild(i);
+      el.appendChild(btn);
+    });
+  });
+  updateChildLabels();
+}
+
+function selectChild(idx) {
+  app_state.activeChild = idx;
+  LS.set('activeChild', idx);
+  document.querySelectorAll('.child-chip').forEach((c,i) => c.classList.toggle('active', i===idx));
+  updateChildLabels();
+  updateHomeStatus();
+  updateDiaperCounts();
+  updateSleepTotal();
+  updateHandoffSummary();
+  updateNotesList();
+  refreshMedList();
+}
+
+function updateChildLabels() {
+  const ch = app_state.children[app_state.activeChild];
+  const lbl = ch ? ch.emoji + ' ' + ch.name : '';
+  ['feed-child-lbl','diaper-child-lbl','sleep-child-lbl','medicine-child-lbl','voice-child-lbl'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = lbl;
+  });
+}
+
+function childName() {
+  return app_state.children[app_state.activeChild]?.name || 'Bambino';
+}
+function childIdx() { return app_state.activeChild; }
+
+// ══════════════════════════════════════════════════════════
+// EVENT LOGGING
+// ══════════════════════════════════════════════════════════
+async function logEvent(type, data) {
+  const ev = {
+    type,
+    childIndex: childIdx(),
+    childName: childName(),
+    familyCode: app_state.profile?.familyCode || 'local',
+    caregiver: app_state.profile?.name || 'Utente',
+    timestamp: Date.now(),
+    ...data
+  };
+  // Local first
+  app_state.events.unshift(ev);
+  LS.set('events', app_state.events.slice(0,200));
+  updateHomeStatus();
+  // Firebase
+  if (app_state.db && app_state.profile?.familyCode) {
+    try {
+      const ref = await addDoc(collection(app_state.db,'events'), {...ev, timestamp: serverTimestamp()});
+      ev.id = ref.id;
+    } catch(e) { console.warn('Event not synced to Firebase:', e); }
+  }
+  return ev;
+}
+
+// ══════════════════════════════════════════════════════════
+// HOME STATUS
+// ══════════════════════════════════════════════════════════
+function updateHomeStatus() {
+  const ci = childIdx();
+  const evts = app_state.events.filter(e => e.childIndex === ci || e.childName === childName());
+  // Last feeding
+  const lastFeed = evts.find(e => e.type === 'feeding');
+  // Last diaper
+  const lastDiaper = evts.find(e => e.type === 'diaper');
+  // Sleep active?
+  const sleeping = app_state.sleepActive;
+  const lastSleep = evts.find(e => e.type === 'sleep_end');
+
+  const grid = document.getElementById('home-status-grid');
+  grid.innerHTML = `
+    <div class="card ${lastFeed && minutesSince(lastFeed.timestamp) > 180 ? 'card-amber' : ''}" onclick="showScreen('sc-feeding')">
+      <div class="card-lbl">Ultima poppata</div>
+      <div class="card-val">${lastFeed ? timeAgo(lastFeed.timestamp) : '—'}</div>
+      <div class="card-sub">${lastFeed ? formatFeedType(lastFeed.feedType) + ' · ' + (lastFeed.ml||'?') + 'ml' : 'Nessuna registrata'}</div>
+    </div>
+    <div class="card" onclick="showScreen('sc-diaper')">
+      <div class="card-lbl">Ultimo pannolino</div>
+      <div class="card-val">${lastDiaper ? timeAgo(lastDiaper.timestamp) : '—'}</div>
+      <div class="card-sub">${lastDiaper ? formatDiaperType(lastDiaper.diaperType) : 'Nessuno registrato'}</div>
+    </div>
+    <div class="card ${sleeping ? 'card-green' : ''}" onclick="showScreen('sc-sleep')">
+      <div class="card-lbl">Sonno</div>
+      <div class="card-val" style="color:${sleeping ? 'var(--green)' : 'var(--t1)'}">${sleeping ? 'Dorme 🌙' : 'Sveglio'}</div>
+      <div class="card-sub">${sleeping ? 'da ' + timeAgo(sleeping.startTime) : (lastSleep ? 'Ultima nanna: ' + timeAgo(lastSleep.timestamp) : 'Nessuna sessione')}</div>
+    </div>
+    <div class="card" onclick="showScreen('sc-medicine')">
+      <div class="card-lbl">Medicine oggi</div>
+      <div class="card-val">${countMedToday(evts)}</div>
+      <div class="card-sub">somministrate oggi</div>
+    </div>
+  `;
+
+  // Events list
+  const homeEvts = document.getElementById('home-events');
+  const recent = evts.slice(0,8);
+  if (!recent.length) {
+    homeEvts.innerHTML = '<div class="empty"><div class="empty-icon">📋</div>Nessun evento ancora</div>';
+    return;
+  }
+  homeEvts.innerHTML = recent.map(e => `
+    <div class="evt">
+      <div class="evt-dot" style="background:${evtColor(e.type)}"></div>
+      <div class="evt-txt">${evtLabel(e)}</div>
+      <div>
+        <div class="evt-time">${fmtTime(e.timestamp)}</div>
+        <div class="evt-who">${e.caregiver||''}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Caregiver header
+  document.getElementById('hdr-caregiver').textContent = 'Ciao, ' + (app_state.profile?.name || '—');
+}
+
+function countMedToday(evts) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  return evts.filter(e => e.type === 'medicine' && e.timestamp >= today.getTime()).length;
+}
+
+// ══════════════════════════════════════════════════════════
+// FEEDING
+// ══════════════════════════════════════════════════════════
+window.chQty = delta => {
+  app_state.feedQty = Math.max(10, Math.min(500, app_state.feedQty + delta));
+  document.getElementById('qty-val').textContent = app_state.feedQty;
+};
+window.setQty = v => {
+  app_state.feedQty = v;
+  document.getElementById('qty-val').textContent = v;
+};
+window.toggleFeedTimer = () => {
+  const btn = document.getElementById('feed-timer-btn');
+  if (app_state.feedTimerRunning) {
+    clearInterval(app_state.feedTimerInterval);
+    app_state.feedTimerRunning = false;
+    btn.textContent = '▶ Riprendi';
+  } else {
+    app_state.feedTimerRunning = true;
+    btn.textContent = '⏸ Pausa';
+    app_state.feedTimerInterval = setInterval(() => {
+      app_state.feedTimerSec++;
+      document.getElementById('feed-timer').textContent = fmtSec(app_state.feedTimerSec);
+    }, 1000);
+  }
+};
+window.resetFeedTimer = () => {
+  clearInterval(app_state.feedTimerInterval);
+  app_state.feedTimerRunning = false;
+  app_state.feedTimerSec = 0;
+  document.getElementById('feed-timer').textContent = '00:00';
+  document.getElementById('feed-timer-btn').textContent = '▶ Avvia';
+};
+window.logFeeding = async () => {
+  const feedType = document.querySelector('#feed-type-pills .sel')?.dataset.val || 'bottle';
+  clearInterval(app_state.feedTimerInterval);
+  app_state.feedTimerRunning = false;
+  await logEvent('feeding', {feedType, ml: app_state.feedQty, durationSec: app_state.feedTimerSec});
+  resetFeedTimer();
+  toast('🍼', 'Poppata registrata!', app_state.feedQty + 'ml · ' + childName());
+  goBack('sc-home');
+};
+window.selPill = (groupId, btn) => {
+  document.querySelectorAll('#'+groupId+' .pill').forEach(p => p.classList.remove('sel'));
+  btn.classList.add('sel');
+};
+
+// ══════════════════════════════════════════════════════════
+// DIAPER
+// ══════════════════════════════════════════════════════════
+window.selDiaper = type => {
+  app_state.selectedDiaper = type;
+  ['pee','poop','both'].forEach(t => {
+    const el = document.getElementById('dp-'+t);
+    el.style.background = '';
+    el.style.borderColor = '';
+  });
+  const colors = {pee:'rgba(245,158,11,.15)',poop:'rgba(139,90,43,.1)',both:'rgba(16,185,129,.1)'};
+  const bcolors = {pee:'rgba(245,158,11,.35)',poop:'rgba(139,90,43,.3)',both:'rgba(16,185,129,.25)'};
+  document.getElementById('dp-'+type).style.background = colors[type];
+  document.getElementById('dp-'+type).style.border = '.5px solid ' + bcolors[type];
+};
+window.logDiaper = async () => {
+  if (!app_state.selectedDiaper) { toast('⚠️','Seleziona tipo pannolino',''); return; }
+  await logEvent('diaper', {diaperType: app_state.selectedDiaper});
+  toast('🧷', 'Pannolino registrato!', formatDiaperType(app_state.selectedDiaper) + ' · ' + childName());
+  app_state.selectedDiaper = null;
+  ['pee','poop','both'].forEach(t => { document.getElementById('dp-'+t).style.background=''; document.getElementById('dp-'+t).style.border=''; });
+  updateDiaperCounts();
+  goBack('sc-home');
+};
+function updateDiaperCounts() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const ci = childIdx();
+  const evts = app_state.events.filter(e => e.type === 'diaper' && (e.childIndex === ci || e.childName === childName()) && e.timestamp >= today.getTime());
+  const pee = evts.filter(e => e.diaperType === 'pee' || e.diaperType === 'both').length;
+  const poop = evts.filter(e => e.diaperType === 'poop' || e.diaperType === 'both').length;
+  const tot = evts.length;
+  const el1 = document.getElementById('dc-pee');
+  const el2 = document.getElementById('dc-poop');
+  const el3 = document.getElementById('dc-tot');
+  if (el1) el1.textContent = pee;
+  if (el2) el2.textContent = poop;
+  if (el3) el3.textContent = tot;
+}
+
+// ══════════════════════════════════════════════════════════
+// SLEEP
+// ══════════════════════════════════════════════════════════
+window.startSleep = async () => {
+  const now = Date.now();
+  app_state.sleepActive = {startTime: now, childIndex: childIdx(), childName: childName()};
+  LS.set('sleepActive', app_state.sleepActive);
+  await logEvent('sleep_start', {startTime: now});
+  document.getElementById('sleep-active-card').style.display = '';
+  document.getElementById('sleep-start-wrap').style.display = 'none';
+  document.getElementById('sleep-end-wrap').style.display = '';
+  document.getElementById('sleep-start-lbl').textContent = 'Inizio: ' + fmtTime(now);
+  startSleepClockIfActive();
+  updateHomeStatus();
+  toast('🌙', 'Nanna iniziata!', childName());
+};
+window.endSleep = async () => {
+  if (!app_state.sleepActive) return;
+  const dur = Math.floor((Date.now() - app_state.sleepActive.startTime) / 1000);
+  await logEvent('sleep_end', {startTime: app_state.sleepActive.startTime, durationSec: dur});
+  app_state.sleepActive = null;
+  LS.del('sleepActive');
+  clearInterval(app_state.sleepTimerInterval);
+  document.getElementById('sleep-active-card').style.display = 'none';
+  document.getElementById('sleep-start-wrap').style.display = '';
+  document.getElementById('sleep-end-wrap').style.display = 'none';
+  updateSleepTotal();
+  updateHomeStatus();
+  toast('☀️', 'Nanna terminata!', 'Durata: ' + fmtDuration(dur));
+};
+function startSleepClockIfActive() {
+  clearInterval(app_state.sleepTimerInterval);
+  if (!app_state.sleepActive) return;
+  const ci = app_state.sleepActive.childIndex;
+  if (ci !== childIdx() && app_state.sleepActive.childName !== childName()) return;
+  document.getElementById('sleep-active-card').style.display = '';
+  document.getElementById('sleep-start-wrap').style.display = 'none';
+  document.getElementById('sleep-end-wrap').style.display = '';
+  document.getElementById('sleep-start-lbl').textContent = 'Inizio: ' + fmtTime(app_state.sleepActive.startTime);
+  app_state.sleepTimerInterval = setInterval(() => {
+    const sec = Math.floor((Date.now() - app_state.sleepActive.startTime) / 1000);
+    const el = document.getElementById('sleep-timer');
+    if (el) el.textContent = fmtHMS(sec);
+  }, 1000);
+}
+function updateSleepTotal() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const ci = childIdx();
+  const evts = app_state.events.filter(e => e.type === 'sleep_end' && (e.childIndex === ci || e.childName === childName()) && e.timestamp >= today.getTime());
+  let totalSec = evts.reduce((s,e) => s + (e.durationSec || 0), 0);
+  if (app_state.sleepActive) totalSec += Math.floor((Date.now() - app_state.sleepActive.startTime)/1000);
+  const pct = Math.min(100, Math.round(totalSec / (16*3600) * 100));
+  const el1 = document.getElementById('sleep-total');
+  const el2 = document.getElementById('sleep-pct-val');
+  const ringEl = document.getElementById('sleep-ring-el');
+  if (el1) el1.textContent = fmtDuration(totalSec);
+  if (el2) el2.textContent = pct + '%';
+  if (ringEl) {
+    const deg = Math.round(pct * 3.6);
+    ringEl.style.background = `conic-gradient(var(--green) 0deg ${deg}deg, var(--s2) ${deg}deg 360deg)`;
+  }
+  // Sessions list
+  const listEl = document.getElementById('sleep-sessions-list');
+  if (!listEl) return;
+  if (!evts.length) { listEl.innerHTML = '<div class="empty"><div class="empty-icon">😴</div>Nessuna sessione oggi</div>'; return; }
+  listEl.innerHTML = evts.map(e => `
+    <div class="card" style="margin-bottom:8px;flex-direction:row;display:flex;align-items:center;gap:10px">
+      <div style="font-size:20px">🌙</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500">${fmtDuration(e.durationSec||0)}</div>
+        <div style="font-size:11px;color:var(--t3)">${fmtTime(e.startTime||e.timestamp)} → ${fmtTime(e.timestamp)}</div>
+      </div>
+      <span style="font-size:11px;color:var(--t3)">${e.caregiver||''}</span>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// MEDICINE
+// ══════════════════════════════════════════════════════════
+window.addMedicine = async () => {
+  const name = document.getElementById('med-name-inp').value.trim();
+  const dose = document.getElementById('med-dose-inp').value.trim();
+  if (!name) { toast('⚠️','Inserisci il nome del farmaco',''); return; }
+  const med = {id: Date.now().toString(), name, dose, childIndex: childIdx()};
+  app_state.medicines.push(med);
+  LS.set('medicines', app_state.medicines);
+  if (app_state.db && app_state.user) {
+    updateDoc(doc(app_state.db,'users',app_state.user.uid),{medicines: app_state.medicines}).catch(()=>{});
+  }
+  document.getElementById('med-name-inp').value = '';
+  document.getElementById('med-dose-inp').value = '';
+  refreshMedList();
+  toast('💊','Farmaco aggiunto','');
+};
+
+window.giveMedicine = async (medId) => {
+  const med = app_state.medicines.find(m => m.id === medId);
+  if (!med) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const alreadyGiven = app_state.events.find(e =>
+    e.type === 'medicine' && e.medId === medId &&
+    e.timestamp >= today.getTime() &&
+    (e.childIndex === childIdx() || e.childName === childName())
+  );
+  if (alreadyGiven) {
+    toast('⚠️','Già somministrato!', med.name + ' dato alle ' + fmtTime(alreadyGiven.timestamp));
+    return;
+  }
+  await logEvent('medicine', {medId, medName: med.name, dose: med.dose});
+  refreshMedList();
+  toast('💊', 'Medicina registrata!', med.name + ' · ' + childName());
+};
+
+window.deleteMedicine = async (medId) => {
+  app_state.medicines = app_state.medicines.filter(m => m.id !== medId);
+  LS.set('medicines', app_state.medicines);
+  if (app_state.db && app_state.user) {
+    updateDoc(doc(app_state.db,'users',app_state.user.uid),{medicines: app_state.medicines}).catch(()=>{});
+  }
+  refreshMedList();
+};
+
+function refreshMedList() {
+  const el = document.getElementById('med-list');
+  if (!el) return;
+  const ci = childIdx();
+  const meds = app_state.medicines.filter(m => m.childIndex === undefined || m.childIndex === ci);
+  const today = new Date(); today.setHours(0,0,0,0);
+  if (!meds.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">💊</div>Nessun farmaco. Aggiungine uno sotto.</div>'; return; }
+  el.innerHTML = meds.map(m => {
+    const given = app_state.events.find(e => e.type === 'medicine' && e.medId === m.id && e.timestamp >= today.getTime() && (e.childIndex === ci || e.childName === childName()));
+    return `
+    <div class="med-item">
+      <div style="font-size:20px">💊</div>
+      <div class="med-info">
+        <div class="med-name">${m.name}</div>
+        <div class="med-dose">${m.dose || ''}</div>
+        ${given ? `<div class="med-ok">✓ Dato alle ${fmtTime(given.timestamp)} da ${given.caregiver||''}</div>` : ''}
+      </div>
+      ${given
+        ? `<div style="font-size:18px;color:var(--green)">✓</div>`
+        : `<button class="med-act" onclick="giveMedicine('${m.id}')">Dai →</button>`
+      }
+      <button onclick="deleteMedicine('${m.id}')" style="background:none;border:none;cursor:pointer;color:var(--t3);font-size:16px;padding:4px">🗑</button>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// VOICE / NOTE
+// ══════════════════════════════════════════════════════════
+window.toggleVoice = () => {
+  const mic = document.getElementById('voice-mic');
+  const status = document.getElementById('voice-status');
+  if (!app_state.voiceRunning) {
+    app_state.voiceRunning = true;
+    mic.classList.add('rec');
+    status.textContent = '● Registrazione in corso...';
+    app_state.voiceInterval = setInterval(() => {
+      app_state.voiceSec++;
+      const m = Math.floor(app_state.voiceSec/60), s = app_state.voiceSec%60;
+      document.getElementById('voice-time').textContent = m+':'+(s<10?'0':'')+s;
+    }, 1000);
+  } else {
+    app_state.voiceRunning = false;
+    clearInterval(app_state.voiceInterval);
+    mic.classList.remove('rec');
+    status.textContent = 'Nota audio salvata (simulata)';
+    const dur = app_state.voiceSec;
+    app_state.voiceSec = 0;
+    document.getElementById('voice-time').textContent = '0:00';
+    logEvent('note', {noteType:'audio', text:'[Nota audio: '+fmtSec(dur)+']', durationSec: dur}).then(()=>{
+      updateNotesList();
+      toast('🎙️','Nota vocale salvata!', childName() + ' · ' + fmtSec(dur));
+    });
+  }
+};
+
+window.saveTextNote = async () => {
+  const text = document.getElementById('note-text').value.trim();
+  if (!text) { toast('⚠️','Scrivi prima la nota',''); return; }
+  await logEvent('note', {noteType:'text', text});
+  document.getElementById('note-text').value = '';
+  updateNotesList();
+  toast('📝','Nota salvata!', childName());
+};
+
+function updateNotesList() {
+  const el = document.getElementById('notes-list');
+  if (!el) return;
+  const ci = childIdx();
+  const notes = app_state.events.filter(e => e.type === 'note' && (e.childIndex === ci || e.childName === childName())).slice(0,6);
+  if (!notes.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📝</div>Nessuna nota</div>'; return; }
+  el.innerHTML = notes.map(n => `
+    <div class="card" style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <span class="tag tag-${n.noteType==='audio'?'amber':'green'}">${n.noteType==='audio'?'🎙️ Audio':'📝 Testo'}</span>
+        <span style="font-size:11px;color:var(--t3)">${fmtTime(n.timestamp)}</span>
+      </div>
+      <div class="note-box" style="margin-bottom:0">${n.text||''}</div>
+      <div style="font-size:11px;color:var(--t3);margin-top:6px">${n.caregiver||''}</div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// HANDOFF
+// ══════════════════════════════════════════════════════════
+function updateHandoffSummary() {
+  const ci = childIdx();
+  const evts = app_state.events.filter(e => e.childIndex === ci || e.childName === childName());
+  const now = new Date();
+  document.getElementById('ho-title').textContent = 'Riepilogo · ' + (app_state.children[ci]?.name || 'Bambino');
+  document.getElementById('ho-time').textContent = fmtDateTime(Date.now()) + ' · ' + (app_state.profile?.name || '');
+
+  const lastFeed = evts.find(e => e.type === 'feeding');
+  const lastDiaper = evts.find(e => e.type === 'diaper');
+  const lastSleep = evts.find(e => e.type === 'sleep_end');
+  const sleeping = app_state.sleepActive && (app_state.sleepActive.childIndex === ci || app_state.sleepActive.childName === childName());
+  const today = now; today.setHours(0,0,0,0);
+  const medsToday = evts.filter(e => e.type === 'medicine' && e.timestamp >= today.getTime());
+  const notes = evts.filter(e => e.type === 'note').slice(0,1);
+
+  const feedAgo = lastFeed ? minutesSince(lastFeed.timestamp) : 999;
+
+  document.getElementById('ho-rows').innerHTML = `
+    <div class="handoff-row">
+      <div class="hicon">🍼</div>
+      <div class="htxt">
+        <div class="hkey">Ultima poppata</div>
+        <div class="hval">${lastFeed ? timeAgo(lastFeed.timestamp) + ' fa · ' + (lastFeed.ml||'?') + 'ml ' + formatFeedType(lastFeed.feedType) : 'Nessuna'}</div>
+      </div>
+      <span class="badge ${feedAgo > 180 ? 'b-alert' : feedAgo > 120 ? 'b-warn' : 'b-ok'}">${feedAgo > 180 ? 'Da fare' : feedAgo > 120 ? 'Presto' : 'OK'}</span>
+    </div>
+    <div class="handoff-row">
+      <div class="hicon">🧷</div>
+      <div class="htxt">
+        <div class="hkey">Ultimo pannolino</div>
+        <div class="hval">${lastDiaper ? timeAgo(lastDiaper.timestamp) + ' fa · ' + formatDiaperType(lastDiaper.diaperType) : 'Nessuno'}</div>
+      </div>
+      <span class="badge b-ok">OK</span>
+    </div>
+    <div class="handoff-row">
+      <div class="hicon">🌙</div>
+      <div class="htxt">
+        <div class="hkey">Sonno</div>
+        <div class="hval">${sleeping ? 'Dorme da ' + timeAgo(app_state.sleepActive.startTime) : (lastSleep ? 'Ultima nanna ' + timeAgo(lastSleep.timestamp) + ' fa' : 'Nessuna sessione')}</div>
+      </div>
+      <span class="badge ${sleeping ? 'b-ok' : 'b-warn'}">${sleeping ? 'Dorme' : 'Sveglio'}</span>
+    </div>
+    <div class="handoff-row">
+      <div class="hicon">💊</div>
+      <div class="htxt">
+        <div class="hkey">Medicine oggi</div>
+        <div class="hval">${medsToday.length ? medsToday.map(m=>m.medName).join(', ') : 'Nessuna somministrata'}</div>
+      </div>
+      <span class="badge b-ok">OK</span>
+    </div>
+    ${notes.length ? `
+    <div class="handoff-row">
+      <div class="hicon">📝</div>
+      <div class="htxt">
+        <div class="hkey">Ultima nota</div>
+        <div class="hval" style="font-style:italic">"${(notes[0].text||'').slice(0,60)}${(notes[0].text||'').length>60?'...':''}"</div>
+      </div>
+    </div>` : ''}
+  `;
+}
+
+window.sendHandoff = async () => {
+  const note = document.getElementById('handoff-note').value.trim();
+  if (note) await logEvent('note', {noteType:'handoff', text: '🤝 Passaggio turno: ' + note});
+  toast('📤','Riepilogo inviato!','Tutta la famiglia è aggiornata');
+  document.getElementById('handoff-note').value = '';
+};
+
+// ══════════════════════════════════════════════════════════
+// CAREGIVERS
+// ══════════════════════════════════════════════════════════
+function renderCaregivers(list) {
+  const el = document.getElementById('cg-list');
+  if (!el) return;
+  const colors = ['rgba(245,158,11,.12)','rgba(59,130,246,.12)','rgba(16,185,129,.12)','rgba(139,90,43,.1)'];
+  const textc = ['var(--amber)','var(--blue)','var(--green)','#8B5A2B'];
+  if (!list.length) { el.innerHTML = '<div class="empty">Nessun altro caregiver</div>'; return; }
+  el.innerHTML = list.map((cg, i) => {
+    const initials = (cg.name||'?').slice(0,2).toUpperCase();
+    const isMe = cg.email === (app_state.user?.email || '');
+    const online = cg.lastSeen && (Date.now() - (cg.lastSeen?.toMillis?.() || 0)) < 5*60*1000;
+    return `
+    <div class="cg-row">
+      <div class="cg-av" style="background:${colors[i%4]};color:${textc[i%4]}">${initials}</div>
+      <div class="cg-info">
+        <div class="cg-name">${cg.name||'Utente'}${isMe ? ' (tu)':''}</div>
+        <div class="cg-role">${cg.email||''}</div>
+      </div>
+      <span class="onl-badge ${online ? 'b-ok' : ''}" style="${!online ? 'background:var(--s3);color:var(--t3)' : ''}">${online ? '● Attivo' : 'Offline'}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('cg-sync-lbl').textContent = 'Codice famiglia · ' + (app_state.profile?.familyCode || '—');
+  // Update heartbeat
+  if (app_state.db && app_state.user) {
+    updateDoc(doc(app_state.db,'users',app_state.user.uid),{lastSeen: serverTimestamp()}).catch(()=>{});
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════
+window.showScreen = id => {
+  const prev = document.querySelector('.screen.active');
+  if (prev) { prev.classList.add('prev'); setTimeout(() => prev.classList.remove('prev','active'), 250); }
+  const next = document.getElementById(id);
+  if (!next) return;
+  next.classList.add('active');
+  app_state.prevScreen = app_state.currentScreen;
+  app_state.currentScreen = id;
+  // Screen-specific updates
+  if (id === 'sc-home') updateHomeStatus();
+  if (id === 'sc-diaper') updateDiaperCounts();
+  if (id === 'sc-sleep') { updateSleepTotal(); startSleepClockIfActive(); if(!app_state.sleepActive){document.getElementById('sleep-active-card').style.display='none';document.getElementById('sleep-start-wrap').style.display='';document.getElementById('sleep-end-wrap').style.display='none';} }
+  if (id === 'sc-medicine') refreshMedList();
+  if (id === 'sc-handoff') { updateHandoffSummary(); renderChildSelectors(); }
+  if (id === 'sc-voice') updateNotesList();
+  if (id === 'sc-settings') loadSettingsScreen();
+  if (id === 'sc-caregivers') { document.getElementById('cg-fcode').textContent = app_state.profile?.familyCode || '—'; if(app_state.db) updateDoc(doc(app_state.db,'users',app_state.user?.uid||'x'),{lastSeen:serverTimestamp()}).catch(()=>{}); }
+  updateChildLabels();
+};
+window.goBack = id => showScreen(id || app_state.prevScreen || 'sc-home');
+window.navTo = (scId, bnId) => {
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#'+bnId).forEach(b => b.classList.add('active'));
+  showScreen(scId);
+};
+
+// ══════════════════════════════════════════════════════════
+// CLOCK
+// ══════════════════════════════════════════════════════════
+function startClock() {
+  const timeEls = ['time-home','time-feeding','time-diaper','time-sleep','time-medicine','time-handoff','time-voice','time-cg','time-settings','time-setup'];
+  setInterval(() => {
+    const t = new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+    timeEls.forEach(id => { const el=document.getElementById(id); if(el) el.textContent=t; });
+  }, 1000);
+}
+
+// ══════════════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════════════
+let toastT;
+window.toast = (icon, title, sub) => {
+  const el = document.getElementById('toast');
+  document.getElementById('toast-icon').textContent = icon;
+  document.getElementById('toast-title').textContent = title;
+  document.getElementById('toast-sub').textContent = sub;
+  el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), 2800);
+};
+
+// ══════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════
+function fmtSec(s) {
+  const m = Math.floor(s/60), sec = s%60;
+  return (m<10?'0':'')+m+':'+(sec<10?'0':'')+sec;
+}
+function fmtHMS(s) {
+  const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60;
+  return (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(sec<10?'0':'')+sec;
+}
+function fmtTime(ts) {
+  if (!ts) return '—';
+  return new Date(ts).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+}
+function fmtDateTime(ts) {
+  return new Date(ts).toLocaleDateString('it-IT',{day:'2-digit',month:'short'}) + ' · ' + fmtTime(ts);
+}
+function fmtDuration(sec) {
+  const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60);
+  if (h > 0) return h + 'h ' + (m<10?'0':'')+m+'m';
+  return m + 'm ' + (sec%60) + 's';
+}
+function minutesSince(ts) {
+  if (!ts) return 9999;
+  const t = typeof ts === 'object' && ts.toMillis ? ts.toMillis() : ts;
+  return Math.floor((Date.now() - t) / 60000);
+}
+function timeAgo(ts) {
+  const min = minutesSince(ts);
+  if (min < 1) return 'adesso';
+  if (min < 60) return min + 'm';
+  const h = Math.floor(min/60);
+  const m2 = min % 60;
+  return h + 'h ' + (m2 > 0 ? m2+'m' : '');
+}
+function formatFeedType(t) {
+  return {bottle:'Biberon',breast_l:'Seno Sin.',breast_r:'Seno Dx.'}[t] || t || '—';
+}
+function formatDiaperType(t) {
+  return {pee:'💧 Solo pipì',poop:'💩 Solo popò',both:'🧷 Pipì + popò'}[t] || t || '—';
+}
+function evtColor(t) {
+  return {feeding:'var(--amber)',diaper:'var(--t3)',sleep_start:'var(--green)',sleep_end:'var(--green)',medicine:'var(--red)',note:'var(--blue)'}[t] || 'var(--t3)';
+}
+function evtLabel(e) {
+  if (e.type==='feeding') return '🍼 Poppata · '+(e.ml||'?')+'ml · '+(formatFeedType(e.feedType));
+  if (e.type==='diaper') return '🧷 Pannolino · '+formatDiaperType(e.diaperType);
+  if (e.type==='sleep_start') return '🌙 Inizio nanna';
+  if (e.type==='sleep_end') return '☀️ Fine nanna · '+fmtDuration(e.durationSec||0);
+  if (e.type==='medicine') return '💊 '+(e.medName||'Medicina');
+  if (e.type==='note') return '📝 Nota: '+(e.text||'').slice(0,30);
+  return e.type;
+}
+function setLoaderTxt(t) { const el=document.getElementById('loader-txt'); if(el) el.textContent=t; }
+function hidLoader() { const l=document.getElementById('loader'); if(l){l.style.opacity='0';setTimeout(()=>l.style.display='none',400);} }
+function delay(ms) { return new Promise(r=>setTimeout(r,ms)); }
+
+// ══════════════════════════════════════════════════════════
+// OFFLINE FALLBACK
+// ══════════════════════════════════════════════════════════
+// If Firebase fails, all functions still work with localStorage
+window.addEventListener('offline', () => {
+  document.getElementById('sync-dot').style.background = 'var(--amber)';
+});
+window.addEventListener('online', () => {
+  subscribeToEvents();
+  document.getElementById('sync-dot').style.background = 'var(--green)';
+});
+
+// ══════════════════════════════════════════════════════════
+// START
+// ══════════════════════════════════════════════════════════
+init();
+
+</script>
+
+<script>
+// Service Worker for PWA install
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    const swContent = `
+self.addEventListener('install', e => { self.skipWaiting(); });
+self.addEventListener('activate', e => { clients.claim(); });
+self.addEventListener('fetch', e => {
+  if (e.request.mode === 'navigate') {
+    e.respondWith(fetch(e.request).catch(() => caches.match('/')));
+  }
+});
+`;
+    const blob = new Blob([swContent], {type:'application/javascript'});
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).catch(()=>{});
+  });
+}
+
+// iOS install prompt helper
+window.addEventListener('load', () => {
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if (isIOS && !isStandalone && !localStorage.getItem('ios_prompt_shown')) {
+    setTimeout(() => {
+      const d = document.createElement('div');
+      d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;border-top:.5px solid rgba(245,158,11,.3);padding:16px 18px calc(16px + env(safe-area-inset-bottom));z-index:9999;font-family:DM Sans,sans-serif;display:flex;gap:12px;align-items:flex-start';
+      d.innerHTML = '<div style="font-size:28px">📱</div><div style="flex:1"><div style="font-size:13px;font-weight:600;color:#ede9e0;margin-bottom:3px">Installa su iPhone</div><div style="font-size:12px;color:#8a8680;line-height:1.5">Tocca <b style="color:#f59e0b">Condividi</b> → <b style="color:#f59e0b">Aggiungi a schermata Home</b> per usare l'app come nativa.</div></div><button onclick="this.parentElement.remove();localStorage.setItem('ios_prompt_shown',1)" style="background:none;border:none;color:#4a4845;font-size:20px;cursor:pointer;padding:0;line-height:1">✕</button>';
+      document.body.appendChild(d);
+    }, 3000);
+  }
+});
+</script>
+</body>
+</html>
