@@ -694,14 +694,19 @@ import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, or
 // ══════════════════════════════════════════════════════════
 // FIREBASE CONFIG
 // ══════════════════════════════════════════════════════════
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
-  apiKey: "AIzaSyDemo_InfurnaFamily_Key_Replace_This",
-  authDomain: "infurnas-family.firebaseapp.com",
-  projectId: "infurnas-family",
-  storageBucket: "infurnas-family.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
+  apiKey: "AIzaSyDHsdknopzoGspMs0oGJlGJLEWg_-nfuaQ",
+  authDomain: "infurna-family.firebaseapp.com",
+  projectId: "infurna-family",
+  storageBucket: "infurna-family.firebasestorage.app",
+  messagingSenderId: "178446871173",
+  appId: "1:178446871173:web:2afb9010776a62ad4197ec",
+  measurementId: "G-BSYFEZXPH3
 };
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 // ══════════════════════════════════════════════════════════
 // LOCAL-FIRST STORAGE (works without Firebase too)
