@@ -6,641 +6,530 @@
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-<meta name="apple-mobile-web-app-title" content="Infurna's Family"/>
 <meta name="theme-color" content="#000000"/>
 <title>Infurna's Family</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#000;--s1:#0d0d0d;--s2:#161616;--s3:#202020;--s4:#2a2a2a;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-  --amber:#f59e0b;--amber-dim:#d97706;--amber-glow:rgba(245,158,11,0.12);
-  --red:#e74c3c;--red-glow:rgba(231,76,60,0.12);
-  --green:#10b981;--green-glow:rgba(16,185,129,0.1);
-  --blue:#3b82f6;
+  --bg:#000;--s1:#0d0d0d;--s2:#161616;--s3:#1e1e1e;--s4:#262626;
+  --bdr:rgba(255,255,255,0.07);--bdr2:rgba(255,255,255,0.13);
+  --amb:#f59e0b;--amb-g:rgba(245,158,11,0.12);
+  --red:#e74c3c;--red-g:rgba(231,76,60,0.12);
+  --grn:#10b981;--grn-g:rgba(16,185,129,0.10);
+  --blu:#3b82f6;
   --t1:#ede9e0;--t2:#8a8680;--t3:#4a4845;
-  --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
-  --r:14px;--rsm:8px;
-  --safe-top:env(safe-area-inset-top,0px);
-  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --fn:'DM Sans',sans-serif;--mo:'DM Mono',monospace;
+  --r:14px;--rs:8px;
+  --st:env(safe-area-inset-top,0px);
+  --sb:env(safe-area-inset-bottom,0px);
 }
-html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--font);color:var(--t1);-webkit-font-smoothing:antialiased}
-#app{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden}
-
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;transform:translateX(28px);overflow:hidden}
-.screen.active{opacity:1;pointer-events:all;transform:translateX(0)}
-.screen.prev{transform:translateX(-28px)}
-
-.screen-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 14px;display:flex;flex-direction:column;gap:10px;padding-bottom:calc(84px + var(--safe-bottom));scrollbar-width:none}
-.screen-body::-webkit-scrollbar{display:none}
-
-.sbar{padding:calc(6px + var(--safe-top)) 18px 4px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:var(--bg)}
-.sbar-time{font-size:12px;color:var(--t3);font-family:var(--mono)}
-.sbar-right{display:flex;gap:5px;align-items:center}
-.sbar-dot{width:5px;height:5px;border-radius:50%;background:var(--amber)}
-.sync-live{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--fn);color:var(--t1);-webkit-font-smoothing:antialiased}
+#APP{position:fixed;inset:0;overflow:hidden}
+.SC{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;transform:translateX(24px);overflow:hidden}
+.SC.ON{opacity:1;pointer-events:all;transform:translateX(0)}
+.SC.PR{transform:translateX(-24px)}
+.BODY{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 14px;display:flex;flex-direction:column;gap:10px;padding-bottom:calc(80px + var(--sb));scrollbar-width:none}
+.BODY::-webkit-scrollbar{display:none}
+.SB{padding:calc(6px + var(--st)) 16px 4px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:var(--bg)}
+.ST{font-size:12px;color:var(--t3);font-family:var(--mo)}
+.DOT{width:5px;height:5px;border-radius:50%;background:var(--amb)}
+.SYNC{width:5px;height:5px;border-radius:50%;background:var(--grn);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-
-.hdr{padding:6px 16px 12px;border-bottom:.5px solid var(--border);flex-shrink:0;display:flex;justify-content:space-between;align-items:flex-end}
-.hdr-logo{font-size:19px;font-weight:600;letter-spacing:-.4px}
-.hdr-logo em{font-style:normal;color:var(--amber)}
-.hdr-sub{font-size:10px;color:var(--t3);margin-top:2px}
-.sub-hdr{padding:10px 16px 12px;border-bottom:.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;gap:10px}
-.sub-hdr-title{font-size:17px;font-weight:600;flex:1}
-
-.card{background:var(--s1);border:.5px solid var(--border);border-radius:var(--r);padding:13px}
-.card-amber{border-color:rgba(245,158,11,.22);background:var(--amber-glow)}
-.card-red{border-color:rgba(231,76,60,.22);background:var(--red-glow)}
-.card-green{border-color:rgba(16,185,129,.18);background:var(--green-glow)}
-.card-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.9px;font-weight:500;margin-bottom:7px}
-.card-val{font-size:21px;font-weight:600}
-.card-sub{font-size:12px;color:var(--t2);margin-top:3px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-
-.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.action-btn{background:var(--s2);border:.5px solid var(--border);border-radius:var(--r);padding:18px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;transition:transform .1s,background .15s;font-family:var(--font);-webkit-appearance:none}
-.action-btn:active{transform:scale(.95);background:var(--s3)}
-.action-btn .aicon{font-size:28px}
-.action-btn .albl{font-size:12px;color:var(--t2);font-weight:500}
-.action-btn.a-amber{border-color:rgba(245,158,11,.28)}
-.action-btn.a-amber .aicon{color:var(--amber)}
-.action-btn.a-red{border-color:rgba(231,76,60,.28)}
-.action-btn.a-red .aicon{color:var(--red)}
-.action-btn.a-green{border-color:rgba(16,185,129,.2)}
-.action-btn.a-green .aicon{color:var(--green)}
-.action-btn.a-blue{border-color:rgba(59,130,246,.2)}
-.action-btn.a-blue .aicon{color:var(--blue)}
-
-.btn{border:none;border-radius:var(--r);cursor:pointer;font-family:var(--font);font-weight:500;font-size:15px;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-appearance:none;width:100%}
-.btn:active{transform:scale(.97)}
-.btn-primary{background:var(--amber);color:#000;padding:16px}
-.btn-secondary{background:var(--s2);color:var(--t1);border:.5px solid var(--border2);padding:14px}
-.btn-danger{background:var(--red);color:var(--t1);padding:14px}
-.btn-ghost{background:transparent;color:var(--t2);border:.5px solid var(--border);font-size:13px;padding:9px 14px;width:auto}
-
-.inp{background:var(--s2);border:.5px solid var(--border2);border-radius:var(--rsm);padding:13px 14px;font-size:15px;color:var(--t1);font-family:var(--font);width:100%;outline:none;-webkit-appearance:none}
-.inp:focus{border-color:rgba(245,158,11,.5)}
-.inp::placeholder{color:var(--t3)}
-.inp-lbl{font-size:11px;color:var(--t3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px}
-
-.sec{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.9px;font-weight:500;margin:4px 0 8px}
-
-.pills{display:flex;gap:6px;flex-wrap:wrap}
-.pill{padding:9px 14px;background:var(--s2);border:.5px solid var(--border);border-radius:20px;font-size:13px;color:var(--t2);cursor:pointer;font-family:var(--font);font-weight:500;transition:all .15s;-webkit-appearance:none}
-.pill.sel{background:var(--amber-glow);border:.5px solid rgba(245,158,11,.45) !important;color:var(--amber)}
-.pill:active{transform:scale(.95)}
-
-.qty-row{display:flex;align-items:center;gap:12px;background:var(--s2);border:.5px solid var(--border);border-radius:var(--rsm);padding:10px 14px}
-.qty-btn{width:42px;height:42px;background:var(--s3);border:none;border-radius:10px;color:var(--t1);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font);-webkit-appearance:none;transition:background .1s}
-.qty-btn:active{background:var(--s4)}
-.qty-val{flex:1;text-align:center;font-size:30px;font-weight:600;font-family:var(--mono);color:var(--t1)}
-.qty-unit{font-size:12px;color:var(--t3)}
-
-.timer-big{font-size:52px;font-weight:300;font-family:var(--mono);color:var(--t1);letter-spacing:-1px;text-align:center}
-
-.div{height:.5px;background:var(--border);margin:8px 0}
-
-.bnav{position:absolute;bottom:0;left:0;right:0;background:var(--s1);border-top:.5px solid var(--border);display:flex;padding:9px 0 calc(9px + var(--safe-bottom));flex-shrink:0;z-index:50}
-.bnav-btn{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--font);-webkit-appearance:none;padding:3px 0}
-.bnav-btn .ni{font-size:20px;color:var(--t3)}
-.bnav-btn .nl{font-size:10px;color:var(--t3)}
-.bnav-btn.active .ni,.bnav-btn.active .nl{color:var(--amber)}
-
-.evt-list{display:flex;flex-direction:column}
-.evt{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--border)}
-.evt:last-child{border-bottom:none}
-.evt-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.evt-txt{flex:1;font-size:13px;color:var(--t1)}
-.evt-who{font-size:10px;color:var(--t3)}
-.evt-time{font-size:11px;color:var(--t3);font-family:var(--mono)}
-
-.ho-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border)}
-.ho-row:last-child{border-bottom:none}
-.hicon{font-size:16px;width:22px;flex-shrink:0;margin-top:1px}
-.htxt{flex:1}
-.hkey{font-size:11px;color:var(--t3)}
-.hval{font-size:14px;color:var(--t1);font-weight:500}
-.badge{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:500;white-space:nowrap}
-.b-ok{background:rgba(16,185,129,.15);color:var(--green)}
-.b-warn{background:rgba(245,158,11,.15);color:var(--amber)}
-.b-alert{background:rgba(231,76,60,.15);color:var(--red)}
-
-.med-item{display:flex;align-items:center;gap:12px;padding:12px 13px;background:var(--s2);border:.5px solid var(--border);border-radius:var(--rsm);margin-bottom:8px}
-.med-info{flex:1}
-.med-name{font-size:14px;color:var(--t1);font-weight:500}
-.med-dose{font-size:11px;color:var(--t3);margin-top:2px}
-.med-ok{font-size:11px;color:var(--green);margin-top:2px}
-.med-act{background:var(--s3);border:none;border-radius:var(--rsm);padding:8px 12px;color:var(--amber);font-size:12px;cursor:pointer;font-family:var(--font);font-weight:500;-webkit-appearance:none;white-space:nowrap}
-
-.child-sel{display:flex;gap:6px;padding:10px 16px;background:var(--bg);border-bottom:.5px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
-.child-sel::-webkit-scrollbar{display:none}
-.child-chip{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--s2);border:.5px solid var(--border);border-radius:20px;cursor:pointer;font-family:var(--font);font-size:13px;color:var(--t2);font-weight:500;white-space:nowrap;flex-shrink:0;-webkit-appearance:none}
-.child-chip.active{background:var(--amber-glow);border:.5px solid rgba(245,158,11,.4) !important;color:var(--amber)}
-
-.sleep-wrap{display:flex;flex-direction:column;align-items:center;padding:10px 0}
-.sleep-ring{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:10px;background:conic-gradient(var(--green) 0deg 0deg, var(--s2) 0deg 360deg)}
-.sleep-inner{width:86px;height:86px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center}
-.sleep-pct{font-size:20px;font-weight:600;font-family:var(--mono);color:var(--green)}
-.sleep-pct-lbl{font-size:9px;color:var(--t3)}
-
-.voice-mic{width:76px;height:76px;border-radius:50%;background:var(--s2);border:.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;margin:0 auto 12px;transition:all .2s}
-.voice-mic.rec{background:var(--red-glow);border-color:rgba(231,76,60,.5);animation:pulse 1.2s infinite}
+.HDR{padding:6px 16px 12px;border-bottom:.5px solid var(--bdr);flex-shrink:0;display:flex;justify-content:space-between;align-items:flex-end}
+.LOGO{font-size:19px;font-weight:600;letter-spacing:-.4px}
+.LOGO span{color:var(--amb)}
+.SUBT{font-size:10px;color:var(--t3);margin-top:2px}
+.SHDR{padding:10px 16px 12px;border-bottom:.5px solid var(--bdr);flex-shrink:0;display:flex;align-items:center;gap:10px}
+.STIT{font-size:17px;font-weight:600;flex:1}
+.CARD{background:var(--s1);border:.5px solid var(--bdr);border-radius:var(--r);padding:13px}
+.CAMB{border-color:rgba(245,158,11,.22);background:var(--amb-g)}
+.CGRN{border-color:rgba(16,185,129,.18);background:var(--grn-g)}
+.CRED{border-color:rgba(231,76,60,.22);background:var(--red-g)}
+.LBL{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.9px;font-weight:500;margin-bottom:7px}
+.VAL{font-size:21px;font-weight:600}
+.SUB{font-size:12px;color:var(--t2);margin-top:3px}
+.G2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.AG{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.ABT{background:var(--s2);border:.5px solid var(--bdr);border-radius:var(--r);padding:18px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;font-family:var(--fn);-webkit-appearance:none;transition:transform .1s}
+.ABT:active{transform:scale(.95)}
+.AI{font-size:28px}
+.AL{font-size:12px;color:var(--t2);font-weight:500}
+.ABT.aa{border-color:rgba(245,158,11,.28)}.ABT.aa .AI{color:var(--amb)}
+.ABT.ar{border-color:rgba(231,76,60,.28)}.ABT.ar .AI{color:var(--red)}
+.ABT.ag{border-color:rgba(16,185,129,.2)}.ABT.ag .AI{color:var(--grn)}
+.ABT.ab{border-color:rgba(59,130,246,.2)}.ABT.ab .AI{color:var(--blu)}
+.BTN{border:none;border-radius:var(--r);cursor:pointer;font-family:var(--fn);font-weight:500;font-size:15px;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-appearance:none;width:100%}
+.BTN:active{transform:scale(.97)}
+.BP{background:var(--amb);color:#000;padding:16px}
+.BS{background:var(--s2);color:var(--t1);border:.5px solid var(--bdr2);padding:14px}
+.BD{background:var(--red);color:var(--t1);padding:14px}
+.BG{background:transparent;color:var(--t2);border:.5px solid var(--bdr);font-size:13px;padding:9px 14px;width:auto;border-radius:var(--rs)}
+.INP{background:var(--s2);border:.5px solid var(--bdr2);border-radius:var(--rs);padding:13px 14px;font-size:15px;color:var(--t1);font-family:var(--fn);width:100%;outline:none;-webkit-appearance:none}
+.INP:focus{border-color:rgba(245,158,11,.5)}
+.INP::placeholder{color:var(--t3)}
+.INPL{font-size:11px;color:var(--t3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px}
+.SEC{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.9px;font-weight:500;margin:4px 0 8px}
+.PIL{padding:9px 14px;background:var(--s2);border:.5px solid var(--bdr);border-radius:20px;font-size:13px;color:var(--t2);cursor:pointer;font-family:var(--fn);font-weight:500;-webkit-appearance:none;transition:all .15s}
+.PIL.SL{background:var(--amb-g);border-color:rgba(245,158,11,.45);color:var(--amb)}
+.QR{display:flex;align-items:center;gap:12px;background:var(--s2);border:.5px solid var(--bdr);border-radius:var(--rs);padding:10px 14px}
+.QB{width:42px;height:42px;background:var(--s3);border:none;border-radius:10px;color:var(--t1);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--fn);-webkit-appearance:none}
+.QB:active{background:var(--s4)}
+.QV{flex:1;text-align:center;font-size:30px;font-weight:600;font-family:var(--mo);color:var(--t1)}
+.QU{font-size:12px;color:var(--t3)}
+.TBG{font-size:48px;font-weight:300;font-family:var(--mo);color:var(--t1);letter-spacing:-1px;text-align:center}
+.DIV{height:.5px;background:var(--bdr);margin:8px 0}
+.BNV{position:absolute;bottom:0;left:0;right:0;background:var(--s1);border-top:.5px solid var(--bdr);display:flex;padding:9px 0 calc(9px + var(--sb));z-index:50}
+.NBT{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--fn);-webkit-appearance:none;padding:3px 0}
+.NI{font-size:20px;color:var(--t3)}
+.NL{font-size:10px;color:var(--t3)}
+.NBT.ON .NI,.NBT.ON .NL{color:var(--amb)}
+.EL{display:flex;flex-direction:column}
+.EI{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--bdr)}
+.EI:last-child{border-bottom:none}
+.ED{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ET{flex:1;font-size:13px;color:var(--t1)}
+.EW{font-size:10px;color:var(--t3)}
+.EC{font-size:11px;color:var(--t3);font-family:var(--mo)}
+.HR{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:.5px solid var(--bdr)}
+.HR:last-child{border-bottom:none}
+.HI{font-size:16px;width:22px;flex-shrink:0;margin-top:1px}
+.HT{flex:1}
+.HK{font-size:11px;color:var(--t3)}
+.HV{font-size:14px;color:var(--t1);font-weight:500}
+.BDG{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:500;white-space:nowrap}
+.BOK{background:rgba(16,185,129,.15);color:var(--grn)}
+.BWN{background:rgba(245,158,11,.15);color:var(--amb)}
+.BAL{background:rgba(231,76,60,.15);color:var(--red)}
+.MI{display:flex;align-items:center;gap:12px;padding:12px 13px;background:var(--s2);border:.5px solid var(--bdr);border-radius:var(--rs);margin-bottom:8px}
+.MN{flex:1}
+.MNM{font-size:14px;color:var(--t1);font-weight:500}
+.MDS{font-size:11px;color:var(--t3);margin-top:2px}
+.MGV{font-size:11px;color:var(--grn);margin-top:2px}
+.MAC{background:var(--s3);border:none;border-radius:var(--rs);padding:8px 12px;color:var(--amb);font-size:12px;cursor:pointer;font-family:var(--fn);font-weight:500;-webkit-appearance:none;white-space:nowrap}
+.KSL{display:flex;gap:6px;padding:10px 16px;background:var(--bg);border-bottom:.5px solid var(--bdr);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.KSL::-webkit-scrollbar{display:none}
+.KCH{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--s2);border:.5px solid var(--bdr);border-radius:20px;cursor:pointer;font-family:var(--fn);font-size:13px;color:var(--t2);font-weight:500;white-space:nowrap;flex-shrink:0;-webkit-appearance:none}
+.KCH.ON{background:var(--amb-g);border-color:rgba(245,158,11,.4);color:var(--amb)}
+.SRW{display:flex;flex-direction:column;align-items:center;padding:10px 0}
+.SRG{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:10px;background:conic-gradient(var(--grn) 0deg 0deg,var(--s2) 0deg 360deg)}
+.SRI{width:86px;height:86px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.SRP{font-size:20px;font-weight:600;font-family:var(--mo);color:var(--grn)}
+.SRL{font-size:9px;color:var(--t3)}
+.VM{width:76px;height:76px;border-radius:50%;background:var(--s2);border:.5px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;margin:0 auto 12px;transition:all .2s}
+.VM.RC{background:var(--red-g);border-color:rgba(231,76,60,.5);animation:pulse 1.2s infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-
-.setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:.5px solid var(--border)}
-.setting-row:last-child{border-bottom:none}
-.setting-lbl{font-size:14px;color:var(--t1)}
-.setting-sub{font-size:11px;color:var(--t3);margin-top:2px}
-.toggle{width:44px;height:26px;border-radius:13px;background:var(--s3);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none;-webkit-appearance:none}
-.toggle.on{background:var(--amber)}
-.toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s}
-.toggle.on::after{transform:translateX(18px)}
-
-.cg-row{display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--s2);border:.5px solid var(--border);border-radius:var(--rsm);margin-bottom:8px}
-.cg-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
-.cg-info{flex:1}
-.cg-name{font-size:14px;color:var(--t1);font-weight:500}
-.cg-role{font-size:11px;color:var(--t3)}
-
-.warn-box{background:rgba(231,76,60,.08);border:.5px solid rgba(231,76,60,.28);border-radius:var(--rsm);padding:11px 13px;display:flex;gap:9px;align-items:flex-start}
-.warn-txt{font-size:12px;color:var(--red);line-height:1.5}
-
-.note-box{background:var(--s2);border:.5px solid var(--border);border-radius:var(--rsm);padding:12px 14px;font-size:13px;color:var(--t2);line-height:1.6;font-style:italic}
-
-.empty{text-align:center;padding:28px 20px;color:var(--t3);font-size:14px}
-.empty-icon{font-size:34px;margin-bottom:8px}
-
-.tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500;margin-right:4px}
-.tag-amber{background:var(--amber-glow);color:var(--amber)}
-.tag-green{background:var(--green-glow);color:var(--green)}
-.tag-red{background:var(--red-glow);color:var(--red)}
-
-#toast{position:fixed;bottom:90px;left:14px;right:14px;background:var(--s2);border:.5px solid rgba(245,158,11,.38);border-radius:var(--r);padding:13px 16px;z-index:1000;display:flex;gap:10px;align-items:center;font-family:var(--font);transition:opacity .3s,transform .3s;transform:translateY(8px);opacity:0;pointer-events:none}
-#toast.show{opacity:1;transform:translateY(0)}
-.toast-title{font-size:14px;font-weight:500;color:var(--t1)}
-.toast-sub{font-size:11px;color:var(--t3)}
-
-#loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2000;transition:opacity .4s}
-.loader-logo{font-size:26px;font-weight:600;color:var(--t1);letter-spacing:-.4px;margin-bottom:24px}
-.loader-logo em{font-style:normal;color:var(--amber)}
-.loader-spin{width:32px;height:32px;border:2px solid var(--s3);border-top-color:var(--amber);border-radius:50%;animation:spin .8s linear infinite}
+.SETR{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:.5px solid var(--bdr)}
+.SETR:last-child{border-bottom:none}
+.SETN{font-size:14px;color:var(--t1)}
+.SETS{font-size:11px;color:var(--t3);margin-top:2px}
+.TOG{width:44px;height:26px;border-radius:13px;background:var(--s3);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none;-webkit-appearance:none}
+.TOG.ON{background:var(--amb)}
+.TOG::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s}
+.TOG.ON::after{transform:translateX(18px)}
+.CGR{display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--s2);border:.5px solid var(--bdr);border-radius:var(--rs);margin-bottom:8px}
+.CAV{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.CNI{flex:1}
+.CNN{font-size:14px;color:var(--t1);font-weight:500}
+.CNR{font-size:11px;color:var(--t3)}
+.WBX{background:rgba(231,76,60,.08);border:.5px solid rgba(231,76,60,.28);border-radius:var(--rs);padding:11px 13px;display:flex;gap:9px;align-items:flex-start}
+.WTX{font-size:12px;color:var(--red);line-height:1.5}
+.NTB{background:var(--s2);border:.5px solid var(--bdr);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--t2);line-height:1.6;font-style:italic}
+.TAG{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500;margin-right:4px}
+.TA{background:var(--amb-g);color:var(--amb)}
+.TG{background:var(--grn-g);color:var(--grn)}
+.EMP{text-align:center;padding:28px 20px;color:var(--t3);font-size:14px}
+.EMP div:first-child{font-size:34px;margin-bottom:8px}
+#TST{position:fixed;bottom:88px;left:14px;right:14px;background:var(--s2);border:.5px solid rgba(245,158,11,.38);border-radius:var(--r);padding:13px 16px;z-index:999;display:flex;gap:10px;align-items:center;font-family:var(--fn);transition:opacity .3s,transform .3s;transform:translateY(8px);opacity:0;pointer-events:none}
+#TST.ON{opacity:1;transform:translateY(0)}
+.TT{font-size:14px;font-weight:500;color:var(--t1)}
+.TS{font-size:11px;color:var(--t3)}
+#LDR{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2000;transition:opacity .4s}
+.LL{font-size:26px;font-weight:600;color:var(--t1);letter-spacing:-.4px;margin-bottom:24px}
+.LL span{color:var(--amb)}
+.LS{width:32px;height:32px;border:2px solid var(--s3);border-top-color:var(--amb);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loader-txt{font-size:12px;color:var(--t3);margin-top:14px}
+.LT{font-size:12px;color:var(--t3);margin-top:14px}
 </style>
 </head>
 <body>
-
-<div id="loader">
-  <div class="loader-logo">Infurna's <em>Family</em></div>
-  <div class="loader-spin"></div>
-  <div class="loader-txt" id="loader-txt">Avvio in corso...</div>
+<div id="LDR">
+  <div class="LL">Infurna's <span>Family</span></div>
+  <div class="LS"></div>
+  <div class="LT" id="ltxt">Avvio in corso...</div>
 </div>
+<div id="APP">
 
-<div id="app">
-
-<!-- AUTH -->
-<div class="screen" id="sc-auth">
+<div class="SC" id="sc-au">
   <div style="flex:1;overflow-y:auto;padding-bottom:30px">
     <div style="padding:40px 22px 30px;display:flex;flex-direction:column;gap:14px">
       <div>
-        <div style="font-size:26px;font-weight:600;letter-spacing:-.4px;margin-bottom:6px">Infurna's <em style="font-style:normal;color:var(--amber)">Family</em></div>
-        <div style="font-size:13px;color:var(--t3);line-height:1.5;margin-bottom:20px">Traccia, sincronizza e condividi la cura del tuo bambino con tutta la famiglia. Gratuito.</div>
+        <div class="LOGO" style="font-size:24px;margin-bottom:6px">Infurna's <span>Family</span></div>
+        <div style="font-size:13px;color:var(--t3);line-height:1.5;margin-bottom:20px">Traccia, sincronizza e condividi la cura del tuo bambino. Gratuito.</div>
       </div>
-      <div>
-        <div class="inp-lbl">Email</div>
-        <input class="inp" id="auth-email" type="email" placeholder="tuaemail@example.com" autocomplete="email"/>
-      </div>
-      <div>
-        <div class="inp-lbl">Password</div>
-        <input class="inp" id="auth-pass" type="password" placeholder="Almeno 6 caratteri" autocomplete="current-password"/>
-      </div>
-      <button class="btn btn-primary" id="btn-login" onclick="doLogin()">
-        <span id="login-txt">Accedi</span>
+      <div><div class="INPL">Email</div><input class="INP" id="a-em" type="email" placeholder="tuaemail@example.com" autocomplete="email"/></div>
+      <div><div class="INPL">Password</div><input class="INP" id="a-pw" type="password" placeholder="Almeno 6 caratteri" autocomplete="current-password"/></div>
+      <button class="BTN BP" id="a-btn" onclick="doLogin()"><span id="a-btntxt">Accedi</span></button>
+      <button class="BTN" onclick="toggleAuth()" style="background:none;border:none;color:var(--t2);font-size:13px;cursor:pointer">
+        Non hai un account? <span style="color:var(--amb)" id="a-swlbl">Registrati</span>
       </button>
-      <button class="btn btn-ghost" onclick="toggleAuthMode()" style="margin:0 auto">
-        Non hai un account? <span style="color:var(--amber)" id="auth-switch-lbl">Registrati</span>
-      </button>
-      <div id="auth-err" style="font-size:12px;color:var(--red);text-align:center;display:none;padding:4px 0"></div>
-      <div style="text-align:center;font-size:11px;color:var(--t3);margin-top:10px">Gratuito · Privato · Funziona offline</div>
+      <div id="a-err" style="font-size:12px;color:var(--red);text-align:center;display:none;padding:4px 0"></div>
+      <div style="text-align:center;font-size:11px;color:var(--t3);margin-top:10px">Gratuito - Offline-ready - Sync Firebase</div>
     </div>
   </div>
 </div>
 
-<!-- ONBOARDING -->
-<div class="screen" id="sc-onboard">
+<div class="SC" id="sc-ob">
   <div style="flex:1;overflow-y:auto">
     <div style="padding:30px 22px;display:flex;flex-direction:column;min-height:100%;justify-content:space-between">
       <div>
-        <div style="font-size:24px;font-weight:600;letter-spacing:-.4px">Infurna's <em style="font-style:normal;color:var(--amber)">Family</em></div>
-        <div style="font-size:28px;font-weight:300;color:var(--t1);line-height:1.3;margin:28px 0 20px">Piu veloce<br>di un messaggio<br><strong style="font-weight:600;color:var(--amber)">WhatsApp.</strong></div>
+        <div class="LOGO" style="font-size:22px">Infurna's <span>Family</span></div>
+        <div style="font-size:26px;font-weight:300;line-height:1.3;margin:28px 0 20px">Piu veloce di<br>un messaggio<br><strong style="font-weight:600;color:var(--amb)">WhatsApp.</strong></div>
         <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:30px">
-          <div style="display:flex;align-items:flex-start;gap:13px">
-            <div style="width:28px;height:28px;border-radius:50%;background:var(--s2);border:.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--amber);flex-shrink:0;margin-top:1px">1</div>
+          <div style="display:flex;gap:13px;align-items:flex-start">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--s2);border:.5px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--amb);flex-shrink:0">1</div>
             <div style="font-size:13px;color:var(--t2);line-height:1.5">Registra poppate, pannolini, sonno e medicine in 1-2 tap</div>
           </div>
-          <div style="display:flex;align-items:flex-start;gap:13px">
-            <div style="width:28px;height:28px;border-radius:50%;background:var(--s2);border:.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--amber);flex-shrink:0;margin-top:1px">2</div>
-            <div style="font-size:13px;color:var(--t2);line-height:1.5">Sincronizzazione istantanea tra tutti i dispositivi della famiglia</div>
+          <div style="display:flex;gap:13px;align-items:flex-start">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--s2);border:.5px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--amb);flex-shrink:0">2</div>
+            <div style="font-size:13px;color:var(--t2);line-height:1.5">Sincronizzazione istantanea tra tutti i dispositivi</div>
           </div>
-          <div style="display:flex;align-items:flex-start;gap:13px">
-            <div style="width:28px;height:28px;border-radius:50%;background:var(--s2);border:.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--amber);flex-shrink:0;margin-top:1px">3</div>
-            <div style="font-size:13px;color:var(--t2);line-height:1.5">Passaggio turno automatico: tutto il necessario in 5 secondi</div>
+          <div style="display:flex;gap:13px;align-items:flex-start">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--s2);border:.5px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--amb);flex-shrink:0">3</div>
+            <div style="font-size:13px;color:var(--t2);line-height:1.5">Passaggio turno automatico in 5 secondi</div>
           </div>
-          <div style="display:flex;align-items:flex-start;gap:13px">
-            <div style="width:28px;height:28px;border-radius:50%;background:var(--s2);border:.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--amber);flex-shrink:0;margin-top:1px">4</div>
-            <div style="font-size:13px;color:var(--t2);line-height:1.5">Fino a 3 bambini, ciascuno con storico indipendente</div>
+          <div style="display:flex;gap:13px;align-items:flex-start">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--s2);border:.5px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--amb);flex-shrink:0">4</div>
+            <div style="font-size:13px;color:var(--t2);line-height:1.5">Fino a 3 bambini con storico indipendente</div>
           </div>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:9px">
-        <button class="btn btn-primary" onclick="startSetup()">Configura il mio profilo</button>
-        <button class="btn btn-secondary" onclick="showScreen('sc-auth')">Ho gia un account</button>
+        <button class="BTN BP" onclick="go('sc-su')">Configura il mio profilo</button>
+        <button class="BTN BS" onclick="go('sc-au')">Ho gia un account</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SETUP -->
-<div class="screen" id="sc-setup">
-  <div class="sbar"><span class="sbar-time" id="t-setup"></span></div>
-  <div class="sub-hdr"><span class="sub-hdr-title">Configurazione iniziale</span></div>
-  <div class="screen-body">
-    <p class="sec">Il tuo nome</p>
-    <input class="inp" id="setup-myname" type="text" placeholder="es. Mamma / Papa / Nonna"/>
-    <div class="div"></div>
-    <p class="sec">Bambino 1</p>
-    <input class="inp" id="setup-c1" type="text" placeholder="Nome del bambino"/>
-    <p class="sec" style="margin-top:8px">Bambino 2 (opzionale)</p>
-    <input class="inp" id="setup-c2" type="text" placeholder="Nome del secondo bambino"/>
-    <p class="sec" style="margin-top:8px">Bambino 3 (opzionale)</p>
-    <input class="inp" id="setup-c3" type="text" placeholder="Nome del terzo bambino"/>
-    <div class="div"></div>
-    <p class="sec">Codice famiglia</p>
-    <p style="font-size:12px;color:var(--t3);margin-bottom:8px;line-height:1.5">Inventane uno e condividilo col partner. Usate lo stesso codice su entrambi i dispositivi per sincronizzarvi.</p>
-    <input class="inp" id="setup-fcode" type="text" placeholder="es. infurna2024"/>
-    <p style="font-size:11px;color:var(--t3);margin-top:4px">Se il partner ha gia un codice, inserisci il suo qui.</p>
+<div class="SC" id="sc-su">
+  <div class="SB"><span class="ST" id="t-su"></span></div>
+  <div class="SHDR"><span class="STIT">Configurazione</span></div>
+  <div class="BODY">
+    <p class="SEC">Il tuo nome</p>
+    <input class="INP" id="su-nm" type="text" placeholder="es. Mamma / Papa / Nonna"/>
+    <div class="DIV"></div>
+    <p class="SEC">Bambino 1</p>
+    <input class="INP" id="su-c1" type="text" placeholder="Nome del bambino"/>
+    <p class="SEC" style="margin-top:8px">Bambino 2 (opzionale)</p>
+    <input class="INP" id="su-c2" type="text" placeholder="Nome"/>
+    <p class="SEC" style="margin-top:8px">Bambino 3 (opzionale)</p>
+    <input class="INP" id="su-c3" type="text" placeholder="Nome"/>
+    <div class="DIV"></div>
+    <p class="SEC">Codice famiglia</p>
+    <p style="font-size:12px;color:var(--t3);margin-bottom:8px;line-height:1.5">Inventane uno e condividilo col partner. Usate lo stesso codice su entrambi i dispositivi.</p>
+    <input class="INP" id="su-fc" type="text" placeholder="es. infurna2024"/>
     <div style="height:10px"></div>
-    <button class="btn btn-primary" onclick="saveSetup()">Salva e inizia</button>
+    <button class="BTN BP" onclick="saveSetup()">Salva e inizia</button>
   </div>
 </div>
 
-<!-- HOME -->
-<div class="screen" id="sc-home">
-  <div class="sbar">
-    <span class="sbar-time" id="t-home"></span>
-    <div class="sbar-right">
-      <div class="sync-live" id="sync-dot"></div>
-      <div class="sbar-dot"></div>
-    </div>
+<div class="SC" id="sc-ho">
+  <div class="SB">
+    <span class="ST" id="t-ho"></span>
+    <div style="display:flex;gap:5px;align-items:center"><div class="SYNC" id="sync-d"></div><div class="DOT"></div></div>
   </div>
-  <div class="hdr">
+  <div class="HDR">
     <div>
-      <div class="hdr-logo">Infurna's <em>Family</em></div>
-      <div class="hdr-sub" id="hdr-caregiver">—</div>
+      <div class="LOGO">Infurna's <span>Family</span></div>
+      <div class="SUBT" id="hdr-cg">---</div>
     </div>
-    <button onclick="navTo('sc-settings','bn-set')" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--t3)">⚙️</button>
+    <button onclick="nav('sc-se','nb-se')" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--t3)">&#9881;</button>
   </div>
-  <div class="child-sel" id="home-child-sel"></div>
-  <div class="screen-body">
-    <div id="home-status-grid" class="grid2"></div>
-    <p class="sec" style="margin-top:2px">Azioni rapide</p>
-    <div class="action-grid">
-      <button class="action-btn a-amber" onclick="showScreen('sc-feeding')"><div class="aicon">🍼</div><div class="albl">Poppata</div></button>
-      <button class="action-btn" onclick="showScreen('sc-diaper')"><div class="aicon">🧷</div><div class="albl">Pannolino</div></button>
-      <button class="action-btn a-green" onclick="showScreen('sc-sleep')"><div class="aicon">🌙</div><div class="albl">Sonno</div></button>
-      <button class="action-btn a-red" onclick="showScreen('sc-medicine')"><div class="aicon">💊</div><div class="albl">Medicina</div></button>
-      <button class="action-btn a-blue" onclick="showScreen('sc-voice')"><div class="aicon">📝</div><div class="albl">Nota</div></button>
-      <button class="action-btn a-amber" onclick="navTo('sc-handoff','bn-handoff')"><div class="aicon">🤝</div><div class="albl" style="color:var(--amber)">Passa Turno</div></button>
+  <div class="KSL" id="ho-ks"></div>
+  <div class="BODY">
+    <div id="ho-sg" class="G2"></div>
+    <p class="SEC" style="margin-top:2px">Azioni rapide</p>
+    <div class="AG">
+      <button class="ABT aa" onclick="go('sc-fe')"><div class="AI">&#127868;</div><div class="AL">Poppata</div></button>
+      <button class="ABT" onclick="go('sc-di')"><div class="AI">&#129399;</div><div class="AL">Pannolino</div></button>
+      <button class="ABT ag" onclick="go('sc-sl')"><div class="AI">&#127769;</div><div class="AL">Sonno</div></button>
+      <button class="ABT ar" onclick="go('sc-me')"><div class="AI">&#128138;</div><div class="AL">Medicina</div></button>
+      <button class="ABT ab" onclick="go('sc-no')"><div class="AI">&#128221;</div><div class="AL">Nota</div></button>
+      <button class="ABT aa" onclick="nav('sc-ha','nb-ha')"><div class="AI">&#129309;</div><div class="AL" style="color:var(--amb)">Passa Turno</div></button>
     </div>
-    <p class="sec" style="margin-top:2px">Ultimi eventi</p>
-    <div class="card"><div class="evt-list" id="home-events"><div class="empty"><div class="empty-icon">📋</div>Nessun evento ancora</div></div></div>
+    <p class="SEC" style="margin-top:2px">Ultimi eventi</p>
+    <div class="CARD"><div class="EL" id="ho-ev"><div class="EMP"><div>&#128203;</div>Nessun evento ancora</div></div></div>
   </div>
-  <div class="bnav">
-    <button class="bnav-btn active" id="bn-home" onclick="navTo('sc-home','bn-home')"><span class="ni">🏠</span><span class="nl">Casa</span></button>
-    <button class="bnav-btn" id="bn-handoff" onclick="navTo('sc-handoff','bn-handoff')"><span class="ni">🤝</span><span class="nl">Turno</span></button>
-    <button class="bnav-btn" id="bn-cg" onclick="navTo('sc-caregivers','bn-cg')"><span class="ni">👨‍👩‍👦</span><span class="nl">Famiglia</span></button>
-    <button class="bnav-btn" id="bn-set" onclick="navTo('sc-settings','bn-set')"><span class="ni">⚙️</span><span class="nl">Impostazioni</span></button>
+  <div class="BNV">
+    <button class="NBT ON" id="nb-ho" onclick="nav('sc-ho','nb-ho')"><span class="NI">&#127968;</span><span class="NL">Casa</span></button>
+    <button class="NBT" id="nb-ha" onclick="nav('sc-ha','nb-ha')"><span class="NI">&#129309;</span><span class="NL">Turno</span></button>
+    <button class="NBT" id="nb-fa" onclick="nav('sc-fa','nb-fa')"><span class="NI">&#128106;</span><span class="NL">Famiglia</span></button>
+    <button class="NBT" id="nb-se" onclick="nav('sc-se','nb-se')"><span class="NI">&#9881;</span><span class="NL">Impostazioni</span></button>
   </div>
 </div>
 
-<!-- FEEDING -->
-<div class="screen" id="sc-feeding">
-  <div class="sbar"><span class="sbar-time" id="t-feeding"></span></div>
-  <div class="sub-hdr">
-    <button class="btn-ghost" onclick="showScreen('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">&#8592;</button>
-    <span class="sub-hdr-title">🍼 Poppata</span>
-    <span id="feed-child-lbl" style="font-size:12px;color:var(--amber)"></span>
+<div class="SC" id="sc-fe">
+  <div class="SB"><span class="ST" id="t-fe"></span></div>
+  <div class="SHDR">
+    <button class="BG" onclick="go('sc-ho')" style="font-size:18px;color:var(--t3)">&#8592;</button>
+    <span class="STIT">&#127868; Poppata</span>
+    <span id="fe-kl" style="font-size:12px;color:var(--amb)"></span>
   </div>
-  <div class="screen-body">
-    <p class="sec">Tipo</p>
-    <div class="pills" id="feed-type-pills">
-      <button class="pill sel" data-val="bottle" onclick="selPill('feed-type-pills',this)">🍼 Biberon</button>
-      <button class="pill" data-val="breast_l" onclick="selPill('feed-type-pills',this)">🤱 Seno Sin.</button>
-      <button class="pill" data-val="breast_r" onclick="selPill('feed-type-pills',this)">🤱 Seno Dx.</button>
+  <div class="BODY">
+    <p class="SEC">Tipo</p>
+    <div style="display:flex;gap:6px;flex-wrap:wrap" id="fe-tp">
+      <button class="PIL SL" data-val="bottle" onclick="selPil('fe-tp',this)">Biberon</button>
+      <button class="PIL" data-val="breast_l" onclick="selPil('fe-tp',this)">Seno Sin.</button>
+      <button class="PIL" data-val="breast_r" onclick="selPil('fe-tp',this)">Seno Dx.</button>
     </div>
-    <p class="sec" style="margin-top:8px">Quantita (ml)</p>
-    <div class="qty-row">
-      <button class="qty-btn" onclick="chQty(-10)">&#8722;</button>
-      <div class="qty-val" id="qty-val">80</div>
-      <div class="qty-unit">ml</div>
-      <button class="qty-btn" onclick="chQty(10)">&#43;</button>
+    <p class="SEC" style="margin-top:8px">Quantita (ml)</p>
+    <div class="QR">
+      <button class="QB" onclick="chQty(-10)">&#8722;</button>
+      <div class="QV" id="qv">80</div>
+      <div class="QU">ml</div>
+      <button class="QB" onclick="chQty(10)">&#43;</button>
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-      <button class="btn-ghost" onclick="setQty(60)" style="border-radius:20px;font-size:12px;padding:7px 12px">60</button>
-      <button class="btn-ghost" onclick="setQty(80)" style="border-radius:20px;font-size:12px;padding:7px 12px;background:var(--amber-glow);border-color:rgba(245,158,11,.4);color:var(--amber)">80 ✓</button>
-      <button class="btn-ghost" onclick="setQty(100)" style="border-radius:20px;font-size:12px;padding:7px 12px">100</button>
-      <button class="btn-ghost" onclick="setQty(120)" style="border-radius:20px;font-size:12px;padding:7px 12px">120</button>
-      <button class="btn-ghost" onclick="setQty(150)" style="border-radius:20px;font-size:12px;padding:7px 12px">150</button>
+      <button class="BG" onclick="setQty(60)" style="border-radius:20px;font-size:12px;padding:7px 12px">60</button>
+      <button class="BG" onclick="setQty(80)" style="border-radius:20px;font-size:12px;padding:7px 12px;background:var(--amb-g);border-color:rgba(245,158,11,.4);color:var(--amb)">80</button>
+      <button class="BG" onclick="setQty(100)" style="border-radius:20px;font-size:12px;padding:7px 12px">100</button>
+      <button class="BG" onclick="setQty(120)" style="border-radius:20px;font-size:12px;padding:7px 12px">120</button>
+      <button class="BG" onclick="setQty(150)" style="border-radius:20px;font-size:12px;padding:7px 12px">150</button>
     </div>
-    <div class="div" style="margin:14px 0"></div>
-    <p class="sec">Timer poppata</p>
-    <div class="timer-big" id="feed-timer">00:00</div>
+    <div class="DIV" style="margin:14px 0"></div>
+    <p class="SEC">Timer poppata</p>
+    <div class="TBG" id="fe-ti">00:00</div>
     <div style="font-size:11px;color:var(--t3);text-align:center;margin-top:4px">Tocca per avviare</div>
     <div style="display:flex;gap:8px;margin-top:10px">
-      <button class="pill" id="feed-timer-btn" onclick="toggleFeedTimer()" style="flex:1;justify-content:center">&#9654; Avvia</button>
-      <button class="pill" onclick="resetFeedTimer()">&#8635; Reset</button>
+      <button class="PIL" id="fe-tb" onclick="togFT()" style="flex:1">Avvia</button>
+      <button class="PIL" onclick="rstFT()">Reset</button>
     </div>
     <div style="height:10px"></div>
-    <button class="btn btn-primary" onclick="logFeeding()">&#10003; Registra poppata</button>
+    <button class="BTN BP" onclick="logFeed()">Registra poppata</button>
   </div>
 </div>
 
-<!-- DIAPER -->
-<div class="screen" id="sc-diaper">
-  <div class="sbar"><span class="sbar-time" id="t-diaper"></span></div>
-  <div class="sub-hdr">
-    <button class="btn-ghost" onclick="showScreen('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">&#8592;</button>
-    <span class="sub-hdr-title">🧷 Pannolino</span>
-    <span id="diaper-child-lbl" style="font-size:12px;color:var(--amber)"></span>
+<div class="SC" id="sc-di">
+  <div class="SB"><span class="ST" id="t-di"></span></div>
+  <div class="SHDR">
+    <button class="BG" onclick="go('sc-ho')" style="font-size:18px;color:var(--t3)">&#8592;</button>
+    <span class="STIT">&#129399; Pannolino</span>
+    <span id="di-kl" style="font-size:12px;color:var(--amb)"></span>
   </div>
-  <div class="screen-body">
-    <p class="sec">Tipo</p>
+  <div class="BODY">
+    <p class="SEC">Tipo</p>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
-      <button class="action-btn" id="dp-pee" onclick="selDiaper('pee')" style="padding:20px 8px"><div class="aicon">💧</div><div class="albl">Solo piu</div></button>
-      <button class="action-btn" id="dp-poop" onclick="selDiaper('poop')" style="padding:20px 8px"><div class="aicon">💩</div><div class="albl">Solo popo</div></button>
-      <button class="action-btn" id="dp-both" onclick="selDiaper('both')" style="padding:20px 8px"><div class="aicon">🧷</div><div class="albl">Entrambi</div></button>
+      <button class="ABT" id="dp-pe" onclick="selDi('pee')" style="padding:20px 8px"><div class="AI">&#128167;</div><div class="AL">Piu</div></button>
+      <button class="ABT" id="dp-po" onclick="selDi('poop')" style="padding:20px 8px"><div class="AI">&#128169;</div><div class="AL">Popo</div></button>
+      <button class="ABT" id="dp-bo" onclick="selDi('both')" style="padding:20px 8px"><div class="AI">&#129399;</div><div class="AL">Entrambi</div></button>
     </div>
-    <div class="div" style="margin:14px 0"></div>
-    <div class="card">
-      <div class="card-lbl">Oggi</div>
+    <div class="DIV" style="margin:14px 0"></div>
+    <div class="CARD">
+      <div class="LBL">Oggi</div>
       <div style="display:flex;gap:16px;margin-top:8px">
-        <div><div style="font-size:22px;font-weight:600" id="dc-pee">0</div><div style="font-size:11px;color:var(--t3)">piu</div></div>
-        <div><div style="font-size:22px;font-weight:600" id="dc-poop">0</div><div style="font-size:11px;color:var(--t3)">popo</div></div>
-        <div><div style="font-size:22px;font-weight:600;color:var(--amber)" id="dc-tot">0</div><div style="font-size:11px;color:var(--t3)">totale</div></div>
+        <div><div style="font-size:22px;font-weight:600" id="dc-pe">0</div><div style="font-size:11px;color:var(--t3)">piu</div></div>
+        <div><div style="font-size:22px;font-weight:600" id="dc-po">0</div><div style="font-size:11px;color:var(--t3)">popo</div></div>
+        <div><div style="font-size:22px;font-weight:600;color:var(--amb)" id="dc-to">0</div><div style="font-size:11px;color:var(--t3)">totale</div></div>
       </div>
     </div>
-    <button class="btn btn-primary" onclick="logDiaper()">&#10003; Registra pannolino</button>
+    <button class="BTN BP" onclick="logDi()">Registra pannolino</button>
   </div>
 </div>
 
-<!-- SLEEP -->
-<div class="screen" id="sc-sleep">
-  <div class="sbar"><span class="sbar-time" id="t-sleep"></span></div>
-  <div class="sub-hdr">
-    <button class="btn-ghost" onclick="showScreen('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">&#8592;</button>
-    <span class="sub-hdr-title">🌙 Sonno</span>
-    <span id="sleep-child-lbl" style="font-size:12px;color:var(--amber)"></span>
+<div class="SC" id="sc-sl">
+  <div class="SB"><span class="ST" id="t-sl"></span></div>
+  <div class="SHDR">
+    <button class="BG" onclick="go('sc-ho')" style="font-size:18px;color:var(--t3)">&#8592;</button>
+    <span class="STIT">&#127769; Sonno</span>
+    <span id="sl-kl" style="font-size:12px;color:var(--amb)"></span>
   </div>
-  <div class="screen-body">
-    <div class="sleep-wrap">
-      <div class="sleep-ring" id="sleep-ring-el">
-        <div class="sleep-inner">
-          <div class="sleep-pct" id="sleep-pct-val">0%</div>
-          <div class="sleep-pct-lbl">del giorno</div>
-        </div>
-      </div>
+  <div class="BODY">
+    <div class="SRW">
+      <div class="SRG" id="sl-rg"><div class="SRI"><div class="SRP" id="sl-pc">0%</div><div class="SRL">del giorno</div></div></div>
       <div style="font-size:11px;color:var(--t3)">Sonno totale oggi</div>
-      <div style="font-size:28px;font-weight:600;color:var(--green);font-family:var(--mono)" id="sleep-total">0h 00m</div>
+      <div style="font-size:28px;font-weight:600;color:var(--grn);font-family:var(--mo)" id="sl-to">0h 00m</div>
     </div>
-    <div class="card card-green" id="sleep-active-card" style="display:none">
-      <div class="card-lbl">In corso</div>
-      <div class="timer-big" id="sleep-timer" style="font-size:38px;color:var(--green)">00:00:00</div>
-      <div class="card-sub" id="sleep-start-lbl">Inizio: —</div>
+    <div class="CARD CGRN" id="sl-ac" style="display:none">
+      <div class="LBL">In corso</div>
+      <div class="TBG" id="sl-ti" style="font-size:38px;color:var(--grn)">00:00:00</div>
+      <div class="SUB" id="sl-sl">Inizio: --</div>
     </div>
-    <div id="sleep-start-wrap">
-      <button class="btn btn-secondary" onclick="startSleep()">🌙 Inizia nanna</button>
-    </div>
-    <div id="sleep-end-wrap" style="display:none">
-      <button class="btn btn-danger" onclick="endSleep()">&#9632; Sveglio — fine nanna</button>
-    </div>
-    <div class="div" style="margin:10px 0"></div>
-    <p class="sec">Sessioni di oggi</p>
-    <div id="sleep-sessions-list"><div class="empty"><div class="empty-icon">😴</div>Nessuna sessione oggi</div></div>
+    <div id="sl-sw"><button class="BTN BS" onclick="startSlp()">Inizia nanna</button></div>
+    <div id="sl-ew" style="display:none"><button class="BTN BD" onclick="endSlp()">Sveglio - fine nanna</button></div>
+    <div class="DIV" style="margin:10px 0"></div>
+    <p class="SEC">Sessioni di oggi</p>
+    <div id="sl-ls"><div class="EMP"><div>&#128564;</div>Nessuna sessione oggi</div></div>
   </div>
 </div>
 
-<!-- MEDICINE -->
-<div class="screen" id="sc-medicine">
-  <div class="sbar"><span class="sbar-time" id="t-medicine"></span></div>
-  <div class="sub-hdr">
-    <button class="btn-ghost" onclick="showScreen('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">&#8592;</button>
-    <span class="sub-hdr-title">💊 Medicine</span>
-    <span id="medicine-child-lbl" style="font-size:12px;color:var(--amber)"></span>
+<div class="SC" id="sc-me">
+  <div class="SB"><span class="ST" id="t-me"></span></div>
+  <div class="SHDR">
+    <button class="BG" onclick="go('sc-ho')" style="font-size:18px;color:var(--t3)">&#8592;</button>
+    <span class="STIT">&#128138; Medicine</span>
+    <span id="me-kl" style="font-size:12px;color:var(--amb)"></span>
   </div>
-  <div class="screen-body">
-    <div class="warn-box">
-      <span style="font-size:16px">⚠️</span>
-      <div class="warn-txt">Prevenzione doppia somministrazione attiva. Ogni registrazione e sincronizzata in tempo reale.</div>
+  <div class="BODY">
+    <div class="WBX">
+      <span style="font-size:16px">&#9888;</span>
+      <div class="WTX">Prevenzione doppia somministrazione attiva. Sincronizzato in tempo reale con tutti.</div>
     </div>
-    <p class="sec" style="margin-top:4px">Farmaci configurati</p>
-    <div id="med-list"></div>
-    <div class="div" style="margin:10px 0"></div>
-    <p class="sec">Aggiungi farmaco</p>
-    <input class="inp" id="med-name-inp" type="text" placeholder="Nome (es. Tachipirina 125mg)" style="margin-bottom:8px"/>
-    <input class="inp" id="med-dose-inp" type="text" placeholder="Dose (es. 0.5ml, 3 gocce)" style="margin-bottom:8px"/>
-    <button class="btn btn-secondary" style="width:auto;padding:10px 20px;border-radius:var(--rsm)" onclick="addMedicine()">+ Aggiungi</button>
+    <p class="SEC" style="margin-top:4px">Farmaci</p>
+    <div id="me-ls"></div>
+    <div class="DIV" style="margin:10px 0"></div>
+    <p class="SEC">Aggiungi farmaco</p>
+    <input class="INP" id="me-nm" type="text" placeholder="Nome (es. Tachipirina 125mg)" style="margin-bottom:8px"/>
+    <input class="INP" id="me-ds" type="text" placeholder="Dose (es. 0.5ml, 3 gocce)" style="margin-bottom:8px"/>
+    <button class="BTN BS" style="width:auto;padding:10px 20px;border-radius:var(--rs)" onclick="addMed()">+ Aggiungi</button>
   </div>
 </div>
 
-<!-- HANDOFF -->
-<div class="screen" id="sc-handoff">
-  <div class="sbar"><span class="sbar-time" id="t-handoff"></span></div>
-  <div class="sub-hdr">
-    <button class="btn-ghost" onclick="navTo('sc-home','bn-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">&#8592;</button>
-    <span class="sub-hdr-title">🤝 Passa il Turno</span>
+<div class="SC" id="sc-ha">
+  <div class="SB"><span class="ST" id="t-ha"></span></div>
+  <div class="SHDR">
+    <button class="BG" onclick="nav('sc-ho','nb-ho')" style="font-size:18px;color:var(--t3)">&#8592;</button>
+    <span class="STIT">&#129309; Passa Turno</span>
   </div>
-  <div class="child-sel" id="handoff-child-sel"></div>
-  <div class="screen-body">
-    <p style="font-size:13px;color:var(--t2);margin-bottom:10px;line-height:1.5">Riepilogo automatico aggiornato in tempo reale. Il prossimo caregiver capira tutto in 5 secondi.</p>
-    <div class="card card-amber">
+  <div class="KSL" id="ha-ks"></div>
+  <div class="BODY">
+    <p style="font-size:13px;color:var(--t2);margin-bottom:10px;line-height:1.5">Riepilogo automatico in tempo reale. Il prossimo capira tutto in 5 secondi.</p>
+    <div class="CARD CAMB">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <div style="font-size:24px">🌙</div>
+        <div style="font-size:24px">&#127769;</div>
         <div>
-          <div style="font-size:14px;font-weight:600" id="ho-title">Riepilogo turno</div>
-          <div style="font-size:11px;color:var(--t3)" id="ho-time">—</div>
+          <div style="font-size:14px;font-weight:600" id="ha-ti">Riepilogo turno</div>
+          <div style="font-size:11px;color:var(--t3)" id="ha-tm">--</div>
         </div>
       </div>
-      <div id="ho-rows"></div>
+      <div id="ha-rw"></div>
     </div>
-    <p class="sec" style="margin-top:6px">Nota per il prossimo</p>
-    <textarea class="inp" id="handoff-note" rows="3" placeholder="Qualcosa di importante da sapere..." style="resize:none;line-height:1.5"></textarea>
-    <button class="btn btn-primary" onclick="sendHandoff()">📤 Invia riepilogo alla famiglia</button>
+    <p class="SEC" style="margin-top:6px">Nota per il prossimo</p>
+    <textarea class="INP" id="ha-nt" rows="3" placeholder="Qualcosa di importante..." style="resize:none;line-height:1.5"></textarea>
+    <button class="BTN BP" onclick="sendHO()">Invia riepilogo alla famiglia</button>
   </div>
-  <div class="bnav">
-    <button class="bnav-btn" onclick="navTo('sc-home','bn-home')"><span class="ni">🏠</span><span class="nl">Casa</span></button>
-    <button class="bnav-btn active"><span class="ni">🤝</span><span class="nl">Turno</span></button>
-    <button class="bnav-btn" onclick="navTo('sc-caregivers','bn-cg')"><span class="ni">👨‍👩‍👦</span><span class="nl">Famiglia</span></button>
-    <button class="bnav-btn" onclick="navTo('sc-settings','bn-set')"><span class="ni">⚙️</span><span class="nl">Impostazioni</span></button>
+  <div class="BNV">
+    <button class="NBT" onclick="nav('sc-ho','nb-ho')"><span class="NI">&#127968;</span><span class="NL">Casa</span></button>
+    <button class="NBT ON"><span class="NI">&#129309;</span><span class="NL">Turno</span></button>
+    <button class="NBT" onclick="nav('sc-fa','nb-fa')"><span class="NI">&#128106;</span><span class="NL">Famiglia</span></button>
+    <button class="NBT" onclick="nav('sc-se','nb-se')"><span class="NI">&#9881;</span><span class="NL">Impostazioni</span></button>
   </div>
 </div>
 
-<!-- VOICE / NOTE -->
-<div class="screen" id="sc-voice">
-  <div class="sbar"><span class="sbar-time" id="t-voice"></span></div>
-  <div class="sub-hdr">
-    <button class="btn-ghost" onclick="showScreen('sc-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">&#8592;</button>
-    <span class="sub-hdr-title">📝 Nota</span>
-    <span id="voice-child-lbl" style="font-size:12px;color:var(--amber)"></span>
+<div class="SC" id="sc-no">
+  <div class="SB"><span class="ST" id="t-no"></span></div>
+  <div class="SHDR">
+    <button class="BG" onclick="go('sc-ho')" style="font-size:18px;color:var(--t3)">&#8592;</button>
+    <span class="STIT">&#128221; Nota</span>
+    <span id="no-kl" style="font-size:12px;color:var(--amb)"></span>
   </div>
-  <div class="screen-body">
-    <div class="card" style="text-align:center;padding:24px">
-      <div class="voice-mic" id="voice-mic" onclick="toggleVoice()">🎙️</div>
-      <div style="font-size:13px;color:var(--t2)" id="voice-status">Tocca per registrare nota vocale</div>
-      <div style="font-size:26px;font-weight:600;font-family:var(--mono);margin-top:10px;color:var(--t1)" id="voice-time">0:00</div>
+  <div class="BODY">
+    <div class="CARD" style="text-align:center;padding:24px">
+      <div class="VM" id="v-mic" onclick="togVoice()">&#127908;</div>
+      <div style="font-size:13px;color:var(--t2)" id="v-st">Tocca per registrare</div>
+      <div style="font-size:26px;font-weight:600;font-family:var(--mo);margin-top:10px;color:var(--t1)" id="v-tm">0:00</div>
     </div>
-    <p class="sec" style="margin-top:4px">Oppure scrivi una nota</p>
-    <textarea class="inp" id="note-text" rows="4" placeholder="Scrivi qui la tua nota..." style="resize:none;line-height:1.5;margin-bottom:8px"></textarea>
-    <button class="btn btn-secondary" onclick="saveTextNote()">💾 Salva nota testo</button>
-    <div class="div" style="margin:10px 0"></div>
-    <p class="sec">Note recenti</p>
-    <div id="notes-list"><div class="empty"><div class="empty-icon">📝</div>Nessuna nota</div></div>
+    <p class="SEC" style="margin-top:4px">Oppure scrivi una nota</p>
+    <textarea class="INP" id="no-tx" rows="4" placeholder="Scrivi qui la tua nota..." style="resize:none;line-height:1.5;margin-bottom:8px"></textarea>
+    <button class="BTN BS" onclick="saveTxtNote()">Salva nota testo</button>
+    <div class="DIV" style="margin:10px 0"></div>
+    <p class="SEC">Note recenti</p>
+    <div id="no-ls"><div class="EMP"><div>&#128221;</div>Nessuna nota</div></div>
   </div>
 </div>
 
-<!-- CAREGIVERS -->
-<div class="screen" id="sc-caregivers">
-  <div class="sbar"><span class="sbar-time" id="t-cg"></span></div>
-  <div class="sub-hdr">
-    <button class="btn-ghost" onclick="navTo('sc-home','bn-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">&#8592;</button>
-    <span class="sub-hdr-title">👨‍👩‍👦 Famiglia</span>
+<div class="SC" id="sc-fa">
+  <div class="SB"><span class="ST" id="t-fa"></span></div>
+  <div class="SHDR">
+    <button class="BG" onclick="nav('sc-ho','nb-ho')" style="font-size:18px;color:var(--t3)">&#8592;</button>
+    <span class="STIT">&#128106; Famiglia</span>
   </div>
-  <div class="screen-body">
+  <div class="BODY">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <div class="sync-live"></div>
-      <span style="font-size:12px;color:var(--t3)" id="cg-sync-lbl">Sync attivo</span>
+      <div class="SYNC"></div>
+      <span style="font-size:12px;color:var(--t3)" id="fa-sl">Sync attivo</span>
     </div>
-    <div class="card" style="margin-bottom:10px">
-      <div class="card-lbl">Codice famiglia</div>
-      <div style="font-size:20px;font-weight:600;font-family:var(--mono);color:var(--amber);margin-top:4px" id="cg-fcode">—</div>
+    <div class="CARD" style="margin-bottom:10px">
+      <div class="LBL">Codice famiglia</div>
+      <div style="font-size:20px;font-weight:600;font-family:var(--mo);color:var(--amb);margin-top:4px" id="fa-code">--</div>
       <div style="font-size:11px;color:var(--t3);margin-top:4px">Condividi con il partner per sincronizzarsi</div>
     </div>
-    <p class="sec">Caregiver connessi</p>
-    <div id="cg-list"><div class="empty">Caricamento...</div></div>
+    <p class="SEC">Caregiver connessi</p>
+    <div id="fa-ls"><div class="EMP">Caricamento...</div></div>
   </div>
-  <div class="bnav">
-    <button class="bnav-btn" onclick="navTo('sc-home','bn-home')"><span class="ni">🏠</span><span class="nl">Casa</span></button>
-    <button class="bnav-btn" onclick="navTo('sc-handoff','bn-handoff')"><span class="ni">🤝</span><span class="nl">Turno</span></button>
-    <button class="bnav-btn active"><span class="ni">👨‍👩‍👦</span><span class="nl">Famiglia</span></button>
-    <button class="bnav-btn" onclick="navTo('sc-settings','bn-set')"><span class="ni">⚙️</span><span class="nl">Impostazioni</span></button>
+  <div class="BNV">
+    <button class="NBT" onclick="nav('sc-ho','nb-ho')"><span class="NI">&#127968;</span><span class="NL">Casa</span></button>
+    <button class="NBT" onclick="nav('sc-ha','nb-ha')"><span class="NI">&#129309;</span><span class="NL">Turno</span></button>
+    <button class="NBT ON"><span class="NI">&#128106;</span><span class="NL">Famiglia</span></button>
+    <button class="NBT" onclick="nav('sc-se','nb-se')"><span class="NI">&#9881;</span><span class="NL">Impostazioni</span></button>
   </div>
 </div>
 
-<!-- SETTINGS -->
-<div class="screen" id="sc-settings">
-  <div class="sbar"><span class="sbar-time" id="t-settings"></span></div>
-  <div class="sub-hdr">
-    <button class="btn-ghost" onclick="navTo('sc-home','bn-home')" style="padding:6px 10px;font-size:18px;color:var(--t3)">&#8592;</button>
-    <span class="sub-hdr-title">⚙️ Impostazioni</span>
+<div class="SC" id="sc-se">
+  <div class="SB"><span class="ST" id="t-se"></span></div>
+  <div class="SHDR">
+    <button class="BG" onclick="nav('sc-ho','nb-ho')" style="font-size:18px;color:var(--t3)">&#8592;</button>
+    <span class="STIT">&#9881; Impostazioni</span>
   </div>
-  <div class="screen-body">
-    <div class="card" style="margin-bottom:8px">
-      <div class="card-lbl">Il mio profilo</div>
-      <div class="div"></div>
-      <div class="setting-row" style="padding:10px 0 4px">
-        <div><div class="setting-lbl">Nome</div><div class="setting-sub" id="set-myname-disp">—</div></div>
-        <button class="btn-ghost" style="padding:7px 12px;font-size:12px;border-radius:var(--rsm)" onclick="editMyName()">Modifica</button>
+  <div class="BODY">
+    <div class="CARD" style="margin-bottom:8px">
+      <div class="LBL">Profilo</div><div class="DIV"></div>
+      <div class="SETR" style="padding:10px 0 4px">
+        <div><div class="SETN">Nome</div><div class="SETS" id="se-nm">--</div></div>
+        <button class="BG" style="padding:7px 12px;font-size:12px" onclick="editName()">Modifica</button>
       </div>
-      <div class="setting-row" style="padding:4px 0 10px;border-bottom:none">
-        <div><div class="setting-lbl">Email</div><div class="setting-sub" id="set-email-disp">—</div></div>
+      <div class="SETR" style="padding:4px 0 10px;border-bottom:none">
+        <div><div class="SETN">Email</div><div class="SETS" id="se-em">--</div></div>
       </div>
     </div>
-
-    <div class="card" style="margin-bottom:8px">
-      <div class="card-lbl">Bambini (max 3)</div>
-      <div class="div"></div>
+    <div class="CARD" style="margin-bottom:8px">
+      <div class="LBL">Bambini (max 3)</div><div class="DIV"></div>
       <div style="display:flex;flex-direction:column;gap:10px;padding:6px 0">
-        <div>
-          <div class="inp-lbl">Bambino 1</div>
-          <input class="inp" id="set-c1" type="text" placeholder="Nome" oninput="saveChildrenSettings()"/>
-        </div>
-        <div>
-          <div class="inp-lbl">Bambino 2 (opzionale)</div>
-          <input class="inp" id="set-c2" type="text" placeholder="Nome" oninput="saveChildrenSettings()"/>
-        </div>
-        <div>
-          <div class="inp-lbl">Bambino 3 (opzionale)</div>
-          <input class="inp" id="set-c3" type="text" placeholder="Nome" oninput="saveChildrenSettings()"/>
-        </div>
+        <div><div class="INPL">Bambino 1</div><input class="INP" id="se-c1" type="text" placeholder="Nome" oninput="saveKids()"/></div>
+        <div><div class="INPL">Bambino 2 (opzionale)</div><input class="INP" id="se-c2" type="text" placeholder="Nome" oninput="saveKids()"/></div>
+        <div><div class="INPL">Bambino 3 (opzionale)</div><input class="INP" id="se-c3" type="text" placeholder="Nome" oninput="saveKids()"/></div>
       </div>
     </div>
-
-    <div class="card" style="margin-bottom:8px">
-      <div class="card-lbl">Famiglia</div>
-      <div class="div"></div>
-      <div class="setting-row">
-        <div><div class="setting-lbl">Codice famiglia</div><div class="setting-sub" id="set-fcode-disp">—</div></div>
-        <button class="btn-ghost" style="padding:7px 12px;font-size:12px;border-radius:var(--rsm)" onclick="copyFcode()">Copia</button>
+    <div class="CARD" style="margin-bottom:8px">
+      <div class="LBL">Famiglia</div><div class="DIV"></div>
+      <div class="SETR">
+        <div><div class="SETN">Codice</div><div class="SETS" id="se-fc">--</div></div>
+        <button class="BG" style="padding:7px 12px;font-size:12px" onclick="copyFC()">Copia</button>
       </div>
     </div>
-
-    <div class="card" style="margin-bottom:8px">
-      <div class="card-lbl">Preferenze</div>
-      <div class="div"></div>
-      <div class="setting-row">
-        <div><div class="setting-lbl">Notifiche push</div><div class="setting-sub">Avvisi in tempo reale</div></div>
-        <button class="toggle on" onclick="this.classList.toggle('on')"></button>
-      </div>
-      <div class="setting-row" style="border-bottom:none">
-        <div><div class="setting-lbl">Avviso poppata</div><div class="setting-sub">Dopo 3 ore</div></div>
-        <button class="toggle on" onclick="this.classList.toggle('on')"></button>
-      </div>
+    <div class="CARD" style="margin-bottom:8px">
+      <div class="LBL">Preferenze</div><div class="DIV"></div>
+      <div class="SETR"><div><div class="SETN">Notifiche</div></div><button class="TOG ON" onclick="this.classList.toggle('ON')"></button></div>
+      <div class="SETR" style="border-bottom:none"><div><div class="SETN">Avviso poppata</div><div class="SETS">Dopo 3 ore</div></div><button class="TOG ON" onclick="this.classList.toggle('ON')"></button></div>
     </div>
-
-    <div class="card" style="margin-bottom:8px">
-      <div class="card-lbl">Account</div>
-      <div class="div"></div>
-      <div class="setting-row">
-        <div><div class="setting-lbl">Versione</div></div>
-        <div style="font-size:12px;color:var(--t3);font-family:var(--mono)">1.0.1</div>
-      </div>
-      <div class="setting-row" style="border-bottom:none">
-        <div><div class="setting-lbl">Storage</div><div class="setting-sub">Firebase Firestore — gratuito</div></div>
-        <span class="badge b-ok">Free</span>
-      </div>
+    <div class="CARD" style="margin-bottom:8px">
+      <div class="LBL">Info</div><div class="DIV"></div>
+      <div class="SETR"><div><div class="SETN">Versione</div></div><div style="font-size:12px;color:var(--t3);font-family:var(--mo)">1.0.2</div></div>
+      <div class="SETR" style="border-bottom:none"><div><div class="SETN">Storage</div><div class="SETS">Firebase Firestore - gratuito</div></div><span class="BDG BOK">Free</span></div>
     </div>
-
-    <button class="btn btn-danger" onclick="doLogout()">Esci dall'account</button>
+    <button class="BTN BD" onclick="doLogout()">Esci</button>
     <div style="height:10px"></div>
   </div>
-  <div class="bnav">
-    <button class="bnav-btn" onclick="navTo('sc-home','bn-home')"><span class="ni">🏠</span><span class="nl">Casa</span></button>
-    <button class="bnav-btn" onclick="navTo('sc-handoff','bn-handoff')"><span class="ni">🤝</span><span class="nl">Turno</span></button>
-    <button class="bnav-btn" onclick="navTo('sc-caregivers','bn-cg')"><span class="ni">👨‍👩‍👦</span><span class="nl">Famiglia</span></button>
-    <button class="bnav-btn active"><span class="ni">⚙️</span><span class="nl">Impostazioni</span></button>
+  <div class="BNV">
+    <button class="NBT" onclick="nav('sc-ho','nb-ho')"><span class="NI">&#127968;</span><span class="NL">Casa</span></button>
+    <button class="NBT" onclick="nav('sc-ha','nb-ha')"><span class="NI">&#129309;</span><span class="NL">Turno</span></button>
+    <button class="NBT" onclick="nav('sc-fa','nb-fa')"><span class="NI">&#128106;</span><span class="NL">Famiglia</span></button>
+    <button class="NBT ON"><span class="NI">&#9881;</span><span class="NL">Impostazioni</span></button>
   </div>
 </div>
 
-</div><!-- /app -->
-
-<div id="toast">
-  <div style="font-size:20px" id="toast-icon">✓</div>
-  <div><div class="toast-title" id="toast-title">OK</div><div class="toast-sub" id="toast-sub"></div></div>
+</div>
+<div id="TST">
+  <div style="font-size:20px" id="t-ico">+</div>
+  <div><div class="TT" id="t-ttl">OK</div><div class="TS" id="t-sub"></div></div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     ALL LOGIC IN A SINGLE NON-MODULE SCRIPT
-     (avoids ES module scope issues with onclick= handlers)
-     Firebase loaded via classic script tags first
-════════════════════════════════════════════════════ -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <script>
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// FIREBASE CONFIG \u2014 sostituisci con il tuo!
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-var FB_CONFIG = {
+var FBCFG={
   apiKey: "AIzaSyDHsdknopzoGspMs0oGJlGJLEWg_-nfuaQ",
   authDomain: "infurna-family.firebaseapp.com",
   projectId: "infurna-family",
@@ -649,1129 +538,711 @@ var FB_CONFIG = {
   appId: "1:178446871173:web:2afb9010776a62ad4197ec",
   measurementId: "G-BSYFEZXPH3
 };
-
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// STATE
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-var ST = {
-  screen: null, prevScreen: null,
-  fb: null, auth: null, db: null, fbOk: false,
-  user: null, profile: null,
-  children: [], activeChild: 0,
-  events: [], medicines: [],
-  sleepActive: null,
-  unsubs: [],
-  feedQty: 80, feedSec: 0, feedRunning: false, feedInterval: null,
-  sleepInterval: null,
-  voiceRunning: false, voiceInterval: null, voiceSec: 0,
-  diaper: null,
-  authMode: 'login'
+var ST={
+  sc:null,psc:null,
+  fb:null,au:null,db:null,fbOk:false,
+  usr:null,prof:null,
+  kids:[],kid:0,
+  evs:[],meds:[],
+  slpA:null,
+  uns:[],
+  fqty:80,fsec:0,frun:false,fint:null,
+  sint:null,
+  vrun:false,vint:null,vsec:0,
+  dtpe:null,
+  amode:'login'
 };
+var EMOJ=['[baby]','[chick]','[star]'];
 
-var EMOJIS = ['\u1F476','\u1F423','\u1F31F'];
+function lsG(k){try{return JSON.parse(localStorage.getItem('if2_'+k));}catch(e){return null;}}
+function lsS(k,v){try{localStorage.setItem('if2_'+k,JSON.stringify(v));}catch(e){}}
+function lsD(k){try{localStorage.removeItem('if2_'+k);}catch(e){}}
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// LOCAL STORAGE HELPERS
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function lsGet(k) {
-  try { return JSON.parse(localStorage.getItem('ifam_' + k)); } catch(e) { return null; }
-}
-function lsSet(k, v) {
-  try { localStorage.setItem('ifam_' + k, JSON.stringify(v)); } catch(e) {}
-}
-function lsDel(k) {
-  try { localStorage.removeItem('ifam_' + k); } catch(e) {}
-}
-
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// INIT
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function init() {
-  setLdrTxt('Connessione Firebase...');
-  try {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(FB_CONFIG);
-    }
-    ST.fb = firebase;
-    ST.auth = firebase.auth();
-    ST.db = firebase.firestore();
-    ST.fbOk = true;
-    setLdrTxt('Controllo sessione...');
-  } catch(e) {
-    console.warn('Firebase init failed:', e.message);
-    ST.fbOk = false;
-    setLdrTxt('Modalita offline');
+function init(){
+  setLt('Connessione Firebase...');
+  try{
+    if(!firebase.apps.length) firebase.initializeApp(FBCFG);
+    ST.fb=firebase; ST.au=firebase.auth(); ST.db=firebase.firestore();
+    ST.fbOk=true;
+    setLt('Controllo sessione...');
+  }catch(e){
+    ST.fbOk=false;
+    setLt('Modalita offline');
   }
-
   startClock();
   loadLocal();
-
-  if (ST.fbOk) {
-    ST.auth.onAuthStateChanged(function(user) {
-      if (user) {
-        ST.user = user;
-        loadUserProfile(user.uid, function() {
+  if(ST.fbOk){
+    ST.au.onAuthStateChanged(function(u){
+      if(u){
+        ST.usr=u;
+        loadProf(u.uid,function(){
           hideLdr();
-          if (!ST.profile || !ST.children.length) {
-            showScreen('sc-onboard');
-          } else {
-            initApp();
-          }
+          if(!ST.prof||!ST.kids.length) go('sc-ob');
+          else startApp();
         });
-      } else {
+      }else{
         hideLdr();
-        var lu = lsGet('user');
-        if (lu && ST.profile) {
-          ST.user = lu;
-          initApp();
-        } else {
-          showScreen(lsGet('seen_onboard') ? 'sc-auth' : 'sc-onboard');
-        }
+        var lu=lsG('usr');
+        if(lu&&ST.prof){ST.usr=lu;startApp();}
+        else go(lsG('seen')?'sc-au':'sc-ob');
       }
     });
-  } else {
-    setTimeout(function() {
+  }else{
+    setTimeout(function(){
       hideLdr();
-      var lu = lsGet('user');
-      if (lu && ST.profile) {
-        ST.user = lu;
-        initApp();
-      } else {
-        showScreen('sc-auth');
-      }
-    }, 600);
+      var lu=lsG('usr');
+      if(lu&&ST.prof){ST.usr=lu;startApp();}
+      else go('sc-au');
+    },600);
   }
 }
 
-function loadLocal() {
-  ST.profile = lsGet('profile');
-  ST.children = lsGet('children') || [];
-  ST.events = lsGet('events') || [];
-  ST.medicines = lsGet('medicines') || [];
-  ST.sleepActive = lsGet('sleepActive');
-  ST.activeChild = lsGet('activeChild') || 0;
-  if (ST.activeChild >= ST.children.length) ST.activeChild = 0;
+function loadLocal(){
+  ST.prof=lsG('prof'); ST.kids=lsG('kids')||[];
+  ST.evs=lsG('evs')||[]; ST.meds=lsG('meds')||[];
+  ST.slpA=lsG('slpA'); ST.kid=lsG('kid')||0;
+  if(ST.kid>=ST.kids.length) ST.kid=0;
 }
 
-function loadUserProfile(uid, cb) {
-  if (!ST.db) { cb && cb(); return; }
-  ST.db.collection('users').doc(uid).get().then(function(snap) {
-    if (snap.exists) {
-      var d = snap.data();
-      ST.profile = { name: d.name || '', familyCode: d.familyCode || '' };
-      ST.children = d.children || [];
-      ST.medicines = d.medicines || [];
-      lsSet('profile', ST.profile);
-      lsSet('children', ST.children);
-      lsSet('medicines', ST.medicines);
+function loadProf(uid,cb){
+  if(!ST.db){cb&&cb();return;}
+  ST.db.collection('users').doc(uid).get().then(function(s){
+    if(s.exists){
+      var d=s.data();
+      ST.prof={name:d.name||'',fc:d.fc||''};
+      ST.kids=d.kids||[]; ST.meds=d.meds||[];
+      lsS('prof',ST.prof); lsS('kids',ST.kids); lsS('meds',ST.meds);
     }
-    cb && cb();
-  }).catch(function() { cb && cb(); });
+    cb&&cb();
+  }).catch(function(){cb&&cb();});
 }
 
-function initApp() {
-  renderChildSels();
-  subscribeEvents();
-  subscribeCaregivers();
-  showScreen('sc-home');
-  updateHome();
-  syncSleepUI();
+function startApp(){
+  renderKS(); subEvs(); subCGs(); go('sc-ho'); updHome(); syncSlpUI();
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// FIRESTORE SUBSCRIPTIONS
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function subscribeEvents() {
-  if (!ST.db || !ST.profile || !ST.profile.familyCode) return;
-  var fc = ST.profile.familyCode;
-  var unsub = ST.db.collection('events')
-    .where('familyCode', '==', fc)
-    .orderBy('ts', 'desc')
-    .limit(200)
-    .onSnapshot(function(snap) {
-      ST.events = snap.docs.map(function(d) {
-        var ev = d.data();
-        ev.id = d.id;
-        if (ev.ts && ev.ts.toMillis) ev.ts = ev.ts.toMillis();
-        return ev;
+function subEvs(){
+  if(!ST.db||!ST.prof||!ST.prof.fc) return;
+  var u=ST.db.collection('evs').where('fc','==',ST.prof.fc)
+    .orderBy('ts','desc').limit(200)
+    .onSnapshot(function(s){
+      ST.evs=s.docs.map(function(d){
+        var e=d.data(); e.id=d.id;
+        if(e.ts&&e.ts.toMillis) e.ts=e.ts.toMillis();
+        return e;
       });
-      lsSet('events', ST.events);
-      updateHome();
-      updateDiaperCounts();
-      updateSleepTotal();
-      updateHandoff();
-      updateNotesList();
-      setSync(true);
-    }, function(err) {
-      console.warn('Firestore error:', err.message);
-      setSync(false);
-    });
-  ST.unsubs.push(unsub);
+      lsS('evs',ST.evs);
+      updHome(); updDiCnt(); updSlpTot(); updHO(); updNotes(); setSync(true);
+    },function(){setSync(false);});
+  ST.uns.push(u);
 }
 
-function subscribeCaregivers() {
-  if (!ST.db || !ST.profile || !ST.profile.familyCode) return;
-  var fc = ST.profile.familyCode;
-  var unsub = ST.db.collection('users')
-    .where('familyCode', '==', fc)
-    .onSnapshot(function(snap) {
-      renderCaregivers(snap.docs.map(function(d) { return d.data(); }));
-    }, function() {});
-  ST.unsubs.push(unsub);
+function subCGs(){
+  if(!ST.db||!ST.prof||!ST.prof.fc) return;
+  var u=ST.db.collection('users').where('fc','==',ST.prof.fc)
+    .onSnapshot(function(s){renderCGs(s.docs.map(function(d){return d.data();}));},function(){});
+  ST.uns.push(u);
 }
 
-function setSync(ok) {
-  var dot = document.getElementById('sync-dot');
-  if (dot) dot.style.background = ok ? 'var(--green)' : 'var(--red)';
+function setSync(ok){
+  var d=document.getElementById('sync-d');
+  if(d) d.style.background=ok?'var(--grn)':'var(--red)';
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// AUTH
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function toggleAuthMode() {
-  ST.authMode = ST.authMode === 'login' ? 'register' : 'login';
-  document.getElementById('login-txt').textContent = ST.authMode === 'login' ? 'Accedi' : 'Registrati';
-  document.getElementById('auth-switch-lbl').textContent = ST.authMode === 'login' ? 'Registrati' : 'Accedi';
-  document.getElementById('auth-err').style.display = 'none';
+/* ---- AUTH ---- */
+function toggleAuth(){
+  ST.amode=ST.amode==='login'?'register':'login';
+  document.getElementById('a-btntxt').textContent=ST.amode==='login'?'Accedi':'Registrati';
+  document.getElementById('a-swlbl').textContent=ST.amode==='login'?'Registrati':'Accedi';
+  document.getElementById('a-err').style.display='none';
 }
-window.toggleAuthMode = toggleAuthMode;
 
-function doLogin() {
-  var email = document.getElementById('auth-email').value.trim();
-  var pass = document.getElementById('auth-pass').value;
-  var errEl = document.getElementById('auth-err');
-  errEl.style.display = 'none';
-  if (!email || !pass) { errEl.textContent = 'Inserisci email e password'; errEl.style.display = 'block'; return; }
-  document.getElementById('login-txt').textContent = '...';
-
-  function onSuccess(user) {
-    ST.user = user;
-    lsSet('user', { uid: user.uid, email: user.email });
-    loadUserProfile(user.uid, function() {
-      if (!ST.profile || !ST.children.length) showScreen('sc-onboard');
-      else initApp();
+function doLogin(){
+  var em=document.getElementById('a-em').value.trim();
+  var pw=document.getElementById('a-pw').value;
+  var err=document.getElementById('a-err');
+  err.style.display='none';
+  if(!em||!pw){err.textContent='Inserisci email e password';err.style.display='block';return;}
+  document.getElementById('a-btntxt').textContent='...';
+  function ok(u){
+    ST.usr=u; lsS('usr',{uid:u.uid,email:u.email});
+    loadProf(u.uid,function(){
+      if(!ST.prof||!ST.kids.length) go('sc-su');
+      else startApp();
     });
   }
-  function onError(e) {
-    var msgs = {
-      'auth/user-not-found': 'Account non trovato. Registrati.',
-      'auth/wrong-password': 'Password errata.',
-      'auth/invalid-credential': 'Email o password errati.',
-      'auth/email-already-in-use': 'Email gia registrata.',
-      'auth/invalid-email': 'Email non valida.',
-      'auth/weak-password': 'Password troppo corta (min 6 caratteri).',
-      'auth/network-request-failed': 'Nessuna connessione. Puo usare offline.'
+  function fail(e){
+    var m={
+      'auth/user-not-found':'Account non trovato.',
+      'auth/wrong-password':'Password errata.',
+      'auth/invalid-credential':'Email o password errati.',
+      'auth/email-already-in-use':'Email gia registrata.',
+      'auth/invalid-email':'Email non valida.',
+      'auth/weak-password':'Password troppo corta (min 6).',
+      'auth/network-request-failed':'Nessuna connessione. Uso offline.'
     };
-    errEl.textContent = msgs[e.code] || ('Errore: ' + e.message);
-    errEl.style.display = 'block';
-    document.getElementById('login-txt').textContent = ST.authMode === 'login' ? 'Accedi' : 'Registrati';
-    // Offline fallback
-    if (e.code === 'auth/network-request-failed' && ST.profile) {
-      ST.user = { uid: 'local_' + email, email: email };
-      lsSet('user', ST.user);
-      ST.fbOk = false;
-      initApp();
+    err.textContent=m[e.code]||('Errore: '+e.message);
+    err.style.display='block';
+    document.getElementById('a-btntxt').textContent=ST.amode==='login'?'Accedi':'Registrati';
+    if(e.code==='auth/network-request-failed'&&ST.prof){
+      ST.usr={uid:'local_'+em,email:em}; lsS('usr',ST.usr); ST.fbOk=false; startApp();
     }
   }
-
-  if (ST.fbOk) {
-    var p = ST.authMode === 'register'
-      ? ST.auth.createUserWithEmailAndPassword(email, pass)
-      : ST.auth.signInWithEmailAndPassword(email, pass);
-    p.then(function(cred) { onSuccess(cred.user); }).catch(onError);
-  } else {
-    // Pure offline mode
-    ST.user = { uid: 'local_' + email, email: email };
-    lsSet('user', ST.user);
-    if (!ST.profile || !ST.children.length) showScreen('sc-onboard');
-    else initApp();
+  if(ST.fbOk){
+    var p=ST.amode==='register'
+      ?ST.au.createUserWithEmailAndPassword(em,pw)
+      :ST.au.signInWithEmailAndPassword(em,pw);
+    p.then(function(c){ok(c.user);}).catch(fail);
+  }else{
+    ST.usr={uid:'local_'+em,email:em}; lsS('usr',ST.usr);
+    if(!ST.prof||!ST.kids.length) go('sc-su'); else startApp();
   }
 }
-window.doLogin = doLogin;
 
-function doLogout() {
-  ST.unsubs.forEach(function(u) { try { u(); } catch(e) {} });
-  ST.unsubs = [];
-  if (ST.fbOk && ST.auth && ST.auth.currentUser) ST.auth.signOut().catch(function() {});
-  lsDel('user');
-  ST.user = null; ST.profile = null; ST.children = []; ST.events = [];
-  showScreen('sc-auth');
-  toast('\u1F44B', 'Uscito', 'A presto!');
+function doLogout(){
+  ST.uns.forEach(function(u){try{u();}catch(e){}});
+  ST.uns=[];
+  if(ST.fbOk&&ST.au&&ST.au.currentUser) ST.au.signOut().catch(function(){});
+  lsD('usr'); ST.usr=null; ST.prof=null; ST.kids=[]; ST.evs=[];
+  go('sc-au'); toast('Uscito','A presto!');
 }
-window.doLogout = doLogout;
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// ONBOARDING / SETUP
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function startSetup() {
-  lsSet('seen_onboard', true);
-  showScreen('sc-setup');
-}
-window.startSetup = startSetup;
-
-function saveSetup() {
-  var myname = document.getElementById('setup-myname').value.trim();
-  var c1 = document.getElementById('setup-c1').value.trim();
-  var c2 = document.getElementById('setup-c2').value.trim();
-  var c3 = document.getElementById('setup-c3').value.trim();
-  var fc = document.getElementById('setup-fcode').value.trim().toLowerCase().replace(/\s+/g, '');
-  if (!myname) { toast('\u26A0\uFE0F', 'Inserisci il tuo nome', ''); return; }
-  if (!c1) { toast('\u26A0\uFE0F', 'Inserisci almeno un bambino', ''); return; }
-  if (!fc) fc = 'famiglia-' + Math.random().toString(36).slice(2, 8);
-  var children = [c1, c2, c3].filter(function(n) { return n.length > 0; }).slice(0, 3).map(function(n, i) {
-    return { name: n, emoji: EMOJIS[i] };
-  });
-  ST.profile = { name: myname, familyCode: fc };
-  ST.children = children;
-  lsSet('profile', ST.profile);
-  lsSet('children', ST.children);
-  if (ST.db && ST.user) {
-    ST.db.collection('users').doc(ST.user.uid).set({
-      name: myname, familyCode: fc, children: children,
-      email: ST.user.email || '',
-      lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
-      medicines: []
-    }).catch(function() {});
+/* ---- SETUP ---- */
+function saveSetup(){
+  var nm=document.getElementById('su-nm').value.trim();
+  var c1=document.getElementById('su-c1').value.trim();
+  var c2=document.getElementById('su-c2').value.trim();
+  var c3=document.getElementById('su-c3').value.trim();
+  var fc=document.getElementById('su-fc').value.trim().toLowerCase().replace(/\s+/g,'');
+  if(!nm){toast('Inserisci il tuo nome','');return;}
+  if(!c1){toast('Inserisci almeno un bambino','');return;}
+  if(!fc) fc='fam-'+Math.random().toString(36).slice(2,8);
+  var kids=[c1,c2,c3].filter(function(n){return n.length>0;}).slice(0,3)
+    .map(function(n,i){return{name:n,em:EMOJ[i]};});
+  ST.prof={name:nm,fc:fc}; ST.kids=kids;
+  lsS('prof',ST.prof); lsS('kids',kids);
+  if(ST.db&&ST.usr){
+    ST.db.collection('users').doc(ST.usr.uid).set({
+      name:nm,fc:fc,kids:kids,email:ST.usr.email||'',
+      lastSeen:firebase.firestore.FieldValue.serverTimestamp(),meds:[]
+    }).catch(function(){});
   }
-  toast('\u2705', 'Profilo salvato!', 'Benvenuto in Infurna\'s Family');
-  initApp();
-}
-window.saveSetup = saveSetup;
-
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// SETTINGS
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function saveChildrenSettings() {
-  var c1 = document.getElementById('set-c1').value.trim();
-  var c2 = document.getElementById('set-c2').value.trim();
-  var c3 = document.getElementById('set-c3').value.trim();
-  var children = [c1, c2, c3].filter(function(n) { return n.length > 0; }).slice(0, 3).map(function(n, i) {
-    return { name: n, emoji: EMOJIS[i] };
-  });
-  if (!children.length) return;
-  ST.children = children;
-  if (ST.activeChild >= children.length) ST.activeChild = 0;
-  lsSet('children', children);
-  lsSet('activeChild', ST.activeChild);
-  if (ST.db && ST.user) {
-    ST.db.collection('users').doc(ST.user.uid).update({ children: children }).catch(function() {});
-  }
-  renderChildSels();
-  updateChildLabels();
-}
-window.saveChildrenSettings = saveChildrenSettings;
-
-function editMyName() {
-  var name = prompt('Il tuo nome:', ST.profile ? ST.profile.name : '');
-  if (!name || !name.trim()) return;
-  name = name.trim();
-  ST.profile.name = name;
-  lsSet('profile', ST.profile);
-  document.getElementById('set-myname-disp').textContent = name;
-  document.getElementById('hdr-caregiver').textContent = 'Ciao, ' + name;
-  if (ST.db && ST.user) {
-    ST.db.collection('users').doc(ST.user.uid).update({ name: name }).catch(function() {});
-  }
-  toast('\u2705', 'Nome aggiornato', '');
-}
-window.editMyName = editMyName;
-
-function copyFcode() {
-  var fc = (ST.profile && ST.profile.familyCode) ? ST.profile.familyCode : '';
-  if (navigator.clipboard) navigator.clipboard.writeText(fc).catch(function() {});
-  toast('\u1F4CB', 'Codice copiato!', fc);
-}
-window.copyFcode = copyFcode;
-
-function loadSettingsUI() {
-  var el1 = document.getElementById('set-myname-disp');
-  var el2 = document.getElementById('set-email-disp');
-  var el3 = document.getElementById('set-fcode-disp');
-  if (el1) el1.textContent = ST.profile ? ST.profile.name : '\u2014';
-  if (el2) el2.textContent = ST.user ? (ST.user.email || '\u2014') : '\u2014';
-  if (el3) el3.textContent = ST.profile ? ST.profile.familyCode : '\u2014';
-  var ch = ST.children;
-  var sc1 = document.getElementById('set-c1');
-  var sc2 = document.getElementById('set-c2');
-  var sc3 = document.getElementById('set-c3');
-  if (sc1) sc1.value = ch[0] ? ch[0].name : '';
-  if (sc2) sc2.value = ch[1] ? ch[1].name : '';
-  if (sc3) sc3.value = ch[2] ? ch[2].name : '';
-  var fcode = document.getElementById('cg-fcode');
-  if (fcode) fcode.textContent = ST.profile ? ST.profile.familyCode : '\u2014';
+  toast('Profilo salvato!','Benvenuto!');
+  startApp();
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// CHILD SELECTORS
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function renderChildSels() {
-  ['home-child-sel', 'handoff-child-sel'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML = '';
-    ST.children.forEach(function(c, i) {
-      var btn = document.createElement('button');
-      btn.className = 'child-chip' + (i === ST.activeChild ? ' active' : '');
-      btn.innerHTML = '<span style="font-size:16px">' + c.emoji + '</span>' + c.name;
-      btn.setAttribute('data-idx', i);
-      btn.onclick = function() { selectChild(i); };
-      el.appendChild(btn);
+/* ---- SETTINGS ---- */
+function saveKids(){
+  var c1=document.getElementById('se-c1').value.trim();
+  var c2=document.getElementById('se-c2').value.trim();
+  var c3=document.getElementById('se-c3').value.trim();
+  var kids=[c1,c2,c3].filter(function(n){return n.length>0;}).slice(0,3)
+    .map(function(n,i){return{name:n,em:EMOJ[i]};});
+  if(!kids.length) return;
+  ST.kids=kids; if(ST.kid>=kids.length) ST.kid=0;
+  lsS('kids',kids); lsS('kid',ST.kid);
+  if(ST.db&&ST.usr) ST.db.collection('users').doc(ST.usr.uid).update({kids:kids}).catch(function(){});
+  renderKS(); updKL();
+}
+
+function editName(){
+  var n=prompt('Il tuo nome:',ST.prof?ST.prof.name:'');
+  if(!n||!n.trim()) return;
+  n=n.trim(); ST.prof.name=n; lsS('prof',ST.prof);
+  var el=document.getElementById('se-nm'); if(el) el.textContent=n;
+  var hel=document.getElementById('hdr-cg'); if(hel) hel.textContent='Ciao, '+n;
+  if(ST.db&&ST.usr) ST.db.collection('users').doc(ST.usr.uid).update({name:n}).catch(function(){});
+  toast('Nome aggiornato','');
+}
+
+function copyFC(){
+  var fc=ST.prof?ST.prof.fc:'';
+  if(navigator.clipboard) navigator.clipboard.writeText(fc).catch(function(){});
+  toast('Codice copiato!',fc);
+}
+
+function loadSeUI(){
+  var nm=document.getElementById('se-nm'); if(nm) nm.textContent=ST.prof?ST.prof.name:'--';
+  var em=document.getElementById('se-em'); if(em) em.textContent=ST.usr?ST.usr.email:'--';
+  var fc=document.getElementById('se-fc'); if(fc) fc.textContent=ST.prof?ST.prof.fc:'--';
+  var c1=document.getElementById('se-c1'); if(c1) c1.value=ST.kids[0]?ST.kids[0].name:'';
+  var c2=document.getElementById('se-c2'); if(c2) c2.value=ST.kids[1]?ST.kids[1].name:'';
+  var c3=document.getElementById('se-c3'); if(c3) c3.value=ST.kids[2]?ST.kids[2].name:'';
+  var fac=document.getElementById('fa-code'); if(fac) fac.textContent=ST.prof?ST.prof.fc:'--';
+}
+
+/* ---- KIDS ---- */
+function renderKS(){
+  ['ho-ks','ha-ks'].forEach(function(id){
+    var el=document.getElementById(id); if(!el) return;
+    el.innerHTML='';
+    ST.kids.forEach(function(k,i){
+      var b=document.createElement('button');
+      b.className='KCH'+(i===ST.kid?' ON':'');
+      b.setAttribute('data-i',i);
+      b.textContent=k.name;
+      b.onclick=function(){selKid(i);};
+      el.appendChild(b);
     });
   });
-  updateChildLabels();
+  updKL();
 }
 
-function selectChild(idx) {
-  ST.activeChild = idx;
-  lsSet('activeChild', idx);
-  document.querySelectorAll('.child-chip').forEach(function(c, i) {
-    c.classList.toggle('active', parseInt(c.getAttribute('data-idx')) === idx);
+function selKid(i){
+  ST.kid=i; lsS('kid',i);
+  document.querySelectorAll('.KCH').forEach(function(c){
+    c.classList.toggle('ON',parseInt(c.getAttribute('data-i'))===i);
   });
-  updateChildLabels();
-  updateHome();
-  updateDiaperCounts();
-  updateSleepTotal();
-  updateHandoff();
-  updateNotesList();
-  refreshMedList();
+  updKL(); updHome(); updDiCnt(); updSlpTot(); updHO(); updNotes(); refMeds();
 }
 
-function updateChildLabels() {
-  var ch = ST.children[ST.activeChild];
-  var lbl = ch ? ch.emoji + ' ' + ch.name : '';
-  ['feed-child-lbl', 'diaper-child-lbl', 'sleep-child-lbl', 'medicine-child-lbl', 'voice-child-lbl'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = lbl;
+function updKL(){
+  var k=ST.kids[ST.kid]; var l=k?k.name:'';
+  ['fe-kl','di-kl','sl-kl','me-kl','no-kl'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.textContent=l;
   });
 }
 
-function childName() { return ST.children[ST.activeChild] ? ST.children[ST.activeChild].name : 'Bambino'; }
-function childIdx() { return ST.activeChild; }
+function kidNm(){return ST.kids[ST.kid]?ST.kids[ST.kid].name:'Bambino';}
+function kidI(){return ST.kid;}
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// EVENT LOGGING
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function logEvent(type, data, cb) {
-  var ev = Object.assign({
-    type: type,
-    childIndex: childIdx(),
-    childName: childName(),
-    familyCode: ST.profile ? ST.profile.familyCode : 'local',
-    caregiver: ST.profile ? ST.profile.name : 'Utente',
-    ts: Date.now()
-  }, data);
-  ST.events.unshift(ev);
-  lsSet('events', ST.events.slice(0, 200));
-  updateHome();
-  if (ST.db && ST.profile && ST.profile.familyCode) {
-    var dbEv = Object.assign({}, ev, { ts: firebase.firestore.FieldValue.serverTimestamp() });
-    ST.db.collection('events').add(dbEv).then(function(ref) {
-      ev.id = ref.id;
-      cb && cb(ev);
-    }).catch(function() { cb && cb(ev); });
-  } else {
-    cb && cb(ev);
-  }
+/* ---- LOG EVENT ---- */
+function logEv(type,data,cb){
+  var ev=Object.assign({type:type,ki:kidI(),kn:kidNm(),fc:ST.prof?ST.prof.fc:'local',cg:ST.prof?ST.prof.name:'Utente',ts:Date.now()},data);
+  ST.evs.unshift(ev); lsS('evs',ST.evs.slice(0,200)); updHome();
+  if(ST.db&&ST.prof&&ST.prof.fc){
+    var de=Object.assign({},ev,{ts:firebase.firestore.FieldValue.serverTimestamp()});
+    ST.db.collection('evs').add(de).then(function(r){ev.id=r.id;cb&&cb(ev);}).catch(function(){cb&&cb(ev);});
+  }else{cb&&cb(ev);}
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// HOME
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function updateHome() {
-  var ci = childIdx();
-  var evts = ST.events.filter(function(e) { return e.childIndex === ci || e.childName === childName(); });
-  var lastFeed = null, lastDiaper = null, lastSleepEnd = null;
-  for (var i = 0; i < evts.length; i++) {
-    if (!lastFeed && evts[i].type === 'feeding') lastFeed = evts[i];
-    if (!lastDiaper && evts[i].type === 'diaper') lastDiaper = evts[i];
-    if (!lastSleepEnd && evts[i].type === 'sleep_end') lastSleepEnd = evts[i];
+/* ---- HOME ---- */
+function updHome(){
+  var ci=kidI(); var kn=kidNm();
+  var evs=ST.evs.filter(function(e){return e.ki===ci||e.kn===kn;});
+  var lf=null,ld=null,lse=null;
+  for(var i=0;i<evs.length;i++){
+    if(!lf&&evs[i].type==='feed') lf=evs[i];
+    if(!ld&&evs[i].type==='diap') ld=evs[i];
+    if(!lse&&evs[i].type==='slpe') lse=evs[i];
   }
-  var sleeping = ST.sleepActive && (ST.sleepActive.childIndex === ci || ST.sleepActive.childName === childName());
-  var today = new Date(); today.setHours(0,0,0,0);
-  var medCount = evts.filter(function(e) { return e.type === 'medicine' && e.ts >= today.getTime(); }).length;
-  var feedAgo = lastFeed ? minAgo(lastFeed.ts) : 999;
-  var feedClass = feedAgo > 180 ? 'card-amber' : '';
-  var grid = document.getElementById('home-status-grid');
-  if (!grid) return;
-  grid.innerHTML =
-    '<div class="card ' + feedClass + '" onclick="showScreen(\'sc-feeding\')" style="cursor:pointer">' +
-      '<div class="card-lbl">Ultima poppata</div>' +
-      '<div class="card-val">' + (lastFeed ? timeAgo(lastFeed.ts) : '\u2014') + '</div>' +
-      '<div class="card-sub">' + (lastFeed ? fmtFeedType(lastFeed.feedType) + ' \u00B7 ' + (lastFeed.ml || '?') + 'ml' : 'Nessuna') + '</div>' +
-    '</div>' +
-    '<div class="card" onclick="showScreen(\'sc-diaper\')" style="cursor:pointer">' +
-      '<div class="card-lbl">Ultimo pannolino</div>' +
-      '<div class="card-val">' + (lastDiaper ? timeAgo(lastDiaper.ts) : '\u2014') + '</div>' +
-      '<div class="card-sub">' + (lastDiaper ? fmtDiaperType(lastDiaper.diaperType) : 'Nessuno') + '</div>' +
-    '</div>' +
-    '<div class="card ' + (sleeping ? 'card-green' : '') + '" onclick="showScreen(\'sc-sleep\')" style="cursor:pointer">' +
-      '<div class="card-lbl">Sonno</div>' +
-      '<div class="card-val" style="color:' + (sleeping ? 'var(--green)' : 'var(--t1)') + '">' + (sleeping ? 'Dorme \u1F319' : 'Sveglio') + '</div>' +
-      '<div class="card-sub">' + (sleeping ? 'da ' + timeAgo(ST.sleepActive.startTime) : (lastSleepEnd ? 'Ultima: ' + timeAgo(lastSleepEnd.ts) : 'Nessuna')) + '</div>' +
-    '</div>' +
-    '<div class="card" onclick="showScreen(\'sc-medicine\')" style="cursor:pointer">' +
-      '<div class="card-lbl">Medicine oggi</div>' +
-      '<div class="card-val">' + medCount + '</div>' +
-      '<div class="card-sub">somministrate oggi</div>' +
+  var slp=ST.slpA&&(ST.slpA.ki===ci||ST.slpA.kn===kn);
+  var tod=new Date(); tod.setHours(0,0,0,0);
+  var mc=evs.filter(function(e){return e.type==='med'&&e.ts>=tod.getTime();}).length;
+  var fa=lf?mAgo(lf.ts):999;
+  var g=document.getElementById('ho-sg'); if(!g) return;
+  g.innerHTML=
+    '<div class="CARD '+(fa>180?'CAMB':'')+'" onclick="go(\'sc-fe\')" style="cursor:pointer">'+
+      '<div class="LBL">Ultima poppata</div>'+
+      '<div class="VAL">'+(lf?tAgo(lf.ts):'--')+'</div>'+
+      '<div class="SUB">'+(lf?fFT(lf.ft)+' - '+(lf.ml||'?')+'ml':'Nessuna')+'</div>'+
+    '</div>'+
+    '<div class="CARD" onclick="go(\'sc-di\')" style="cursor:pointer">'+
+      '<div class="LBL">Ultimo pannolino</div>'+
+      '<div class="VAL">'+(ld?tAgo(ld.ts):'--')+'</div>'+
+      '<div class="SUB">'+(ld?fDT(ld.dt):'Nessuno')+'</div>'+
+    '</div>'+
+    '<div class="CARD '+(slp?'CGRN':'')+'" onclick="go(\'sc-sl\')" style="cursor:pointer">'+
+      '<div class="LBL">Sonno</div>'+
+      '<div class="VAL" style="color:'+(slp?'var(--grn)':'var(--t1)')+'">'+(slp?'Dorme':'Sveglio')+'</div>'+
+      '<div class="SUB">'+(slp?'da '+tAgo(ST.slpA.st):(lse?'Ultima: '+tAgo(lse.ts):'Nessuna'))+'</div>'+
+    '</div>'+
+    '<div class="CARD" onclick="go(\'sc-me\')" style="cursor:pointer">'+
+      '<div class="LBL">Medicine oggi</div>'+
+      '<div class="VAL">'+mc+'</div>'+
+      '<div class="SUB">somministrate oggi</div>'+
     '</div>';
-
-  var homeEvts = document.getElementById('home-events');
-  if (!homeEvts) return;
-  var recent = evts.slice(0, 8);
-  if (!recent.length) {
-    homeEvts.innerHTML = '<div class="empty"><div class="empty-icon">\u1F4CB</div>Nessun evento ancora</div>';
-    return;
-  }
-  homeEvts.innerHTML = recent.map(function(e) {
-    return '<div class="evt">' +
-      '<div class="evt-dot" style="background:' + evtColor(e.type) + '"></div>' +
-      '<div class="evt-txt">' + evtLabel(e) + '</div>' +
-      '<div>' +
-        '<div class="evt-time">' + fmtTime(e.ts) + '</div>' +
-        '<div class="evt-who">' + (e.caregiver || '') + '</div>' +
-      '</div>' +
+  var he=document.getElementById('ho-ev'); if(!he) return;
+  var rec=evs.slice(0,8);
+  if(!rec.length){he.innerHTML='<div class="EMP"><div>&#128203;</div>Nessun evento ancora</div>';return;}
+  he.innerHTML=rec.map(function(e){
+    return '<div class="EI">'+
+      '<div class="ED" style="background:'+eCol(e.type)+'"></div>'+
+      '<div class="ET">'+eLbl(e)+'</div>'+
+      '<div><div class="EC">'+fT(e.ts)+'</div><div class="EW">'+(e.cg||'')+'</div></div>'+
     '</div>';
   }).join('');
-
-  var hdr = document.getElementById('hdr-caregiver');
-  if (hdr && ST.profile) hdr.textContent = 'Ciao, ' + ST.profile.name;
+  var hc=document.getElementById('hdr-cg');
+  if(hc&&ST.prof) hc.textContent='Ciao, '+ST.prof.name;
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// FEEDING
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function chQty(delta) {
-  ST.feedQty = Math.max(10, Math.min(500, ST.feedQty + delta));
-  document.getElementById('qty-val').textContent = ST.feedQty;
+/* ---- FEED ---- */
+function chQty(d){ST.fqty=Math.max(10,Math.min(500,ST.fqty+d));document.getElementById('qv').textContent=ST.fqty;}
+function setQty(v){ST.fqty=v;document.getElementById('qv').textContent=v;}
+function togFT(){
+  var b=document.getElementById('fe-tb');
+  if(ST.frun){clearInterval(ST.fint);ST.frun=false;if(b) b.textContent='Riprendi';}
+  else{ST.frun=true;if(b) b.textContent='Pausa';ST.fint=setInterval(function(){ST.fsec++;var el=document.getElementById('fe-ti');if(el) el.textContent=fSec(ST.fsec);},1000);}
 }
-window.chQty = chQty;
-
-function setQty(v) {
-  ST.feedQty = v;
-  document.getElementById('qty-val').textContent = v;
+function rstFT(){
+  clearInterval(ST.fint);ST.frun=false;ST.fsec=0;
+  var el=document.getElementById('fe-ti'); if(el) el.textContent='00:00';
+  var b=document.getElementById('fe-tb'); if(b) b.textContent='Avvia';
 }
-window.setQty = setQty;
+function logFeed(){
+  var s=document.querySelector('#fe-tp .SL');
+  var ft=s?s.getAttribute('data-val'):'bottle';
+  clearInterval(ST.fint);ST.frun=false;var dur=ST.fsec;ST.fsec=0;
+  logEv('feed',{ft:ft,ml:ST.fqty,dur:dur},function(){
+    rstFT(); toast('Poppata registrata!',ST.fqty+'ml - '+kidNm()); go('sc-ho');
+  });
+}
+function selPil(gid,btn){
+  document.querySelectorAll('#'+gid+' .PIL').forEach(function(p){p.classList.remove('SL');});
+  btn.classList.add('SL');
+}
 
-function toggleFeedTimer() {
-  var btn = document.getElementById('feed-timer-btn');
-  if (ST.feedRunning) {
-    clearInterval(ST.feedInterval);
-    ST.feedRunning = false;
-    if (btn) btn.textContent = '\u25B6 Riprendi';
-  } else {
-    ST.feedRunning = true;
-    if (btn) btn.textContent = '\u23F8 Pausa';
-    ST.feedInterval = setInterval(function() {
-      ST.feedSec++;
-      var el = document.getElementById('feed-timer');
-      if (el) el.textContent = fmtSec(ST.feedSec);
-    }, 1000);
+/* ---- DIAPER ---- */
+function selDi(t){
+  ST.dtpe=t;
+  ['dp-pe','dp-po','dp-bo'].forEach(function(id){
+    var el=document.getElementById(id); if(!el) return;
+    el.style.background=''; el.style.border='.5px solid var(--bdr)';
+  });
+  var cols={pee:'rgba(245,158,11,.15)',poop:'rgba(139,90,43,.1)',both:'rgba(16,185,129,.1)'};
+  var bcols={pee:'rgba(245,158,11,.4)',poop:'rgba(139,90,43,.35)',both:'rgba(16,185,129,.3)'};
+  var id={pee:'dp-pe',poop:'dp-po',both:'dp-bo'}[t];
+  var el=document.getElementById(id);
+  if(el){el.style.background=cols[t];el.style.border='.5px solid '+bcols[t];}
+}
+function logDi(){
+  if(!ST.dtpe){toast('Seleziona tipo pannolino','');return;}
+  var dt=ST.dtpe; ST.dtpe=null;
+  ['dp-pe','dp-po','dp-bo'].forEach(function(id){var el=document.getElementById(id);if(el){el.style.background='';el.style.border='.5px solid var(--bdr)';}});
+  logEv('diap',{dt:dt},function(){toast('Pannolino registrato!',fDT(dt)+' - '+kidNm());updDiCnt();go('sc-ho');});
+}
+function updDiCnt(){
+  var tod=new Date(); tod.setHours(0,0,0,0);
+  var ci=kidI(); var kn=kidNm();
+  var evs=ST.evs.filter(function(e){return e.type==='diap'&&(e.ki===ci||e.kn===kn)&&e.ts>=tod.getTime();});
+  var pe=0,po=0;
+  evs.forEach(function(e){if(e.dt==='pee'||e.dt==='both')pe++;if(e.dt==='poop'||e.dt==='both')po++;});
+  var ep=document.getElementById('dc-pe'); if(ep) ep.textContent=pe;
+  var epo=document.getElementById('dc-po'); if(epo) epo.textContent=po;
+  var et=document.getElementById('dc-to'); if(et) et.textContent=evs.length;
+}
+
+/* ---- SLEEP ---- */
+function startSlp(){
+  var now=Date.now();
+  ST.slpA={st:now,ki:kidI(),kn:kidNm()}; lsS('slpA',ST.slpA);
+  logEv('slps',{st:now},function(){});
+  syncSlpUI(); updHome(); toast('Nanna iniziata!',kidNm());
+}
+function endSlp(){
+  if(!ST.slpA) return;
+  var dur=Math.floor((Date.now()-ST.slpA.st)/1000); var st=ST.slpA.st;
+  ST.slpA=null; lsD('slpA'); clearInterval(ST.sint);
+  logEv('slpe',{st:st,dur:dur},function(){syncSlpUI();updSlpTot();updHome();toast('Nanna terminata!','Durata: '+fDur(dur));});
+}
+function syncSlpUI(){
+  var ci=kidI(); var kn=kidNm();
+  var slp=ST.slpA&&(ST.slpA.ki===ci||ST.slpA.kn===kn);
+  var ac=document.getElementById('sl-ac');
+  var sw=document.getElementById('sl-sw');
+  var ew=document.getElementById('sl-ew');
+  var sl=document.getElementById('sl-sl');
+  if(ac) ac.style.display=slp?'':'none';
+  if(sw) sw.style.display=slp?'none':'';
+  if(ew) ew.style.display=slp?'':'none';
+  if(sl&&slp) sl.textContent='Inizio: '+fT(ST.slpA.st);
+  clearInterval(ST.sint);
+  if(slp){
+    ST.sint=setInterval(function(){
+      var s=Math.floor((Date.now()-ST.slpA.st)/1000);
+      var el=document.getElementById('sl-ti'); if(el) el.textContent=fHMS(s);
+    },1000);
   }
 }
-window.toggleFeedTimer = toggleFeedTimer;
-
-function resetFeedTimer() {
-  clearInterval(ST.feedInterval);
-  ST.feedRunning = false;
-  ST.feedSec = 0;
-  var el = document.getElementById('feed-timer');
-  if (el) el.textContent = '00:00';
-  var btn = document.getElementById('feed-timer-btn');
-  if (btn) btn.textContent = '\u25B6 Avvia';
-}
-window.resetFeedTimer = resetFeedTimer;
-
-function logFeeding() {
-  var sel = document.querySelector('#feed-type-pills .sel');
-  var feedType = sel ? sel.getAttribute('data-val') : 'bottle';
-  clearInterval(ST.feedInterval);
-  ST.feedRunning = false;
-  var dur = ST.feedSec;
-  ST.feedSec = 0;
-  logEvent('feeding', { feedType: feedType, ml: ST.feedQty, durationSec: dur }, function() {
-    resetFeedTimer();
-    toast('\u1F37C', 'Poppata registrata!', ST.feedQty + 'ml \u00B7 ' + childName());
-    showScreen('sc-home');
-  });
-}
-window.logFeeding = logFeeding;
-
-function selPill(groupId, btn) {
-  document.querySelectorAll('#' + groupId + ' .pill').forEach(function(p) { p.classList.remove('sel'); });
-  btn.classList.add('sel');
-}
-window.selPill = selPill;
-
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// DIAPER
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function selDiaper(type) {
-  ST.diaper = type;
-  ['pee', 'poop', 'both'].forEach(function(t) {
-    var el = document.getElementById('dp-' + t);
-    if (!el) return;
-    el.style.background = '';
-    el.style.border = '.5px solid var(--border)';
-  });
-  var colors = { pee: 'rgba(245,158,11,.15)', poop: 'rgba(139,90,43,.1)', both: 'rgba(16,185,129,.1)' };
-  var bcolors = { pee: 'rgba(245,158,11,.4)', poop: 'rgba(139,90,43,.35)', both: 'rgba(16,185,129,.3)' };
-  var el = document.getElementById('dp-' + type);
-  if (el) { el.style.background = colors[type]; el.style.border = '.5px solid ' + bcolors[type]; }
-}
-window.selDiaper = selDiaper;
-
-function logDiaper() {
-  if (!ST.diaper) { toast('\u26A0\uFE0F', 'Seleziona tipo pannolino', ''); return; }
-  var dtype = ST.diaper;
-  ST.diaper = null;
-  ['pee', 'poop', 'both'].forEach(function(t) {
-    var el = document.getElementById('dp-' + t);
-    if (el) { el.style.background = ''; el.style.border = '.5px solid var(--border)'; }
-  });
-  logEvent('diaper', { diaperType: dtype }, function() {
-    toast('\u1F9F7', 'Pannolino registrato!', fmtDiaperType(dtype) + ' \u00B7 ' + childName());
-    updateDiaperCounts();
-    showScreen('sc-home');
-  });
-}
-window.logDiaper = logDiaper;
-
-function updateDiaperCounts() {
-  var today = new Date(); today.setHours(0,0,0,0);
-  var ci = childIdx();
-  var evts = ST.events.filter(function(e) {
-    return e.type === 'diaper' && (e.childIndex === ci || e.childName === childName()) && e.ts >= today.getTime();
-  });
-  var pee = 0, poop = 0;
-  evts.forEach(function(e) {
-    if (e.diaperType === 'pee' || e.diaperType === 'both') pee++;
-    if (e.diaperType === 'poop' || e.diaperType === 'both') poop++;
-  });
-  var elP = document.getElementById('dc-pee');
-  var elPo = document.getElementById('dc-poop');
-  var elT = document.getElementById('dc-tot');
-  if (elP) elP.textContent = pee;
-  if (elPo) elPo.textContent = poop;
-  if (elT) elT.textContent = evts.length;
-}
-
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// SLEEP
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function startSleep() {
-  var now = Date.now();
-  ST.sleepActive = { startTime: now, childIndex: childIdx(), childName: childName() };
-  lsSet('sleepActive', ST.sleepActive);
-  logEvent('sleep_start', { startTime: now }, function() {});
-  syncSleepUI();
-  updateHome();
-  toast('\u1F319', 'Nanna iniziata!', childName());
-}
-window.startSleep = startSleep;
-
-function endSleep() {
-  if (!ST.sleepActive) return;
-  var dur = Math.floor((Date.now() - ST.sleepActive.startTime) / 1000);
-  var start = ST.sleepActive.startTime;
-  ST.sleepActive = null;
-  lsDel('sleepActive');
-  clearInterval(ST.sleepInterval);
-  logEvent('sleep_end', { startTime: start, durationSec: dur }, function() {
-    syncSleepUI();
-    updateSleepTotal();
-    updateHome();
-    toast('\u2600\uFE0F', 'Nanna terminata!', 'Durata: ' + fmtDur(dur));
-  });
-}
-window.endSleep = endSleep;
-
-function syncSleepUI() {
-  var ci = childIdx();
-  var sleeping = ST.sleepActive && (ST.sleepActive.childIndex === ci || ST.sleepActive.childName === childName());
-  var ac = document.getElementById('sleep-active-card');
-  var sw = document.getElementById('sleep-start-wrap');
-  var ew = document.getElementById('sleep-end-wrap');
-  var sl = document.getElementById('sleep-start-lbl');
-  if (ac) ac.style.display = sleeping ? '' : 'none';
-  if (sw) sw.style.display = sleeping ? 'none' : '';
-  if (ew) ew.style.display = sleeping ? '' : 'none';
-  if (sl && sleeping) sl.textContent = 'Inizio: ' + fmtTime(ST.sleepActive.startTime);
-  clearInterval(ST.sleepInterval);
-  if (sleeping) {
-    ST.sleepInterval = setInterval(function() {
-      var sec = Math.floor((Date.now() - ST.sleepActive.startTime) / 1000);
-      var el = document.getElementById('sleep-timer');
-      if (el) el.textContent = fmtHMS(sec);
-    }, 1000);
-  }
-}
-
-function updateSleepTotal() {
-  var today = new Date(); today.setHours(0,0,0,0);
-  var ci = childIdx();
-  var evts = ST.events.filter(function(e) {
-    return e.type === 'sleep_end' && (e.childIndex === ci || e.childName === childName()) && e.ts >= today.getTime();
-  });
-  var totalSec = 0;
-  evts.forEach(function(e) { totalSec += e.durationSec || 0; });
-  if (ST.sleepActive && (ST.sleepActive.childIndex === ci || ST.sleepActive.childName === childName())) {
-    totalSec += Math.floor((Date.now() - ST.sleepActive.startTime) / 1000);
-  }
-  var pct = Math.min(100, Math.round(totalSec / (16 * 3600) * 100));
-  var el1 = document.getElementById('sleep-total');
-  var el2 = document.getElementById('sleep-pct-val');
-  var ring = document.getElementById('sleep-ring-el');
-  if (el1) el1.textContent = fmtDur(totalSec);
-  if (el2) el2.textContent = pct + '%';
-  if (ring) {
-    var deg = Math.round(pct * 3.6);
-    ring.style.background = 'conic-gradient(var(--green) 0deg ' + deg + 'deg, var(--s2) ' + deg + 'deg 360deg)';
-  }
-  var listEl = document.getElementById('sleep-sessions-list');
-  if (!listEl) return;
-  if (!evts.length) { listEl.innerHTML = '<div class="empty"><div class="empty-icon">\u1F634</div>Nessuna sessione oggi</div>'; return; }
-  listEl.innerHTML = evts.map(function(e) {
-    return '<div class="card" style="margin-bottom:8px;display:flex;align-items:center;gap:10px">' +
-      '<div style="font-size:20px">\u1F319</div>' +
-      '<div style="flex:1"><div style="font-size:13px;font-weight:500">' + fmtDur(e.durationSec || 0) + '</div>' +
-      '<div style="font-size:11px;color:var(--t3)">' + fmtTime(e.startTime || e.ts) + ' \u2192 ' + fmtTime(e.ts) + '</div></div>' +
-      '<span style="font-size:11px;color:var(--t3)">' + (e.caregiver || '') + '</span>' +
+function updSlpTot(){
+  var tod=new Date(); tod.setHours(0,0,0,0);
+  var ci=kidI(); var kn=kidNm();
+  var evs=ST.evs.filter(function(e){return e.type==='slpe'&&(e.ki===ci||e.kn===kn)&&e.ts>=tod.getTime();});
+  var tot=0; evs.forEach(function(e){tot+=e.dur||0;});
+  if(ST.slpA&&(ST.slpA.ki===ci||ST.slpA.kn===kn)) tot+=Math.floor((Date.now()-ST.slpA.st)/1000);
+  var pct=Math.min(100,Math.round(tot/(16*3600)*100));
+  var e1=document.getElementById('sl-to'); if(e1) e1.textContent=fDur(tot);
+  var e2=document.getElementById('sl-pc'); if(e2) e2.textContent=pct+'%';
+  var rg=document.getElementById('sl-rg');
+  if(rg){var deg=Math.round(pct*3.6);rg.style.background='conic-gradient(var(--grn) 0deg '+deg+'deg,var(--s2) '+deg+'deg 360deg)';}
+  var ls=document.getElementById('sl-ls'); if(!ls) return;
+  if(!evs.length){ls.innerHTML='<div class="EMP"><div>&#128564;</div>Nessuna sessione oggi</div>';return;}
+  ls.innerHTML=evs.map(function(e){
+    return '<div class="CARD" style="margin-bottom:8px;display:flex;align-items:center;gap:10px">'+
+      '<div style="font-size:20px">&#127769;</div>'+
+      '<div style="flex:1"><div style="font-size:13px;font-weight:500">'+fDur(e.dur||0)+'</div>'+
+      '<div style="font-size:11px;color:var(--t3)">'+fT(e.st||e.ts)+' > '+fT(e.ts)+'</div></div>'+
+      '<span style="font-size:11px;color:var(--t3)">'+(e.cg||'')+'</span>'+
     '</div>';
   }).join('');
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// MEDICINE
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function addMedicine() {
-  var name = document.getElementById('med-name-inp').value.trim();
-  var dose = document.getElementById('med-dose-inp').value.trim();
-  if (!name) { toast('\u26A0\uFE0F', 'Inserisci il nome del farmaco', ''); return; }
-  var med = { id: Date.now().toString(), name: name, dose: dose, childIndex: childIdx() };
-  ST.medicines.push(med);
-  lsSet('medicines', ST.medicines);
-  if (ST.db && ST.user) {
-    ST.db.collection('users').doc(ST.user.uid).update({ medicines: ST.medicines }).catch(function() {});
-  }
-  document.getElementById('med-name-inp').value = '';
-  document.getElementById('med-dose-inp').value = '';
-  refreshMedList();
-  toast('\u1F48A', 'Farmaco aggiunto', '');
+/* ---- MEDICINE ---- */
+function addMed(){
+  var nm=document.getElementById('me-nm').value.trim();
+  var ds=document.getElementById('me-ds').value.trim();
+  if(!nm){toast('Inserisci il nome del farmaco','');return;}
+  var m={id:Date.now().toString(),name:nm,dose:ds,ki:kidI()};
+  ST.meds.push(m); lsS('meds',ST.meds);
+  if(ST.db&&ST.usr) ST.db.collection('users').doc(ST.usr.uid).update({meds:ST.meds}).catch(function(){});
+  document.getElementById('me-nm').value=''; document.getElementById('me-ds').value='';
+  refMeds(); toast('Farmaco aggiunto','');
 }
-window.addMedicine = addMedicine;
-
-function giveMedicine(medId) {
-  var med = null;
-  for (var i = 0; i < ST.medicines.length; i++) {
-    if (ST.medicines[i].id === medId) { med = ST.medicines[i]; break; }
+function giveMed(mid){
+  var m=null; for(var i=0;i<ST.meds.length;i++){if(ST.meds[i].id===mid){m=ST.meds[i];break;}}
+  if(!m) return;
+  var tod=new Date(); tod.setHours(0,0,0,0);
+  var ci=kidI(); var kn=kidNm(); var ag=null;
+  for(var j=0;j<ST.evs.length;j++){
+    var e=ST.evs[j];
+    if(e.type==='med'&&e.mid===mid&&e.ts>=tod.getTime()&&(e.ki===ci||e.kn===kn)){ag=e;break;}
   }
-  if (!med) return;
-  var today = new Date(); today.setHours(0,0,0,0);
-  var ci = childIdx();
-  var alreadyGiven = null;
-  for (var j = 0; j < ST.events.length; j++) {
-    var ev = ST.events[j];
-    if (ev.type === 'medicine' && ev.medId === medId && ev.ts >= today.getTime() && (ev.childIndex === ci || ev.childName === childName())) {
-      alreadyGiven = ev; break;
+  if(ag){toast('Gia somministrato!',m.name+' dato alle '+fT(ag.ts));return;}
+  logEv('med',{mid:mid,mn:m.name,dose:m.dose},function(){refMeds();toast('Medicina registrata!',m.name+' - '+kidNm());});
+}
+function delMed(mid){
+  ST.meds=ST.meds.filter(function(m){return m.id!==mid;});
+  lsS('meds',ST.meds);
+  if(ST.db&&ST.usr) ST.db.collection('users').doc(ST.usr.uid).update({meds:ST.meds}).catch(function(){});
+  refMeds();
+}
+function refMeds(){
+  var el=document.getElementById('me-ls'); if(!el) return;
+  var ci=kidI();
+  var meds=ST.meds.filter(function(m){return m.ki===undefined||m.ki===ci;});
+  var tod=new Date(); tod.setHours(0,0,0,0); var kn=kidNm();
+  if(!meds.length){el.innerHTML='<div class="EMP"><div>&#128138;</div>Nessun farmaco. Aggiungine uno sotto.</div>';return;}
+  el.innerHTML=meds.map(function(m){
+    var gv=null;
+    for(var i=0;i<ST.evs.length;i++){
+      var e=ST.evs[i];
+      if(e.type==='med'&&e.mid===m.id&&e.ts>=tod.getTime()&&(e.ki===ci||e.kn===kn)){gv=e;break;}
     }
-  }
-  if (alreadyGiven) {
-    toast('\u26A0\uFE0F', 'Gia somministrato!', med.name + ' dato alle ' + fmtTime(alreadyGiven.ts));
-    return;
-  }
-  logEvent('medicine', { medId: medId, medName: med.name, dose: med.dose }, function() {
-    refreshMedList();
-    toast('\u1F48A', 'Medicina registrata!', med.name + ' \u00B7 ' + childName());
-  });
-}
-window.giveMedicine = giveMedicine;
-
-function deleteMedicine(medId) {
-  ST.medicines = ST.medicines.filter(function(m) { return m.id !== medId; });
-  lsSet('medicines', ST.medicines);
-  if (ST.db && ST.user) {
-    ST.db.collection('users').doc(ST.user.uid).update({ medicines: ST.medicines }).catch(function() {});
-  }
-  refreshMedList();
-}
-window.deleteMedicine = deleteMedicine;
-
-function refreshMedList() {
-  var el = document.getElementById('med-list');
-  if (!el) return;
-  var ci = childIdx();
-  var meds = ST.medicines.filter(function(m) { return m.childIndex === undefined || m.childIndex === ci; });
-  var today = new Date(); today.setHours(0,0,0,0);
-  if (!meds.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">\u1F48A</div>Nessun farmaco. Aggiungine uno sotto.</div>'; return; }
-  el.innerHTML = meds.map(function(m) {
-    var given = null;
-    for (var i = 0; i < ST.events.length; i++) {
-      var ev = ST.events[i];
-      if (ev.type === 'medicine' && ev.medId === m.id && ev.ts >= today.getTime() && (ev.childIndex === ci || ev.childName === childName())) {
-        given = ev; break;
-      }
-    }
-    return '<div class="med-item">' +
-      '<div style="font-size:20px">\u1F48A</div>' +
-      '<div class="med-info">' +
-        '<div class="med-name">' + m.name + '</div>' +
-        '<div class="med-dose">' + (m.dose || '') + '</div>' +
-        (given ? '<div class="med-ok">Dato alle ' + fmtTime(given.ts) + ' da ' + (given.caregiver || '') + '</div>' : '') +
-      '</div>' +
-      (given
-        ? '<div style="font-size:18px;color:var(--green)">\u2713</div>'
-        : '<button class="med-act" onclick="giveMedicine(\'' + m.id + '\')">Dai</button>'
-      ) +
-      '<button onclick="deleteMedicine(\'' + m.id + '\')" style="background:none;border:none;cursor:pointer;color:var(--t3);font-size:16px;padding:4px 0 4px 4px">\u1F5D1</button>' +
+    return '<div class="MI">'+
+      '<div style="font-size:20px">&#128138;</div>'+
+      '<div class="MN"><div class="MNM">'+m.name+'</div><div class="MDS">'+(m.dose||'')+'</div>'+
+      (gv?'<div class="MGV">Dato alle '+fT(gv.ts)+' da '+(gv.cg||'')+'</div>':'')+'</div>'+
+      (gv?'<div style="font-size:18px;color:var(--grn)">&#10003;</div>':'<button class="MAC" onclick="giveMed(\''+m.id+'\')">Dai</button>')+
+      '<button onclick="delMed(\''+m.id+'\')" style="background:none;border:none;cursor:pointer;color:var(--t3);font-size:16px;padding:4px">&#128465;</button>'+
     '</div>';
   }).join('');
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// VOICE / NOTE
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function toggleVoice() {
-  var mic = document.getElementById('voice-mic');
-  var status = document.getElementById('voice-status');
-  var timeEl = document.getElementById('voice-time');
-  if (!ST.voiceRunning) {
-    ST.voiceRunning = true;
-    if (mic) mic.classList.add('rec');
-    if (status) status.textContent = '\u25CF Registrazione in corso...';
-    ST.voiceInterval = setInterval(function() {
-      ST.voiceSec++;
-      var m = Math.floor(ST.voiceSec / 60), s = ST.voiceSec % 60;
-      if (timeEl) timeEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
-    }, 1000);
-  } else {
-    ST.voiceRunning = false;
-    clearInterval(ST.voiceInterval);
-    var dur = ST.voiceSec;
-    ST.voiceSec = 0;
-    if (mic) mic.classList.remove('rec');
-    if (timeEl) timeEl.textContent = '0:00';
-    if (status) status.textContent = 'Nota vocale salvata';
-    logEvent('note', { noteType: 'audio', text: '[Nota audio: ' + fmtSec(dur) + ']', durationSec: dur }, function() {
-      updateNotesList();
-      toast('\u1F399\uFE0F', 'Nota vocale salvata!', childName() + ' \u00B7 ' + fmtSec(dur));
-    });
+/* ---- VOICE ---- */
+function togVoice(){
+  var mic=document.getElementById('v-mic');
+  var st=document.getElementById('v-st');
+  var tm=document.getElementById('v-tm');
+  if(!ST.vrun){
+    ST.vrun=true; if(mic) mic.classList.add('RC');
+    if(st) st.textContent='Registrazione in corso...';
+    ST.vint=setInterval(function(){
+      ST.vsec++; var m=Math.floor(ST.vsec/60),s=ST.vsec%60;
+      if(tm) tm.textContent=m+':'+(s<10?'0':'')+s;
+    },1000);
+  }else{
+    ST.vrun=false; clearInterval(ST.vint); var dur=ST.vsec; ST.vsec=0;
+    if(mic) mic.classList.remove('RC'); if(tm) tm.textContent='0:00';
+    if(st) st.textContent='Nota vocale salvata';
+    logEv('note',{nt:'audio',tx:'[Nota audio: '+fSec(dur)+']',dur:dur},function(){updNotes();toast('Nota vocale salvata!',kidNm()+' - '+fSec(dur));});
   }
 }
-window.toggleVoice = toggleVoice;
-
-function saveTextNote() {
-  var text = document.getElementById('note-text').value.trim();
-  if (!text) { toast('\u26A0\uFE0F', 'Scrivi prima la nota', ''); return; }
-  logEvent('note', { noteType: 'text', text: text }, function() {
-    document.getElementById('note-text').value = '';
-    updateNotesList();
-    toast('\u1F4DD', 'Nota salvata!', childName());
-  });
+function saveTxtNote(){
+  var tx=document.getElementById('no-tx').value.trim();
+  if(!tx){toast('Scrivi prima la nota','');return;}
+  logEv('note',{nt:'text',tx:tx},function(){document.getElementById('no-tx').value='';updNotes();toast('Nota salvata!',kidNm());});
 }
-window.saveTextNote = saveTextNote;
-
-function updateNotesList() {
-  var el = document.getElementById('notes-list');
-  if (!el) return;
-  var ci = childIdx();
-  var notes = ST.events.filter(function(e) {
-    return e.type === 'note' && (e.childIndex === ci || e.childName === childName());
-  }).slice(0, 6);
-  if (!notes.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">\u1F4DD</div>Nessuna nota</div>'; return; }
-  el.innerHTML = notes.map(function(n) {
-    return '<div class="card" style="margin-bottom:8px">' +
-      '<div style="display:flex;justify-content:space-between;margin-bottom:6px">' +
-        '<span class="tag ' + (n.noteType === 'audio' ? 'tag-amber' : 'tag-green') + '">' + (n.noteType === 'audio' ? '\u1F399\uFE0F Audio' : '\u1F4DD Testo') + '</span>' +
-        '<span style="font-size:11px;color:var(--t3)">' + fmtTime(n.ts) + '</span>' +
-      '</div>' +
-      '<div class="note-box" style="margin-bottom:0">' + (n.text || '') + '</div>' +
-      '<div style="font-size:11px;color:var(--t3);margin-top:6px">' + (n.caregiver || '') + '</div>' +
+function updNotes(){
+  var el=document.getElementById('no-ls'); if(!el) return;
+  var ci=kidI(); var kn=kidNm();
+  var ns=ST.evs.filter(function(e){return e.type==='note'&&(e.ki===ci||e.kn===kn);}).slice(0,6);
+  if(!ns.length){el.innerHTML='<div class="EMP"><div>&#128221;</div>Nessuna nota</div>';return;}
+  el.innerHTML=ns.map(function(n){
+    return '<div class="CARD" style="margin-bottom:8px">'+
+      '<div style="display:flex;justify-content:space-between;margin-bottom:6px">'+
+        '<span class="TAG '+(n.nt==='audio'?'TA':'TG')+'">'+(n.nt==='audio'?'Audio':'Testo')+'</span>'+
+        '<span style="font-size:11px;color:var(--t3)">'+fT(n.ts)+'</span>'+
+      '</div>'+
+      '<div class="NTB" style="margin-bottom:0">'+(n.tx||'')+'</div>'+
+      '<div style="font-size:11px;color:var(--t3);margin-top:6px">'+(n.cg||'')+'</div>'+
     '</div>';
   }).join('');
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// HANDOFF
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function updateHandoff() {
-  var ci = childIdx();
-  var evts = ST.events.filter(function(e) { return e.childIndex === ci || e.childName === childName(); });
-  var lastFeed = null, lastDiaper = null, lastSleepEnd = null;
-  for (var i = 0; i < evts.length; i++) {
-    if (!lastFeed && evts[i].type === 'feeding') lastFeed = evts[i];
-    if (!lastDiaper && evts[i].type === 'diaper') lastDiaper = evts[i];
-    if (!lastSleepEnd && evts[i].type === 'sleep_end') lastSleepEnd = evts[i];
+/* ---- HANDOFF ---- */
+function updHO(){
+  var ci=kidI(); var kn=kidNm();
+  var evs=ST.evs.filter(function(e){return e.ki===ci||e.kn===kn;});
+  var lf=null,ld=null,lse=null;
+  for(var i=0;i<evs.length;i++){
+    if(!lf&&evs[i].type==='feed') lf=evs[i];
+    if(!ld&&evs[i].type==='diap') ld=evs[i];
+    if(!lse&&evs[i].type==='slpe') lse=evs[i];
   }
-  var sleeping = ST.sleepActive && (ST.sleepActive.childIndex === ci || ST.sleepActive.childName === childName());
-  var today = new Date(); today.setHours(0,0,0,0);
-  var medsToday = evts.filter(function(e) { return e.type === 'medicine' && e.ts >= today.getTime(); });
-  var notes = evts.filter(function(e) { return e.type === 'note'; }).slice(0, 1);
-  var feedAgo = lastFeed ? minAgo(lastFeed.ts) : 999;
-  var feedBadge = feedAgo > 180 ? 'b-alert' : feedAgo > 120 ? 'b-warn' : 'b-ok';
-  var feedBadgeTxt = feedAgo > 180 ? 'Da fare' : feedAgo > 120 ? 'Presto' : 'OK';
-  var chn = ST.children[ci] ? ST.children[ci].name : 'Bambino';
-  var titleEl = document.getElementById('ho-title');
-  var timeEl = document.getElementById('ho-time');
-  var rowsEl = document.getElementById('ho-rows');
-  if (titleEl) titleEl.textContent = 'Riepilogo: ' + chn;
-  if (timeEl) timeEl.textContent = fmtDateTime(Date.now()) + ' \u00B7 ' + (ST.profile ? ST.profile.name : '');
-  if (!rowsEl) return;
-  var html =
-    '<div class="ho-row">' +
-      '<div class="hicon">\u1F37C</div>' +
-      '<div class="htxt"><div class="hkey">Ultima poppata</div>' +
-      '<div class="hval">' + (lastFeed ? timeAgo(lastFeed.ts) + ' fa \u00B7 ' + (lastFeed.ml || '?') + 'ml ' + fmtFeedType(lastFeed.feedType) : 'Nessuna') + '</div></div>' +
-      '<span class="badge ' + feedBadge + '">' + feedBadgeTxt + '</span>' +
-    '</div>' +
-    '<div class="ho-row">' +
-      '<div class="hicon">\u1F9F7</div>' +
-      '<div class="htxt"><div class="hkey">Ultimo pannolino</div>' +
-      '<div class="hval">' + (lastDiaper ? timeAgo(lastDiaper.ts) + ' fa \u00B7 ' + fmtDiaperType(lastDiaper.diaperType) : 'Nessuno') + '</div></div>' +
-      '<span class="badge b-ok">OK</span>' +
-    '</div>' +
-    '<div class="ho-row">' +
-      '<div class="hicon">\u1F319</div>' +
-      '<div class="htxt"><div class="hkey">Sonno</div>' +
-      '<div class="hval">' + (sleeping ? 'Dorme da ' + timeAgo(ST.sleepActive.startTime) : (lastSleepEnd ? 'Ultima: ' + timeAgo(lastSleepEnd.ts) + ' fa' : 'Nessuna sessione')) + '</div></div>' +
-      '<span class="badge ' + (sleeping ? 'b-ok' : 'b-warn') + '">' + (sleeping ? 'Dorme' : 'Sveglio') + '</span>' +
-    '</div>' +
-    '<div class="ho-row">' +
-      '<div class="hicon">\u1F48A</div>' +
-      '<div class="htxt"><div class="hkey">Medicine oggi</div>' +
-      '<div class="hval">' + (medsToday.length ? medsToday.map(function(m) { return m.medName; }).join(', ') : 'Nessuna') + '</div></div>' +
-      '<span class="badge b-ok">OK</span>' +
-    '</div>';
-  if (notes.length) {
-    var noteText = (notes[0].text || '').slice(0, 60);
-    if ((notes[0].text || '').length > 60) noteText += '...';
-    html += '<div class="ho-row">' +
-      '<div class="hicon">\u1F4DD</div>' +
-      '<div class="htxt"><div class="hkey">Ultima nota</div>' +
-      '<div class="hval" style="font-style:italic">' + noteText + '</div></div>' +
-    '</div>';
-  }
-  rowsEl.innerHTML = html;
+  var slp=ST.slpA&&(ST.slpA.ki===ci||ST.slpA.kn===kn);
+  var tod=new Date(); tod.setHours(0,0,0,0);
+  var meds=evs.filter(function(e){return e.type==='med'&&e.ts>=tod.getTime();});
+  var ns=evs.filter(function(e){return e.type==='note';}).slice(0,1);
+  var fa=lf?mAgo(lf.ts):999;
+  var fb=fa>180?'BAL':fa>120?'BWN':'BOK'; var fbl=fa>180?'Da fare':fa>120?'Presto':'OK';
+  var ht=document.getElementById('ha-ti'); if(ht) ht.textContent='Riepilogo: '+kn;
+  var htm=document.getElementById('ha-tm'); if(htm) htm.textContent=fDT(Date.now())+' - '+(ST.prof?ST.prof.name:'');
+  var hr=document.getElementById('ha-rw'); if(!hr) return;
+  var h=
+    '<div class="HR"><div class="HI">&#127868;</div>'+
+    '<div class="HT"><div class="HK">Ultima poppata</div>'+
+    '<div class="HV">'+(lf?tAgo(lf.ts)+' fa - '+(lf.ml||'?')+'ml '+fFT(lf.ft):'Nessuna')+'</div></div>'+
+    '<span class="BDG '+fb+'">'+fbl+'</span></div>'+
+    '<div class="HR"><div class="HI">&#129399;</div>'+
+    '<div class="HT"><div class="HK">Ultimo pannolino</div>'+
+    '<div class="HV">'+(ld?tAgo(ld.ts)+' fa - '+fDT2(ld.dt):'Nessuno')+'</div></div>'+
+    '<span class="BDG BOK">OK</span></div>'+
+    '<div class="HR"><div class="HI">&#127769;</div>'+
+    '<div class="HT"><div class="HK">Sonno</div>'+
+    '<div class="HV">'+(slp?'Dorme da '+tAgo(ST.slpA.st):(lse?'Ultima: '+tAgo(lse.ts)+' fa':'Nessuna'))+'</div></div>'+
+    '<span class="BDG '+(slp?'BOK':'BWN')+'">'+(slp?'Dorme':'Sveglio')+'</span></div>'+
+    '<div class="HR"><div class="HI">&#128138;</div>'+
+    '<div class="HT"><div class="HK">Medicine oggi</div>'+
+    '<div class="HV">'+(meds.length?meds.map(function(m){return m.mn;}).join(', '):'Nessuna')+'</div></div>'+
+    '<span class="BDG BOK">OK</span></div>';
+  if(ns.length){var nt=(ns[0].tx||'').slice(0,60)+(((ns[0].tx||'').length>60)?'...':'');
+    h+='<div class="HR"><div class="HI">&#128221;</div><div class="HT"><div class="HK">Ultima nota</div><div class="HV" style="font-style:italic">'+nt+'</div></div></div>';}
+  hr.innerHTML=h;
+}
+function sendHO(){
+  var nt=document.getElementById('ha-nt').value.trim();
+  if(nt) logEv('note',{nt:'ho',tx:'Passaggio turno: '+nt},function(){});
+  toast('Riepilogo inviato!','Tutta la famiglia e aggiornata');
+  var el=document.getElementById('ha-nt'); if(el) el.value='';
 }
 
-function sendHandoff() {
-  var note = document.getElementById('handoff-note').value.trim();
-  if (note) {
-    logEvent('note', { noteType: 'handoff', text: 'Passaggio turno: ' + note }, function() {});
-  }
-  toast('\u1F4E4', 'Riepilogo inviato!', 'Tutta la famiglia e aggiornata');
-  var el = document.getElementById('handoff-note');
-  if (el) el.value = '';
-}
-window.sendHandoff = sendHandoff;
-
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// CAREGIVERS
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function renderCaregivers(list) {
-  var el = document.getElementById('cg-list');
-  if (!el) return;
-  var colors = ['rgba(245,158,11,.12)', 'rgba(59,130,246,.12)', 'rgba(16,185,129,.12)', 'rgba(139,90,43,.1)'];
-  var textc = ['var(--amber)', 'var(--blue)', 'var(--green)', '#8B5A2B'];
-  var syncLbl = document.getElementById('cg-sync-lbl');
-  if (syncLbl) syncLbl.textContent = list.length + ' caregiver \u00B7 ' + (ST.profile ? ST.profile.familyCode : '');
-  if (!list.length) { el.innerHTML = '<div class="empty">Nessun altro caregiver</div>'; return; }
-  el.innerHTML = list.map(function(cg, i) {
-    var initials = ((cg.name || '?').slice(0, 2)).toUpperCase();
-    var isMe = ST.user && cg.email === ST.user.email;
-    var lastSeenMs = cg.lastSeen && cg.lastSeen.toMillis ? cg.lastSeen.toMillis() : (cg.lastSeen || 0);
-    var online = lastSeenMs && (Date.now() - lastSeenMs) < 300000;
-    return '<div class="cg-row">' +
-      '<div class="cg-av" style="background:' + colors[i % 4] + ';color:' + textc[i % 4] + '">' + initials + '</div>' +
-      '<div class="cg-info">' +
-        '<div class="cg-name">' + (cg.name || 'Utente') + (isMe ? ' (tu)' : '') + '</div>' +
-        '<div class="cg-role">' + (cg.email || '') + '</div>' +
-      '</div>' +
-      '<span class="badge ' + (online ? 'b-ok' : '') + '" style="' + (!online ? 'background:var(--s3);color:var(--t3)' : '') + '">' + (online ? '\u25CF Attivo' : 'Offline') + '</span>' +
+/* ---- CAREGIVERS ---- */
+function renderCGs(list){
+  var el=document.getElementById('fa-ls'); if(!el) return;
+  var sl=document.getElementById('fa-sl');
+  if(sl) sl.textContent=list.length+' caregiver - '+(ST.prof?ST.prof.fc:'');
+  var cols=['rgba(245,158,11,.12)','rgba(59,130,246,.12)','rgba(16,185,129,.12)','rgba(139,90,43,.1)'];
+  var tc=['var(--amb)','var(--blu)','var(--grn)','#8B5A2B'];
+  if(!list.length){el.innerHTML='<div class="EMP">Nessun caregiver</div>';return;}
+  el.innerHTML=list.map(function(cg,i){
+    var ini=((cg.name||'?').slice(0,2)).toUpperCase();
+    var isMe=ST.usr&&cg.email===ST.usr.email;
+    var ls=cg.lastSeen&&cg.lastSeen.toMillis?cg.lastSeen.toMillis():(cg.lastSeen||0);
+    var onl=ls&&(Date.now()-ls)<300000;
+    return '<div class="CGR">'+
+      '<div class="CAV" style="background:'+cols[i%4]+';color:'+tc[i%4]+'">'+ini+'</div>'+
+      '<div class="CNI"><div class="CNN">'+(cg.name||'Utente')+(isMe?' (tu)':'')+'</div><div class="CNR">'+(cg.email||'')+'</div></div>'+
+      '<span class="BDG '+(onl?'BOK':'')+'" style="'+(onl?'':'background:var(--s3);color:var(--t3)')+'">'+(onl?'Attivo':'Offline')+'</span>'+
     '</div>';
   }).join('');
-  // Heartbeat
-  if (ST.db && ST.user && ST.user.uid) {
-    ST.db.collection('users').doc(ST.user.uid).update({ lastSeen: firebase.firestore.FieldValue.serverTimestamp() }).catch(function() {});
+  if(ST.db&&ST.usr&&ST.usr.uid){
+    ST.db.collection('users').doc(ST.usr.uid).update({lastSeen:firebase.firestore.FieldValue.serverTimestamp()}).catch(function(){});
   }
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// NAVIGATION
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function showScreen(id) {
-  var prev = document.querySelector('.screen.active');
-  if (prev) {
-    prev.classList.add('prev');
-    (function(p) { setTimeout(function() { p.classList.remove('prev', 'active'); }, 250); })(prev);
+/* ---- NAVIGATION ---- */
+function go(id){
+  var pr=document.querySelector('.SC.ON');
+  if(pr){pr.classList.add('PR');(function(p){setTimeout(function(){p.classList.remove('PR','ON');},220);})(pr);}
+  var nx=document.getElementById(id); if(!nx) return;
+  nx.classList.add('ON'); ST.psc=ST.sc; ST.sc=id;
+  if(id==='sc-ho') updHome();
+  if(id==='sc-di') updDiCnt();
+  if(id==='sc-sl'){updSlpTot();syncSlpUI();}
+  if(id==='sc-me') refMeds();
+  if(id==='sc-ha'){updHO();renderKS();}
+  if(id==='sc-no') updNotes();
+  if(id==='sc-se') loadSeUI();
+  if(id==='sc-fa'){
+    var fc=document.getElementById('fa-code'); if(fc) fc.textContent=ST.prof?ST.prof.fc:'--';
+    if(ST.db&&ST.usr&&ST.usr.uid) ST.db.collection('users').doc(ST.usr.uid).update({lastSeen:firebase.firestore.FieldValue.serverTimestamp()}).catch(function(){});
   }
-  var next = document.getElementById(id);
-  if (!next) return;
-  next.classList.add('active');
-  ST.prevScreen = ST.screen;
-  ST.screen = id;
-  if (id === 'sc-home') updateHome();
-  if (id === 'sc-diaper') updateDiaperCounts();
-  if (id === 'sc-sleep') { updateSleepTotal(); syncSleepUI(); }
-  if (id === 'sc-medicine') refreshMedList();
-  if (id === 'sc-handoff') { updateHandoff(); renderChildSels(); }
-  if (id === 'sc-voice') updateNotesList();
-  if (id === 'sc-settings') loadSettingsUI();
-  if (id === 'sc-caregivers') {
-    var fcode = document.getElementById('cg-fcode');
-    if (fcode) fcode.textContent = ST.profile ? ST.profile.familyCode : '\u2014';
-    if (ST.db && ST.user && ST.user.uid) {
-      ST.db.collection('users').doc(ST.user.uid).update({ lastSeen: firebase.firestore.FieldValue.serverTimestamp() }).catch(function() {});
-    }
-  }
-  updateChildLabels();
+  updKL();
 }
-window.showScreen = showScreen;
-
-function navTo(scId, bnId) {
-  document.querySelectorAll('.bnav-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.querySelectorAll('#' + bnId).forEach(function(b) { b.classList.add('active'); });
-  showScreen(scId);
-}
-window.navTo = navTo;
-
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// CLOCK
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function startClock() {
-  var ids = ['t-setup','t-home','t-feeding','t-diaper','t-sleep','t-medicine','t-handoff','t-voice','t-cg','t-settings'];
-  setInterval(function() {
-    var t = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-    ids.forEach(function(id) { var el = document.getElementById(id); if (el) el.textContent = t; });
-  }, 1000);
+function nav(sid,bid){
+  document.querySelectorAll('.NBT').forEach(function(b){b.classList.remove('ON');});
+  document.querySelectorAll('#'+bid).forEach(function(b){b.classList.add('ON');});
+  go(sid);
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// TOAST
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-var toastT;
-function toast(icon, title, sub) {
-  var el = document.getElementById('toast');
-  var ti = document.getElementById('toast-icon');
-  var tt = document.getElementById('toast-title');
-  var ts = document.getElementById('toast-sub');
-  if (ti) ti.textContent = icon;
-  if (tt) tt.textContent = title;
-  if (ts) ts.textContent = sub || '';
-  if (el) el.classList.add('show');
-  clearTimeout(toastT);
-  toastT = setTimeout(function() { if (el) el.classList.remove('show'); }, 2800);
+/* ---- CLOCK ---- */
+function startClock(){
+  var ids=['t-su','t-ho','t-fe','t-di','t-sl','t-me','t-ha','t-no','t-fa','t-se'];
+  setInterval(function(){
+    var t=new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+    ids.forEach(function(id){var el=document.getElementById(id);if(el) el.textContent=t;});
+  },1000);
 }
-window.toast = toast;
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// HELPERS
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-function fmtSec(s) {
-  var m = Math.floor(s / 60), sec = s % 60;
-  return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+/* ---- TOAST ---- */
+var tTm;
+function toast(ttl,sub){
+  var el=document.getElementById('TST');
+  var tt=document.getElementById('t-ttl');
+  var ts=document.getElementById('t-sub');
+  if(tt) tt.textContent=ttl;
+  if(ts) ts.textContent=sub||'';
+  if(el) el.classList.add('ON');
+  clearTimeout(tTm);
+  tTm=setTimeout(function(){if(el) el.classList.remove('ON');},2800);
 }
-function fmtHMS(s) {
-  var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
-  return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
-}
-function fmtTime(ts) {
-  if (!ts) return '\u2014';
-  var t = typeof ts === 'object' && ts.toMillis ? ts.toMillis() : ts;
-  return new Date(t).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-}
-function fmtDateTime(ts) {
-  return new Date(ts).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' }) + ' ' + fmtTime(ts);
-}
-function fmtDur(sec) {
-  var h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60);
-  if (h > 0) return h + 'h ' + (m < 10 ? '0' : '') + m + 'm';
-  return m + 'm ' + (sec % 60) + 's';
-}
-function minAgo(ts) {
-  if (!ts) return 9999;
-  var t = typeof ts === 'object' && ts.toMillis ? ts.toMillis() : ts;
-  return Math.floor((Date.now() - t) / 60000);
-}
-function timeAgo(ts) {
-  var min = minAgo(ts);
-  if (min < 1) return 'adesso';
-  if (min < 60) return min + 'm';
-  var h = Math.floor(min / 60), m2 = min % 60;
-  return h + 'h' + (m2 > 0 ? ' ' + m2 + 'm' : '');
-}
-function fmtFeedType(t) {
-  var map = { bottle: 'Biberon', breast_l: 'Seno Sin.', breast_r: 'Seno Dx.' };
-  return map[t] || t || '\u2014';
-}
-function fmtDiaperType(t) {
-  var map = { pee: 'Piu', poop: 'Popo', both: 'Piu + Popo' };
-  return map[t] || t || '\u2014';
-}
-function evtColor(type) {
-  var map = { feeding: 'var(--amber)', diaper: 'var(--t3)', sleep_start: 'var(--green)', sleep_end: 'var(--green)', medicine: 'var(--red)', note: 'var(--blue)' };
-  return map[type] || 'var(--t3)';
-}
-function evtLabel(e) {
-  if (e.type === 'feeding') return '\u1F37C Poppata: ' + (e.ml || '?') + 'ml \u00B7 ' + fmtFeedType(e.feedType);
-  if (e.type === 'diaper') return '\u1F9F7 Pannolino: ' + fmtDiaperType(e.diaperType);
-  if (e.type === 'sleep_start') return '\u1F319 Inizio nanna';
-  if (e.type === 'sleep_end') return '\u2600\uFE0F Fine nanna: ' + fmtDur(e.durationSec || 0);
-  if (e.type === 'medicine') return '\u1F48A ' + (e.medName || 'Medicina');
-  if (e.type === 'note') return '\u1F4DD Nota: ' + (e.text || '').slice(0, 30);
+
+/* ---- HELPERS ---- */
+function fSec(s){var m=Math.floor(s/60),sc=s%60;return (m<10?'0':'')+m+':'+(sc<10?'0':'')+sc;}
+function fHMS(s){var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=s%60;return (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(sc<10?'0':'')+sc;}
+function fT(ts){if(!ts) return '--';var t=ts&&ts.toMillis?ts.toMillis():ts;return new Date(t).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});}
+function fDT(ts){return new Date(ts).toLocaleDateString('it-IT',{day:'2-digit',month:'short'})+' '+fT(ts);}
+function fDur(s){var h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h>0?h+'h '+(m<10?'0':'')+m+'m':m+'m '+(s%60)+'s';}
+function mAgo(ts){if(!ts) return 9999;var t=ts&&ts.toMillis?ts.toMillis():ts;return Math.floor((Date.now()-t)/60000);}
+function tAgo(ts){var m=mAgo(ts);if(m<1) return 'adesso';if(m<60) return m+'m';var h=Math.floor(m/60),m2=m%60;return h+'h'+(m2>0?' '+m2+'m':'');}
+function fFT(t){var mp={bottle:'Biberon',breast_l:'Seno Sin.',breast_r:'Seno Dx.'};return mp[t]||t||'--';}
+function fDT(t){var mp={pee:'Piu',poop:'Popo',both:'Piu+Popo'};return mp[t]||t||'--';}
+function fDT2(t){return fDT(t);}
+function eCol(t){var mp={feed:'var(--amb)',diap:'var(--t3)',slps:'var(--grn)',slpe:'var(--grn)',med:'var(--red)',note:'var(--blu)'};return mp[t]||'var(--t3)';}
+function eLbl(e){
+  if(e.type==='feed') return 'Poppata: '+(e.ml||'?')+'ml - '+fFT(e.ft);
+  if(e.type==='diap') return 'Pannolino: '+fDT(e.dt);
+  if(e.type==='slps') return 'Inizio nanna';
+  if(e.type==='slpe') return 'Fine nanna: '+fDur(e.dur||0);
+  if(e.type==='med') return (e.mn||'Medicina');
+  if(e.type==='note') return 'Nota: '+(e.tx||'').slice(0,30);
   return e.type;
 }
-function setLdrTxt(t) { var el = document.getElementById('loader-txt'); if (el) el.textContent = t; }
-function hideLdr() {
-  var l = document.getElementById('loader');
-  if (l) { l.style.opacity = '0'; setTimeout(function() { l.style.display = 'none'; }, 400); }
-}
+function setLt(t){var el=document.getElementById('ltxt');if(el) el.textContent=t;}
+function hideLdr(){var l=document.getElementById('LDR');if(l){l.style.opacity='0';setTimeout(function(){l.style.display='none';},400);}}
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// OFFLINE EVENTS
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-window.addEventListener('offline', function() { setSync(false); });
-window.addEventListener('online', function() {
-  if (ST.fbOk && ST.profile && ST.profile.familyCode) {
-    subscribeEvents();
-    setSync(true);
-  }
-});
+window.addEventListener('offline',function(){setSync(false);});
+window.addEventListener('online',function(){if(ST.fbOk&&ST.prof&&ST.prof.fc){subEvs();setSync(true);}});
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// iOS INSTALL BANNER (no apostrophes in strings)
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-window.addEventListener('load', function() {
-  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-  if (isIOS && !isStandalone && !localStorage.getItem('ios_shown')) {
-    setTimeout(function() {
-      var d = document.createElement('div');
-      d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;border-top:0.5px solid rgba(245,158,11,0.3);padding:16px 18px 30px;z-index:9999;font-family:DM Sans,sans-serif;display:flex;gap:12px;align-items:flex-start';
-      var inner = document.createElement('div');
-      inner.innerHTML = '<span style="font-size:28px">\u1F4F1</span>';
-      var txt = document.createElement('div');
-      txt.style.flex = '1';
-      var h = document.createElement('div');
-      h.style.cssText = 'font-size:13px;font-weight:600;color:#ede9e0;margin-bottom:3px';
-      h.textContent = 'Installa su iPhone';
-      var p = document.createElement('div');
-      p.style.cssText = 'font-size:12px;color:#8a8680;line-height:1.5';
-      p.textContent = 'Tocca Condividi poi Aggiungi a schermata Home per usare come app nativa.';
-      txt.appendChild(h); txt.appendChild(p);
-      var cls = document.createElement('button');
-      cls.style.cssText = 'background:none;border:none;color:#4a4845;font-size:20px;cursor:pointer;padding:0;line-height:1';
-      cls.textContent = 'x';
-      cls.onclick = function() { d.remove(); localStorage.setItem('ios_shown', '1'); };
-      d.appendChild(inner); d.appendChild(txt); d.appendChild(cls);
-      document.body.appendChild(d);
-    }, 3000);
-  }
-});
+/* ---- EXPOSE GLOBALS ---- */
+window.toggleAuth=toggleAuth;
+window.doLogin=doLogin;
+window.doLogout=doLogout;
+window.saveSetup=saveSetup;
+window.saveKids=saveKids;
+window.editName=editName;
+window.copyFC=copyFC;
+window.go=go;
+window.nav=nav;
+window.selPil=selPil;
+window.chQty=chQty;
+window.setQty=setQty;
+window.togFT=togFT;
+window.rstFT=rstFT;
+window.logFeed=logFeed;
+window.selDi=selDi;
+window.logDi=logDi;
+window.startSlp=startSlp;
+window.endSlp=endSlp;
+window.addMed=addMed;
+window.giveMed=giveMed;
+window.delMed=delMed;
+window.togVoice=togVoice;
+window.saveTxtNote=saveTxtNote;
+window.sendHO=sendHO;
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-// START
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 init();
 </script>
+
 </body>
 </html>
